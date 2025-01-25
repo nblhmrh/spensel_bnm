@@ -9,11 +9,10 @@ function Navbar() {
 
   return (
     <nav className="flex justify-end items-center px-6 py-4">
-      {/* Logo */}
       <div className="flex items-center mr-auto">
         {" "}
         {/* Memberikan margin otomatis untuk mendorong logo ke kiri */}
-        <Image src={logo} alt="Logo Sekolah" width={85} height={85} />
+        <Image src={logo} alt="Logo Sekolah" width={100} height={100} />
       </div>
 
       {/* Menu Desktop */}
