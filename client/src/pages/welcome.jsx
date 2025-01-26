@@ -3,7 +3,7 @@ import Navbar from "./Navbar";
 import Image from "next/image";
 // import ftskul from "../assets/ftskul.jpg";
 import laskar from "../assets/laskar.jpg";
-import News from '../pages/News';
+import News from './News';
 import {
   FaBuilding,
   FaChalkboardTeacher,
@@ -18,7 +18,7 @@ export default function Home() {
       <Navbar />
 
       <section className="flex flex-col items-center text-center py-16 px-6">
-        <h1 className="text-3xl md:text-4xl font-bold  text-[#ffff]">
+        <h1 className="text-3xl md:text-4xl font-bold text-[#ffff]">
           UPT SMP NEGERI 9 BINAMU <br /> JENEPONTO
         </h1>
         <div className="mt-8 w-full md:w-2/3 lg:w-1/2 ">
