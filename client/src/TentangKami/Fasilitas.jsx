@@ -1,4 +1,6 @@
 import React from 'react'
+import Navbar from '../pages/Navbar'
+import Link from 'next/link'
 
 function Fasilitas() {
   return (

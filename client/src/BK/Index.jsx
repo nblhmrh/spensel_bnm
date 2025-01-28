@@ -2,15 +2,15 @@ import React from 'react'
 import Navbar from '../pages/Navbar'
 import Link from 'next/link'
 
-function Prestasi() {
+function Index() {
   return (
     <>
-       <div className="bg-[#154472] w-[1382px] h-[300px]">
+      <div className="bg-[#154472] w-[1382px] h-[300px]">
         <Navbar />
 
         <section className="flex flex-col py-8 px-6">
           <h1 className="text-3xl md:text-4xl font-bold  text-[#ffff]">
-            Prestasi
+            Bimbingan & Konseling
           </h1>
           <p className="text-white mt-2 py-3 font-normal">
             <Link href="/" className="underline hover:text-gray-300">
@@ -23,7 +23,7 @@ function Prestasi() {
             >
               Tentang Kami
             </Link>{" "}
-            &gt; <span className="text-gray-300 ">Prestasi</span>
+            &gt; <span className="text-gray-300 "> Bimbingan & Konseling</span>
           </p>
         </section>
       </div>
@@ -31,4 +31,4 @@ function Prestasi() {
   )
 }
 
-export default Prestasi
+export default Index
