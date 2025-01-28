@@ -24,11 +24,11 @@ function Card() {
           <Image src={logo} alt="Logo Sekolah" width={200} height={200} />
         </div>
 
-        <section className="flex flex-col space-x-7">
-          <p className="font-semibold text-white">
+        <div className="flex flex-row space-x-7">
+          <p className="font-semibold text-black">
             Copyright © 2025 SMPN 9 Binamu All rights reserved.
           </p>
-        </section>
+        </div>
       </div>
     </>
   );
