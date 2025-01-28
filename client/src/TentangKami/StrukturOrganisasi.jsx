@@ -1,6 +1,9 @@
-import React from 'react'
-import Navbar from '../pages/Navbar'
-import Link from 'next/link'
+import React from "react";
+import Navbar from "../pages/Navbar";
+import Link from "next/link";
+import Image from "next/image";
+import struktur from "../assets/struktur.png";
+import News from "../pages/news";
 
 function StrukturOrganisasi() {
   return (
@@ -27,8 +30,23 @@ function StrukturOrganisasi() {
           </p>
         </section>
       </div>
+      <div>
+        <h1 className="text-3xl text-[#154472] font-semibold px-6 py-8">
+          Struktur Organisasi UPT SMPN 9 Binamu
+        </h1>
+      </div>
+      <div className="py-16 px-12 items-center justify-center">
+        <Image
+          src={struktur}
+          alt="struktur"
+          width={1300}
+          height={1000}
+          className="rounded-lg shadow-lg "
+        />
+      </div>
+      <News/>
     </>
-  )
+  );
 }
 
-export default StrukturOrganisasi
+export default StrukturOrganisasi;

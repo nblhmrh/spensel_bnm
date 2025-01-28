@@ -3,7 +3,8 @@ import Navbar from "./Navbar";
 import Image from "next/image";
 // import ftskul from "../assets/ftskul.jpg";
 import laskar from "../assets/laskar.jpg";
-import News from './News';
+import News from "./news";
+
 import {
   FaBuilding,
   FaChalkboardTeacher,
