@@ -1,11 +1,8 @@
 import React from "react";
-import Navbar from "../pages/Navbar";
+import Navbar from "../Navbar/page";
 import Link from "next/link";
-import Image from "next/image";
-import akreditasi from "../assets/akreditasi.png";
-import News from "../pages/News";
-
-function Akreditasi() {
+import News from "@/pages/News";
+function Fasilitas() {
   return (
     <>
       <div className="bg-[#154472] w-[1382px] h-[300px]">
@@ -13,7 +10,7 @@ function Akreditasi() {
 
         <section className="flex flex-col py-8 px-6">
           <h1 className="text-3xl md:text-4xl font-bold  text-[#ffff]">
-            Akreditasi
+            Fasilitas
           </h1>
           <p className="text-white mt-2 py-3 font-normal">
             <Link href="/" className="underline hover:text-gray-300">
@@ -21,12 +18,19 @@ function Akreditasi() {
             </Link>{" "}
             &gt;{" "}
             <Link
-              href="/tentang-kami"
+              href="/TentangKami"
               className="underline hover:text-gray-300"
             >
               Tentang Kami
             </Link>{" "}
-            &gt; <span className="text-gray-300 ">Akreditasi</span>
+            &gt;{" "}
+            <Link
+              href="/fasilitas"
+              className="underline hover:text-gray-300"
+            >
+              Fasilitas
+            </Link>{" "}
+            
           </p>
         </section>
       </div>
@@ -36,21 +40,12 @@ function Akreditasi() {
           Akreditasi UPT SMPN 9 Binamu
         </h1>
         <p className="text-gray-800 text-1xl font-medium py-1">
-          Berikut merupakan Akreditasi dari SMPN 9 Binamu Jeneponto
+          Berikut merupakan Fasilitas dari SMPN 9 Binamu Jeneponto
         </p>
-      </div>
-      <div className="py-16 px-12 items-center justify-center">
-        <Image
-          src={akreditasi}
-          alt="akreditasi"
-          width={1300}
-          height={1000}
-          className="rounded-lg shadow-lg "
-        />
       </div>
       <News />
     </>
   );
 }
 
-export default Akreditasi;
+export default Fasilitas;

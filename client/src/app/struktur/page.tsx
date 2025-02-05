@@ -1,9 +1,9 @@
 import React from "react";
-import Navbar from "../pages/Navbar";
+import Navbar from "../Navbar/page";
 import Link from "next/link";
 import Image from "next/image";
-import struktur from "../assets/struktur.png";
-import News from "../pages/news";
+import struktur from "@/assets/struktur.png";
+import News from "@/pages/News";
 
 function StrukturOrganisasi() {
   return (
@@ -21,12 +21,19 @@ function StrukturOrganisasi() {
             </Link>{" "}
             &gt;{" "}
             <Link
-              href="/tentang-kami"
+              href="/TentangKami"
               className="underline hover:text-gray-300"
             >
               Tentang Kami
             </Link>{" "}
-            &gt; <span className="text-gray-300 ">Struktur Organisasi</span>
+            &gt;{" "}
+            <Link
+              href="/struktur"
+              className="underline hover:text-gray-300"
+            >
+              Struktur Organisasi Sekolah
+            </Link>{" "}
+            
           </p>
         </section>
       </div>
@@ -34,6 +41,9 @@ function StrukturOrganisasi() {
         <h1 className="text-3xl text-[#154472] font-semibold px-6 py-8">
           Struktur Organisasi UPT SMPN 9 Binamu
         </h1>
+        <p className="bg-gray-200 txt-center px-6 py-3 rounded-full text-blue-900 font-bold text-lg  ">
+        Mari kita mengenal lebih dekat siapa saja yang  berperan penting dalam menjalankan <br/>roda pendidikan di SMPN 9 Binamu Jeneponto. Berikut adalah struktur organisasi sekolah kami.
+        </p>
       </div>
       <div className="py-16 px-12 items-center justify-center">
         <Image
