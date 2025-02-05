@@ -1,57 +1,63 @@
 "use client"; // Menandai bahwa ini adalah komponen client-side
 
 import React, { useState } from "react";
+import { useRouter } from "next/navigation";
 import Image from "next/image";
-import logo from "../assets/logo.png"; // Import gambar
+import logo from "@/assets/logo.png"; // Import gambar
+
 
 function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
+  const router = useRouter();
 
   return (
-    <nav className="flex justify-end items-center px-6 py-4">
+    <nav className="flex justify-end items-center px-6 py-4 text-white">
       <div className="flex items-center mr-auto">
-        {" "}
-        {/* Memberikan margin otomatis untuk mendorong logo ke kiri */}
         <Image src={logo} alt="Logo Sekolah" width={100} height={100} />
       </div>
 
       {/* Menu Desktop */}
-      <ul className="hidden md:flex space-x-7 text-[#ffff]">
+      <ul className="hidden md:flex space-x-7">
         <li>
-          <a href="#beranda" className="hover:text-white font-medium">
+          <button 
+          onClick={() => router.push("/")} 
+          className="hover:text-gray-300 font-medium"
+          type="button">
             Beranda
-          </a>
+          </button>
         </li>
         <li>
-          <a href="#tentang" className="hover:text-white font-medium">
+          <button 
+          onClick={() => router.push("/TentangKami")} className="hover:text-gray-300 font-medium"
+          type="button">
             Tentang Kami
-          </a>
+          </button>
         </li>
         <li>
-          <a href="#bk" className="hover:text-white font-medium">
+          <button onClick={() => router.push("/BK")} className="hover:text-gray-300 font-medium">
             BK
-          </a>
+          </button>
         </li>
         <li>
-          <a href="#program" className="hover:text-white font-medium">
+          <button onClick={() => router.push("/Program")} className="hover:text-gray-300 font-medium">
             Program
-          </a>
+          </button>
         </li>
         <li>
-          <a href="#ppdb" className="hover:text-white font-medium">
+          <button onClick={() => router.push("/ppdb")} className="hover:text-gray-300 font-medium">
             PPDB
-          </a>
+          </button>
         </li>
       </ul>
 
       {/* Hubungi Kami Button */}
       <div className="hidden md:block">
-        <a
-          href="#hubungi-kami"
+        <button
+          onClick={() => router.push("/hubungi-kami")}
           className="ml-9 mr-11 px-4 py-2 bg-white text-blue-800 font-semibold border rounded-full hover:bg-gray-200"
         >
           Hubungi Kami
-        </a>
+        </button>
       </div>
 
       {/* Mobile Menu Button */}
@@ -66,37 +72,37 @@ function Navbar() {
       {isOpen && (
         <ul className="absolute top-16 left-0 w-full bg-blue-800 text-yellow-300 flex flex-col items-center space-y-4 py-4 md:hidden">
           <li>
-            <a href="#beranda" className="hover:text-white">
+            <button onClick={() => router.push("/")} className="hover:text-white">
               Beranda
-            </a>
+            </button>
           </li>
           <li>
-            <a href="#tentang" className="hover:text-white">
+            <button onClick={() => router.push("/tentang")} className="hover:text-white">
               Tentang Kami
-            </a>
+            </button>
           </li>
           <li>
-            <a href="#bk" className="hover:text-white">
+            <button onClick={() => router.push("/bk")} className="hover:text-white">
               BK
-            </a>
+            </button>
           </li>
           <li>
-            <a href="#program" className="hover:text-white">
+            <button onClick={() => router.push("/program")} className="hover:text-white">
               Program
-            </a>
+            </button>
           </li>
           <li>
-            <a href="#ppdb" className="hover:text-white">
+            <button onClick={() => router.push("/ppdb")} className="hover:text-white">
               PPDB
-            </a>
+            </button>
           </li>
           <li>
-            <a
-              href="#hubungi-kami"
+            <button
+              onClick={() => router.push("/hubungi-kami")}
               className="px-4 py-2 bg-white text-blue-800 font-semibold rounded-lg hover:bg-gray-200"
             >
               Hubungi Kami
-            </a>
+            </button>
           </li>
         </ul>
       )}

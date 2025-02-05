@@ -1,9 +1,11 @@
 import React from 'react'
+import Navbar from '../Navbar/page'
+import Link from 'next/link'
 
-function Kurikulum() {
+function Dokumen() {
   return (
     <>
-       <div className="bg-[#154472] w-[1382px] h-[300px]">
+      <div className="bg-[#154472] w-[1382px] h-[300px]">
         <Navbar />
 
         <section className="flex flex-col py-8 px-6">
@@ -29,4 +31,4 @@ function Kurikulum() {
   )
 }
 
-export default Kurikulum
+export default Dokumen
