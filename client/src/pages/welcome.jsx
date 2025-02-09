@@ -150,7 +150,7 @@ export default function Home() {
             </div>
           </section>
         
-      <div>
+      <div className="pt-6">
         <News/>
       </div>
     </>

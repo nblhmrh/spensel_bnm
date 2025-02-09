@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import Navbar from "../Navbar/page";
 import Image from "next/image";
 import Link from "next/link";
+import { StaticImageData } from "next/image";
 import News from "@/pages/News";
 // Import gambar dari folder assets
 import lynan1 from "@/assets/lynan1.png";
@@ -21,9 +22,9 @@ const layananData = [
 
 function Layanan() {
   const [modalOpen, setModalOpen] = useState(false);
-  const [selectedImage, setSelectedImage] = useState(null);
+  const [selectedImage, setSelectedImage] = useState<StaticImageData | null>(null);
 
-  const openModal = (image) => {
+  const openModal = (image: StaticImageData) => {
     setSelectedImage(image);
     setModalOpen(true);
   };

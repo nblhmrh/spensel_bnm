@@ -7,7 +7,7 @@ import News from "@/pages/News";
 const layanan = [
   { title: "Profil BK", icon: <FaUserCircle />, link: "/B-Profil" },
   { title: "Asesmen BK", icon: <FaClipboardList />, link: "/B-Asesmen" },
-  { title: "Dokumentasi BK", icon: <FaCamera />, link: "/dokumentasi-bk" },
+  { title: "Dokumentasi BK", icon: <FaCamera />, link: "/B-Dokumentasi" },
   { title: "Layanan BK", icon: <FaFolderOpen />, link: "/B-Layanan" },
    { title: "Pengaduan", icon: <FaHeadset />, link: "/B-Pengaduan" },
 ];
