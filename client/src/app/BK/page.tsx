@@ -6,7 +6,7 @@ import { FaUserCircle, FaClipboardList, FaCamera, FaHeadset, FaFolderOpen } from
 import News from "@/pages/News";
 const layanan = [
   { title: "Profil BK", icon: <FaUserCircle />, link: "/B-Profil" },
-  { title: "Asesmen BK", icon: <FaClipboardList />, link: "/asesmen-bk" },
+  { title: "Asesmen BK", icon: <FaClipboardList />, link: "/B-Asesmen" },
   { title: "Layanan Pengaduan", icon: <FaHeadset />, link: "/layanan-pengaduan" },
   { title: "Dokumentasi BK", icon: <FaCamera />, link: "/dokumentasi-bk" },
   { title: "Layanan BK", icon: <FaFolderOpen />, link: "/layanan-bk" },
