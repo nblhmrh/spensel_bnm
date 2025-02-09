@@ -11,7 +11,7 @@ function Index() {
     { title: "Visi & Misi", link: "/visi-misi", icon: <FaClipboardList size={50} className="text-blue-900" /> },
     { title: "Struktur Organisasi", link: "/struktur", icon: <FaUsers size={50} className="text-blue-900" /> },
     { title: "Akreditasi", link: "/akreditasi", icon: <FaCertificate size={50} className="text-blue-900" /> },
-    { title: "Berita Terkini", link: "/berita-terkini", icon: <FaNewspaper size={50} className="text-blue-900" /> },
+    { title: "Berita", link: "/Berita", icon: <FaNewspaper size={50} className="text-blue-900" /> },
     { title: "Fasilitas", link: "/fasilitas", icon: <FaBuilding size={50} className="text-blue-900" /> },
     { title: "Prestasi", link: "/prestasi", icon: <FaTrophy size={50} className="text-blue-900" /> },
   ];

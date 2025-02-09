@@ -31,7 +31,7 @@ function StrukturOrganisasi() {
               href="/struktur"
               className="underline hover:text-gray-300"
             >
-              Struktur Organisasi Sekolah
+              Struktur Organisasi 
             </Link>{" "}
             
           </p>
@@ -41,8 +41,8 @@ function StrukturOrganisasi() {
         <h1 className="text-3xl text-[#154472] font-semibold px-6 py-8">
           Struktur Organisasi UPT SMPN 9 Binamu
         </h1>
-        <p className="bg-gray-200 txt-center px-6 py-3 rounded-full text-blue-900 font-bold text-lg  ">
-        Mari kita mengenal lebih dekat siapa saja yang  berperan penting dalam menjalankan <br/>roda pendidikan di SMPN 9 Binamu Jeneponto. Berikut adalah struktur organisasi sekolah kami.
+        <p className="bg-gray-200 text-center px-8 py-1 rounded-full text-2xl text-blue-900 font-bold  ">
+        Mari kita mengenal lebih dekat siapa saja yang  berperan penting dalam menjalankan <br/>roda pendidikan di UPT SMPN 9 Binamu. Berikut adalah struktur organisasi sekolah kami.
         </p>
       </div>
       <div className="py-16 px-12 items-center justify-center">

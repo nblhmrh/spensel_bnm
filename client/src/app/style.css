@@ -1,0 +1,25 @@
+
+/* styles.css */
+.swiper-button-next,
+.swiper-button-prev {
+  color: white; /* Change the color to match your theme */
+  z-index: 10; /* Ensure the buttons are above other elements */
+  width: 80px; /* Adjust the width as needed */
+  height: 80px; /* Adjust the height as needed */
+  background-color: #154472; /* Add a background color for better visibility */
+  border-radius: 80%; /* Make the buttons circular */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Add a shadow for better visibility */
+}
+
+.swiper-button-next:hover,
+.swiper-button-prev:hover {
+  background-color: black; /* Change background color on hover */
+}
+
+.swiper-button-next::after,
+.swiper-button-prev::after {
+  font-size: 80px; /* Adjust the icon size */
+}
