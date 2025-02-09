@@ -10,7 +10,7 @@ function Dokumen() {
 
         <section className="flex flex-col py-8 px-6">
           <h1 className="text-3xl md:text-4xl font-bold  text-[#ffff]">
-            Kurikulum
+            Dokumentasi BK
           </h1>
           <p className="text-white mt-2 py-3 font-normal">
             <Link href="/" className="underline hover:text-gray-300">
@@ -18,12 +18,19 @@ function Dokumen() {
             </Link>{" "}
             &gt;{" "}
             <Link
-              href="/tentang-kami"
+              href="/BK"
               className="underline hover:text-gray-300"
             >
-              Tentang Kami
+              BK
             </Link>{" "}
-            &gt; <span className="text-gray-300 ">Kurikulum</span>
+            &gt;{" "}
+            <Link
+              href="/B-Dokumentasi"
+              className="underline hover:text-gray-300"
+            >
+              Dokumentasi
+            </Link>{" "}
+           
           </p>
         </section>
       </div>
