@@ -1,5 +1,6 @@
 "use client";
-
+import React from "react";
+import { useRouter } from 'next/navigation';
 import Link from "next/link";
 import Image from "next/image";
 import {
@@ -15,6 +16,7 @@ import logo from "@/assets/logo.png";
 import gerbang from "@/assets/gerbang.png";
 
 function ContactSection() {
+  const router = useRouter();
   return (
     <>
       <div className="relative w-full h-[300px] flex flex-col items-center justify-center text-center text-white">
@@ -34,9 +36,11 @@ function ContactSection() {
             Cari tahu cara menjadi siswa/i di UPT SMPN 9 Binamu
           </h2>
         </div>
-        <button className="z-10 mt-6 px-6 py-3 border-2 border-white text-white text-lg font-semibold rounded-full hover:bg-white hover:text-black transition">
+    
+        <button className="z-10 mt-6 px-6 py-3 border-2 border-white text-white text-lg font-semibold rounded-full hover:bg-white hover:text-black transition" onClick={() => router.push('/PPDB')}>
           Klik disini
         </button>
+      
       </div>
 
       <div className="bg-[#154472] text-white p-6 md:p-12 flex flex-col md:flex-row items-center justify-between gap-6">

@@ -52,7 +52,7 @@ export default function Register() {
       console.log(response.data);
 
       // 🔹 Arahkan ke halaman Daftar 2 setelah sukses
-      router.push("/daftar2");
+      router.push("/Daftar2");
     } catch (err) {
       if (axios.isAxiosError(err)) {
         setError(err.response?.data?.message || "Terjadi kesalahan");
@@ -102,11 +102,11 @@ export default function Register() {
             <div className="mb-4 relative">
               <label className="block text-gray-700 text-sm font-medium mb-1">Email</label>
               <div className="flex items-center border rounded-lg px-3 py-2 focus-within:ring-2 focus-within:ring-blue-500">
-                <AiOutlineMail className="text-gray-500 text-xl mr-2" />
+                <AiOutlineMail className="text-gray-700 text-xl mr-2" />
                 <input
                   type="email"
                   name="email"
-                  className="w-full focus:outline-none"
+                  className="w-full focus:outline-none text-black"
                   value={formData.email}
                   onChange={handleChange}
                   required
@@ -123,7 +123,7 @@ export default function Register() {
                 <input
                   type={showPassword ? "text" : "password"}
                   name="password"
-                  className="w-full focus:outline-none"
+                  className="w-full focus:outline-none text-black"
                   value={formData.password}
                   onChange={handleChange}
                   required
@@ -143,7 +143,7 @@ export default function Register() {
                 <input
                   type={showConfirmPassword ? "text" : "password"}
                   name="confirmPassword"
-                  className="w-full focus:outline-none"
+                  className="w-full focus:outline-none text-black"
                   value={formData.confirmPassword}
                   onChange={handleChange}
                   required

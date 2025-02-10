@@ -5,6 +5,8 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { FaUser, FaCalendarAlt, FaWhatsapp, FaIdCard } from "react-icons/fa";
 import logo from "@/assets/logo.png";
+import skl from '@/assets/skl.jpg'
+import smbt from '@/assets/smbt.png'
 export default function RegistrationForm() {
   const router = useRouter();
   const [formData, setFormData] = useState({
@@ -25,6 +27,17 @@ export default function RegistrationForm() {
   };
 
   return (
+    <div className="relative min-h-screen flex justify-center items-center">
+      {/* Background Image */}
+      <div className="absolute inset-0 z-0">
+        <Image 
+          src={smbt}
+          layout="fill"
+          objectFit="cover"
+          alt="Background"
+        />
+      </div>
+
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
       <div className="bg-white shadow-lg rounded-lg p-8 w-full max-w-2xl flex">
         {/* Form Section */}
@@ -53,7 +66,7 @@ export default function RegistrationForm() {
                 value={formData.name}
                 onChange={handleChange}
                 required
-                className="pl-10 p-2 w-full border rounded-lg"
+                className="pl-10 p-2 w-full border rounded-lg text-black"
               />
             </div>
             <div className="relative">
@@ -64,7 +77,7 @@ export default function RegistrationForm() {
                 value={formData.birthDate}
                 onChange={handleChange}
                 required
-                className="pl-10 p-2 w-full border rounded-lg"
+                className="pl-10 p-2 w-full border rounded-lg text-black"
               />
             </div>
             <div className="relative">
@@ -76,7 +89,7 @@ export default function RegistrationForm() {
                 value={formData.whatsapp}
                 onChange={handleChange}
                 required
-                className="pl-10 p-2 w-full border rounded-lg"
+                className="pl-10 p-2 w-full border rounded-lg text-black"
               />
             </div>
             <div className="relative">
@@ -88,12 +101,12 @@ export default function RegistrationForm() {
                 value={formData.nik}
                 onChange={handleChange}
                 required
-                className="pl-10 p-2 w-full border rounded-lg"
+                className="pl-10 p-2 w-full border rounded-lg text-black"
               />
             </div>
             <button
               type="submit"
-              className="w-full bg-blue-600 text-white p-2 rounded-lg hover:bg-blue-700"
+              className="w-full bg-[#154472] text-white p-2 rounded-lg hover:bg-blue-700"
             >
               Lanjut
             </button>
@@ -102,7 +115,7 @@ export default function RegistrationForm() {
         {/* Image Section */}
         <div className="w-1/2 flex justify-center items-center p-4">
           <Image
-            src="/images/students.jpg"
+            src={skl}
             alt="Illustration"
             width={300}
             height={300}
@@ -110,6 +123,7 @@ export default function RegistrationForm() {
           />
         </div>
       </div>
+    </div>
     </div>
   );
 }
