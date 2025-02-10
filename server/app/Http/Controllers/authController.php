@@ -11,17 +11,17 @@ class authController extends Controller
         $request->validate([
             'name' => 'required',
             'email' => 'required',
-            'phone' => 'required',
-            'nik' => 'required',
-            'birth_date' => 'required|date_format:Y-m-d',
+            //'phone' => 'required',
+            //'nik' => 'required',
+            //'birth_date' => 'required|date_format:Y-m-d',
             'password' => 'required',
         ]);
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
-            'phone' => $request->phone,
-            'nik' => $request->nik,
-            'birth_date' => $request->birth_date,
+           // 'phone' => $request->phone,
+            //'nik' => $request->nik,
+            //'birth_date' => $request->birth_date,
             'password' => Hash::make($request->password),
         ]);
         return response()->json($user);
