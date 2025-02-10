@@ -54,7 +54,7 @@ export default function Dashboard() {
               <FaHome className="mr-2" /> Beranda
             </button>
             <button
-              onClick={() => router.push("/pendaftaran")}
+              onClick={() => router.push("/Pendaftaran")}
               className="flex items-center text-left w-full px-4 py-2 hover:bg-gray-200 rounded-lg"
             >
               <FaUserPlus className="mr-2" /> Pendaftaran
