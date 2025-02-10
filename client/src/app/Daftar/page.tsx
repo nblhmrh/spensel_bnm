@@ -1,4 +1,6 @@
+
 "use client";
+
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
@@ -9,6 +11,8 @@ import { RiLockPasswordLine } from "react-icons/ri";
 import skl from '@/assets/skl.jpg'
 import logo from '@/assets/logo.png'
 import smbt from '@/assets/smbt.png'
+
+axios.defaults.withCredentials = true;
 
 export default function Register() {
   const router = useRouter();
@@ -43,15 +47,25 @@ export default function Register() {
     }
 
     try {
+      await axios.get("http://localhost:8000/sanctum/csrf-cookie", { withCredentials: true });
+
+      const csrfToken = document.cookie
+        .split('; ')
+        .find(row => row.startsWith('XSRF-TOKEN='))
+        ?.split('=')[1];
+
       const response = await axios.post("http://localhost:8000/api/register", {
         email: formData.email,
         password: formData.password,
+      }, {
+        headers: {
+          "X-CSRF-TOKEN": decodeURIComponent(csrfToken || ""),
+        },
       });
 
       alert("Registrasi berhasil!");
       console.log(response.data);
 
-      // 🔹 Arahkan ke halaman Daftar 2 setelah sukses
       router.push("/Daftar2");
     } catch (err) {
       if (axios.isAxiosError(err)) {
