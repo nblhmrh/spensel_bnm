@@ -62,7 +62,7 @@ function Prestasi() {
         <h1 className="text-3xl text-[#154472] font-semibold">
         Prestasi UPT SMPN 9 Binamu 
         </h1>
-        <p className="text-gray-800 text-xl font-medium py-1">
+        <p className="text-gray-800 text-xl font-medium py-1 text-center">
         Halaman Prestasi ini adalah cerminan kualitas pendidikan dan dedikasi tinggi dari seluruh warga sekolah. Setiap prestasi adalah bukti komitmen kami untuk memberikan yang terbaik bagi perkembangan dan kemajuan siswa.
         </p>
       </div>

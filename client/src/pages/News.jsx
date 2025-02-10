@@ -52,7 +52,7 @@ function News() {
       </div>
 
       {/* Tombol Selengkapnya */}
-      <Link href="/Tentang-Kami#berita">
+      <Link href="/Berita">
         <button className="mt-8 px-6 py-3 border-2 border-white text-white rounded-full font-semibold hover:bg-white hover:text-[#154472] transition-all duration-300">
           Selengkapnya
         </button>

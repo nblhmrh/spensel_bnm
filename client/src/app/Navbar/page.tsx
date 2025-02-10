@@ -44,7 +44,7 @@ function Navbar() {
           </button>
         </li>
         <li>
-          <button onClick={() => router.push("/ppdb")} className="hover:text-gray-300 font-medium">
+          <button onClick={() => router.push("/PPDB")} className="hover:text-gray-300 font-medium">
             PPDB
           </button>
         </li>
