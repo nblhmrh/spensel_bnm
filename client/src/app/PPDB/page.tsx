@@ -44,7 +44,7 @@ import gerbang from '@/assets/gerbang.png'
           </button>
           <button 
             className="bg-white text-gray-900 px-16 py-2 rounded-lg hover:bg-gray-600 transition text-lg"
-            onClick={() => router.push('/masuk')}
+            onClick={() => router.push('/Login')}
           >
             Masuk
           </button>
