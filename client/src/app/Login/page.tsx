@@ -38,7 +38,7 @@ export default function Login() {
       console.log(response.data);
 
       // 🔹 Redirect ke halaman dashboard setelah login
-      router.push("/dashboard");
+      router.push("/Beranda");
     } catch (err) {
       if (axios.isAxiosError(err)) {
         setError(err.response?.data?.message || "Email atau kata sandi salah");
@@ -88,7 +88,7 @@ export default function Login() {
                 <input
                   type="email"
                   name="email"
-                  className="w-full focus:outline-none"
+                  className="w-full focus:outline-none text-black"
                   value={formData.email}
                   onChange={handleChange}
                   required
@@ -105,7 +105,7 @@ export default function Login() {
                 <input
                   type={showPassword ? "text" : "password"}
                   name="password"
-                  className="w-full focus:outline-none"
+                  className="w-full focus:outline-none text-black"
                   value={formData.password}
                   onChange={handleChange}
                   required
