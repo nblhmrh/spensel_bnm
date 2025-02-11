@@ -38,7 +38,7 @@ export default function Login() {
       console.log(response.data);
 
       // 🔹 Redirect ke halaman dashboard setelah login
-      router.push("/Beranda");
+      router.push("/Berandappdb");
     } catch (err) {
       if (axios.isAxiosError(err)) {
         setError(err.response?.data?.message || "Email atau kata sandi salah");
