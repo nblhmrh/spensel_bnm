@@ -24,26 +24,28 @@ export default function Pendaftaran() {
        <aside className="w-64 bg-white shadow-lg p-5 flex flex-col">
         <div>
           {/* Logo dan Nama Sekolah */}
-          <div className="mr-6">
+          <div className="items-center">
             <Image src={logo} width={80} height={80} alt="Logo Sekolah" />
           </div>
-          <h2 className="text-right font-bold text-lg flex-2 text-gray-800">
+          <h2 className="text-center font-bold text-lg flex-2 text-gray-800">
             UPT SMPN 9 Binamu
           </h2>
 
           {/* Menu Navigasi */}
           <nav className="text-[#154472] space-y-4 mt-4">
-            <button className="flex items-center text-left w-full px-4 py-2 bg-blue-100 rounded-lg font-semibold text-blue-800">
+            <button 
+             onClick={() => router.push("/Berandappdb")}
+             className="flex items-center text-left w-full px-4 py-2 rounded-lg ">
               <FaHome className="mr-2" /> Beranda
             </button>
             <button
               onClick={() => router.push("/Pendaftaran")}
-              className="flex items-center text-left w-full px-4 py-2 hover:bg-gray-200 rounded-lg"
+              className="flex items-center text-left w-full px-4 py-2 bg-blue-100 font-semibold text-blue-800 hover:bg-gray-200 rounded-lg"
             >
               <FaUserPlus className="mr-2" /> Pendaftaran
             </button>
             <button
-              onClick={() => router.push("/pengumuman")}
+              onClick={() => router.push("/Pengumuman")}
               className="flex items-center text-left w-full px-4 py-2 hover:bg-gray-200 rounded-lg"
             >
               <FaBullhorn className="mr-2" /> Pengumuman
@@ -82,7 +84,7 @@ export default function Pendaftaran() {
       {/* Data Peserta Didik */}
       <div
         className="bg-[#154472] text-white p-6 rounded-xl text-center cursor-pointer shadow-lg hover:bg-[#123A60] transition-all"
-        onClick={() => router.push("/pendaftaran/data-peserta")}
+        onClick={() => router.push("/Datasiswa")}
       >
         <Image src={student} alt="Data Peserta Didik" className="mx-auto w-16 h-16 mb-2" />
         <h3 className="text-lg font-semibold">Data Peserta Didik</h3>
@@ -94,7 +96,7 @@ export default function Pendaftaran() {
       {/* Data Orang Tua/Wali */}
       <div
         className="bg-[#154472] text-white p-6 rounded-xl text-center cursor-pointer shadow-lg hover:bg-[#123A60] transition-all"
-        onClick={() => router.push("/pendaftaran/data-ortu")}
+        onClick={() => router.push("/Dataortu")}
       >
         <Image src={parents} alt="Data Orang Tua/Wali" className="mx-auto w-16 h-16 mb-2" />
         <h3 className="text-lg font-semibold">Data Orang Tua/Wali</h3>
@@ -108,7 +110,7 @@ export default function Pendaftaran() {
         className="bg-[#154472] text-white p-6 rounded-xl text-center cursor-pointer shadow-lg hover:bg-[#123A60] transition-all"
         onClick={() =>
           window.open(
-            "https://docs.google.com/forms/d/e/1FAIpQLSdxK",
+            "https://forms.gle/MCTMeZpqukH4DUhq9",
             "_blank"
           )
         }

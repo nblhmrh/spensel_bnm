@@ -37,7 +37,7 @@ export default function Home() {
   ];
   return (
     <>
-      <div className="bg-[#154472] w-[1382px] h-[500px]">
+      <div className="bg-[#154472] w-full h-[500px]">
         <Navbar />
         
         <section className="flex flex-col items-center text-center py-16 px-6">
@@ -46,7 +46,7 @@ export default function Home() {
           </h1>
           <div className="mt-8 w-full md:w-2/3 lg:w-1/2 ">
             <Image
-              src={laskar}
+              src={smbt}
               alt="Gedung Sekolah"
               className="rounded-lg shadow-lg"
             />

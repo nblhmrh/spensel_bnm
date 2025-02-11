@@ -1,18 +1,21 @@
-
 "use client";
-
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import axios from "axios";
-import { AiOutlineMail, AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
+import {
+  AiOutlineMail,
+  AiOutlineEye,
+  AiOutlineEyeInvisible,
+} from "react-icons/ai";
 import { RiLockPasswordLine } from "react-icons/ri";
-import skl from '@/assets/skl.jpg'
-import logo from '@/assets/logo.png'
-import smbt from '@/assets/smbt.png'
+import skl from "@/assets/skl.jpg";
+import logo from "@/assets/logo.png";
+import smbt from "@/assets/smbt.png";
 
 axios.defaults.withCredentials = true;
+axios.defaults.baseURL = "http://localhost:8000";
 
 export default function Register() {
   const router = useRouter();
@@ -33,7 +36,8 @@ export default function Register() {
   };
 
   const togglePassword = () => setShowPassword(!showPassword);
-  const toggleConfirmPassword = () => setShowConfirmPassword(!showConfirmPassword);
+  const toggleConfirmPassword = () =>
+    setShowConfirmPassword(!showConfirmPassword);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -47,24 +51,20 @@ export default function Register() {
     }
 
     try {
-      await fetch('http://localhost:8000/sanctum/csrf-cookie', {
-        method: 'GET',
-        credentials: 'include' // Wajib untuk menyertakan cookies
-    });
-    
-      const csrfToken = document.cookie
-        .split('; ')
-        .find(row => row.startsWith('XSRF-TOKEN='))
-        ?.split('=')[1];
+      // 🔹 Minta CSRF token dulu
+      // await axios.get("/sanctum/csrf-cookie");
 
-      const response = await axios.post("http://localhost:8000/api/register", {
-        email: formData.email,
-        password: formData.password,
-      }, {
-        headers: {
-          "X-CSRF-TOKEN": decodeURIComponent(csrfToken || ""),
+      // 🔹 Kirim request register
+      const response = await axios.post(
+        "http://localhost:8000/api/register",
+        {
+          email: formData.email,
+          password: formData.password,
         },
-      });
+        {
+          withCredentials: true,
+        }
+      );
 
       alert("Registrasi berhasil!");
       console.log(response.data);
@@ -85,12 +85,7 @@ export default function Register() {
     <div className="relative min-h-screen flex justify-center items-center">
       {/* Background Image */}
       <div className="absolute inset-0 z-0">
-        <Image 
-          src={smbt}
-          layout="fill"
-          objectFit="cover"
-          alt="Background"
-        />
+        <Image src={smbt} layout="fill" objectFit="cover" alt="Background" />
       </div>
 
       {/* Form Container */}
@@ -99,17 +94,15 @@ export default function Register() {
         <div className="w-1/2 p-4">
           {/* Logo Sekolah */}
           <div className="flex justify-center mb-4">
-            <Image 
-              src={logo}
-              width={100} 
-              height={100} 
-              alt="Logo Sekolah"
-            />
+            <Image src={logo} width={100} height={100} alt="Logo Sekolah" />
           </div>
 
-          <h2 className="text-2xl font-semibold text-center mb-2 text-[#154472]">Tinggal selangkah lagi..</h2>
+          <h2 className="text-2xl font-semibold text-center mb-2 text-[#154472]">
+            Tinggal selangkah lagi..
+          </h2>
           <p className="text-sm text-gray-600 text-center mb-4">
-            Isilah data di bawah ini untuk melakukan pendaftaran akun terlebih dahulu ya!
+            Isilah data di bawah ini untuk melakukan pendaftaran akun terlebih
+            dahulu ya!
           </p>
 
           {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
@@ -117,7 +110,9 @@ export default function Register() {
           <form onSubmit={handleSubmit}>
             {/* Email */}
             <div className="mb-4 relative">
-              <label className="block text-gray-700 text-sm font-medium mb-1">Email</label>
+              <label className="block text-gray-700 text-sm font-medium mb-1">
+                Email
+              </label>
               <div className="flex items-center border rounded-lg px-3 py-2 focus-within:ring-2 focus-within:ring-blue-500">
                 <AiOutlineMail className="text-gray-700 text-xl mr-2" />
                 <input
@@ -134,7 +129,9 @@ export default function Register() {
 
             {/* Password */}
             <div className="mb-4 relative">
-              <label className="block text-gray-700 text-sm font-medium mb-1">Kata Sandi</label>
+              <label className="block text-gray-700 text-sm font-medium mb-1">
+                Kata Sandi
+              </label>
               <div className="flex items-center border rounded-lg px-3 py-2 focus-within:ring-2 focus-within:ring-blue-500">
                 <RiLockPasswordLine className="text-gray-500 text-xl mr-2" />
                 <input
@@ -146,15 +143,25 @@ export default function Register() {
                   required
                   placeholder="Masukkan kata sandi"
                 />
-                <button type="button" onClick={togglePassword} className="focus:outline-none">
-                  {showPassword ? <AiOutlineEyeInvisible className="text-gray-500 text-xl" /> : <AiOutlineEye className="text-gray-500 text-xl" />}
+                <button
+                  type="button"
+                  onClick={togglePassword}
+                  className="focus:outline-none"
+                >
+                  {showPassword ? (
+                    <AiOutlineEyeInvisible className="text-gray-500 text-xl" />
+                  ) : (
+                    <AiOutlineEye className="text-gray-500 text-xl" />
+                  )}
                 </button>
               </div>
             </div>
 
             {/* Confirm Password */}
             <div className="mb-4 relative">
-              <label className="block text-gray-700 text-sm font-medium mb-1">Konfirmasi Kata Sandi</label>
+              <label className="block text-gray-700 text-sm font-medium mb-1">
+                Konfirmasi Kata Sandi
+              </label>
               <div className="flex items-center border rounded-lg px-3 py-2 focus-within:ring-2 focus-within:ring-blue-500">
                 <RiLockPasswordLine className="text-gray-500 text-xl mr-2" />
                 <input
@@ -166,8 +173,16 @@ export default function Register() {
                   required
                   placeholder="Masukkan kembali kata sandi"
                 />
-                <button type="button" onClick={toggleConfirmPassword} className="focus:outline-none">
-                  {showConfirmPassword ? <AiOutlineEyeInvisible className="text-gray-500 text-xl" /> : <AiOutlineEye className="text-gray-500 text-xl" />}
+                <button
+                  type="button"
+                  onClick={toggleConfirmPassword}
+                  className="focus:outline-none"
+                >
+                  {showConfirmPassword ? (
+                    <AiOutlineEyeInvisible className="text-gray-500 text-xl" />
+                  ) : (
+                    <AiOutlineEye className="text-gray-500 text-xl" />
+                  )}
                 </button>
               </div>
             </div>
@@ -191,7 +206,7 @@ export default function Register() {
 
         {/* Gambar Samping */}
         <div className="w-1/2 flex justify-center items-center">
-          <Image 
+          <Image
             src={skl}
             width={380}
             height={380}
