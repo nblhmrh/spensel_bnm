@@ -47,8 +47,11 @@ export default function Register() {
     }
 
     try {
-      await axios.get("http://localhost:8000/sanctum/csrf-cookie", { withCredentials: true });
-
+      await fetch('http://localhost:8000/sanctum/csrf-cookie', {
+        method: 'GET',
+        credentials: 'include' // Wajib untuk menyertakan cookies
+    });
+    
       const csrfToken = document.cookie
         .split('; ')
         .find(row => row.startsWith('XSRF-TOKEN='))
