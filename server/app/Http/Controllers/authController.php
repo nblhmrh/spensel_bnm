@@ -9,7 +9,7 @@ class authController extends Controller
 {
     public function register(Request $request) {
         $request->validate([
-            'name' => 'required',
+            //'name' => 'required',
             'email' => 'required',
             //'phone' => 'required',
             //'nik' => 'required',
@@ -17,7 +17,7 @@ class authController extends Controller
             'password' => 'required',
         ]);
         $user = User::create([
-            'name' => $request->name,
+            //'name' => $request->name,
             'email' => $request->email,
            // 'phone' => $request->phone,
             //'nik' => $request->nik,

@@ -43,18 +43,18 @@ export default function Register() {
     e.preventDefault();
     setLoading(true);
     setError(null);
-
+  
     if (formData.password !== formData.confirmPassword) {
       setError("Konfirmasi kata sandi tidak cocok.");
       setLoading(false);
       return;
     }
-
+  
     try {
-      // 🔹 Minta CSRF token dulu
-      // await axios.get("/sanctum/csrf-cookie");
-
-      // 🔹 Kirim request register
+      // Ambil CSRF token terlebih dahulu
+      await axios.get("/sanctum/csrf-cookie");
+  
+      // Kirim request register
       const response = await axios.post(
         "http://localhost:8000/api/register",
         {
@@ -65,10 +65,10 @@ export default function Register() {
           withCredentials: true,
         }
       );
-
+  
       alert("Registrasi berhasil!");
       console.log(response.data);
-
+  
       router.push("/Daftar2");
     } catch (err) {
       if (axios.isAxiosError(err)) {
