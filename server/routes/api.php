@@ -12,7 +12,7 @@ Route::middleware([EnsureFrontendRequestsAreStateful::class])->group(function ()
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/user', [authController::class, 'user']);
-    Route::post('/logout', [authController::class, 'logout']);
+    Route::middleware('auth:sanctum')->post('/logout', [AuthController::class, 'logout']);
 });
 Route::get('/csrf-cookie', function (Request $request) {
     return response()->json(['message' => 'CSRF Cookie Set']);

@@ -1,4 +1,5 @@
 import React from "react";
+import '../app/globals.css'; 
 import Navbar from "@/app/Navbar/page";
 import Image from "next/image";
 import laskar from "../assets/laskar.jpg";

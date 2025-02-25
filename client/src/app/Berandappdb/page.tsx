@@ -31,9 +31,18 @@ export default function Dashboard() {
   };
 
   const handleLogout = () => {
+    // Hapus token atau data sesi dari localStorage
+    localStorage.removeItem('token');
+  
+    // Tampilkan pesan logout
     alert("Anda telah keluar.");
-    router.push("/Welcome");
-  };
+  
+    // Ganti history browser dengan halaman Welcome
+    window.history.replaceState(null, '', '/PPDB');
+  
+    // Redirect ke halaman Welcome
+    router.push("/PPDB");
+  }; 
 
   return (
     <div className="flex min-h-screen bg-gray-100">

@@ -3,7 +3,7 @@ import { useEffect } from "react";
 export default function useAuth(){
     const router=useRouter()
     useEffect(()=>{
-        const token=localStorage.getItem('auth_token')
+        const token=localStorage.getItem('token')
         if(!token){
             router.push('/login')
         }
