@@ -30,18 +30,10 @@ export default function Dashboard() {
     whatsapp: "0812345678910",
   };
 
-  const handleLogout = () => {
-    // Hapus token atau data sesi dari localStorage
-    localStorage.removeItem('token');
-  
-    // Tampilkan pesan logout
-    alert("Anda telah keluar.");
-  
-    // Ganti history browser dengan halaman Welcome
-    window.history.replaceState(null, '', '/PPDB');
-  
-    // Redirect ke halaman Welcome
-    router.push("/PPDB");
+  const handleLogout = () => { 
+    localStorage.removeItem('token'); 
+    window.history.replaceState(null, '', '/PPDB'); 
+    router.push("/Welcome");
   }; 
 
   return (

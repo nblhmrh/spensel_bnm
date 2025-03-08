@@ -66,7 +66,7 @@ export default function Register() {
         }
       );
   
-      alert("Registrasi berhasil!");
+      
       console.log(response.data);
   
       router.push("/Daftar2");

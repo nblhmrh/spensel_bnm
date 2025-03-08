@@ -34,7 +34,6 @@ export default function Login() {
 
     try {
       const response = await axios.post("http://localhost:8000/api/login", formData);
-      alert("Login berhasil!");
       console.log(response.data);
 
       // 🔹 Redirect ke halaman dashboard setelah login

@@ -20,9 +20,6 @@ class User extends Authenticatable
     protected $fillable = [
         'name',
         'email',
-       // 'phone',
-       // 'nik',
-      //  'birth_date',
         'password',
     ];
 
@@ -44,4 +41,9 @@ class User extends Authenticatable
     protected $casts = [
       'password' => 'hashed'
     ];
+
+    public function daftar2() {
+        return $this->hasOne(Daftar2::class);
+    }
+    
 }

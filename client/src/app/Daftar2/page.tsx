@@ -7,6 +7,7 @@ import { FaUser, FaCalendarAlt, FaWhatsapp, FaIdCard } from "react-icons/fa";
 import logo from "@/assets/logo.png";
 import skl from '@/assets/skl.jpg'
 import smbt from '@/assets/smbt.png'
+
 export default function RegistrationForm() {
   const router = useRouter();
   const [formData, setFormData] = useState({
@@ -35,24 +36,25 @@ export default function RegistrationForm() {
           layout="fill"
           objectFit="cover"
           alt="Background"
+          quality={100}
         />
       </div>
 
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
-      <div className="bg-white shadow-lg rounded-lg p-8 w-full max-w-2xl flex">
+    <div className="flex items-center justify-center min-h-screen bg-transparent z-10">
+      <div className="relative z-10 bg-white px-14 py-3.5 rounded-lg shadow-lg w-[1200px] flex">
         {/* Form Section */}
         <div className="w-1/2 p-4">
           <Image
             src={logo}
             alt="School Logo"
-            width={80}
-            height={80}
-            className="mx-auto mb-4"
+            width={100}
+            height={100}
+            className="flex justify-center mb-4 mx-auto"
           />
-          <h2 className="text-center text-xl font-bold text-blue-600">
+          <h2 className="text-2xl font-semibold text-center mb-2 text-[#154472]">
             Tinggal selangkah lagi..
           </h2>
-          <p className="text-sm text-center mb-4">
+          <p className="text-sm text-gray-600 text-center mb-4">
             Isilah data-data di bawah ini untuk melakukan pendaftaran akun
             terlebih dahulu ya!
           </p>
@@ -117,8 +119,8 @@ export default function RegistrationForm() {
           <Image
             src={skl}
             alt="Illustration"
-            width={300}
-            height={300}
+            width={380}
+            height={380}
             className="rounded-lg"
           />
         </div>
