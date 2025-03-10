@@ -45,5 +45,10 @@ class User extends Authenticatable
     public function daftar2() {
         return $this->hasOne(Daftar2::class);
     }
-    
+
+    public function datasiswa()
+    {
+    return $this->hasOne(Datasiswa::class);
+    }
+
 }

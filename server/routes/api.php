@@ -4,6 +4,10 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\authController;
 use App\Http\Controllers\Daftar2Controller;
+use App\Http\Controllers\DatasiswaController;
+
+
+
 use Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful;
 
 Route::post('/register', [authController::class, 'register']);
@@ -21,4 +25,5 @@ Route::get('/csrf-cookie', function (Request $request) {
 });
 
 Route::post('/daftar2', [Daftar2Controller::class, 'store']);
+Route::post('/datasiswa', [DatasiswaController::class, 'store']);   
 
