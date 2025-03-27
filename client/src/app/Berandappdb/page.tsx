@@ -30,10 +30,12 @@ export default function Dashboard() {
     whatsapp: "0812345678910",
   };
 
-  const handleLogout = () => {
-    alert("Anda telah keluar.");
-    router.push("/");
-  };
+
+  const handleLogout = () => { 
+    localStorage.removeItem('token'); 
+    window.history.replaceState(null, '', '/PPDB'); 
+    router.push("/Welcome");
+  }; 
 
   return (
     <div className="flex min-h-screen bg-gray-100">
