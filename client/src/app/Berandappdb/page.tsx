@@ -32,7 +32,7 @@ export default function Dashboard() {
 
   const handleLogout = () => {
     alert("Anda telah keluar.");
-    router.push("/Welcome");
+    router.push("/");
   };
 
   return (
