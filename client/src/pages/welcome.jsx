@@ -146,7 +146,7 @@ export default function Home() {
                 </p>
               </div>
               <div className="bg-[#154472] px-6 py-3 w-[200px] h-[50px] rounded-full font-bold text-yellow-600">
-                Tn. Amirullah, M.Pd
+                Amirullah, M.Pd
               </div>
             </div>
           </section>
