@@ -11,7 +11,8 @@ function Navbar() {
   const router = useRouter();
 
   return (
-    <nav className="flex justify-end items-center px-6 py-4 text-white">
+    <div>
+    <nav className="fixed top-0 left-0 w-full z-50 flex justify-end items-center px-6 text-white bg-[#154472] shadow-md">
       <div className="flex items-center mr-auto">
         <Image src={logo} alt="Logo Sekolah" width={100} height={100} />
       </div>
@@ -107,6 +108,11 @@ function Navbar() {
         </ul>
       )}
     </nav>
+    <div className="py-16">
+
+    </div>
+    </div>
+ 
   );
 }
 
