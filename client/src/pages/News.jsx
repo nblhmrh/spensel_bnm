@@ -22,7 +22,7 @@ function News() {
     <>
     <div className="bg-[#154472] w-full min-h-screen flex flex-col items-center py-10 px-4">
       {/* Header */}
-      <h1 className="text-xl md:text-2xl font-bold text-white text-center py-4">
+      <h1 className="text-xl md:text-4xl font-bold text-white text-center py-4">
         BERITA TERKINI
       </h1>
       <h2 className="text-2xl md:text-3xl font-bold text-white text-center mb-8">
