@@ -36,7 +36,7 @@ export default function FormOrangTua() {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      const response = await axios.post("http://127.0.0.1:8000/api/orangtua", formData);
+      const response = await axios.post("http://127.0.0.1:8000/api/dataortu", formData);
       alert("Data berhasil dikirim!");
       console.log(response.data);
     } catch (error) {

@@ -24,10 +24,10 @@ export default function Dashboard() {
 
   // Data Pengguna
   const user = {
-    id: "T8287396jdjow4629",
-    name: "utipatotie",
-    email: "mutiaqamilamarsyah@gmail.com",
-    whatsapp: "0812345678910",
+    id: "",
+    name: "",
+    email: "",
+    whatsapp: "",
   };
 
 

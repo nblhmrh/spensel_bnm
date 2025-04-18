@@ -11,6 +11,7 @@ return new class extends Migration
         Schema::create('datasiswa', function (Blueprint $table) {
             $table->id();
             $table->string('nisn')->unique();
+            $table->string('nik');
             $table->string('nama');
             $table->string('jenis_kelamin');
             $table->string('tempat_lahir');

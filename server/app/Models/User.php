@@ -43,7 +43,7 @@ class User extends Authenticatable
     ];
 
     public function daftar2() {
-        return $this->hasOne(Daftar2::class);
+        return $this->hasMany(Daftar2::class);
     }
 
     public function datasiswa()
