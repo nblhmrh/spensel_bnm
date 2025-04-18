@@ -50,7 +50,7 @@ function Kurikulum() {
                 href={file.link}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition"
+                className="bg-[#154472] text-white px-4 py-2 rounded hover:bg-gray-700 transition"
               >
                 Lihat / Download
               </a>
