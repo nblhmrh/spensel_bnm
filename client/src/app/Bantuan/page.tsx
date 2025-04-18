@@ -1,193 +1,190 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
-import { FaArrowLeft } from "react-icons/fa";
-import Image from "next/image";
+import { useState, useEffect } from "react";
 import {
   FaSignOutAlt,
   FaHome,
   FaUserPlus,
   FaBullhorn,
   FaQuestionCircle,
+  FaChevronLeft,
+  FaChevronRight,
 } from "react-icons/fa";
+import Image from "next/image";
 import logo from "@/assets/logo.png";
-import axios from "axios";
+import { useRouter } from "next/navigation";
+import { FaArrowLeft } from "react-icons/fa";
 
-export default function Pengumuman() {
+// import axios from "axios";
+
+export default function Bantuan() {
   const router = useRouter();
-  const [nisn, setNisn] = useState("");
-  const [nama, setNama] = useState("");
-  const [noPendaftaran, setNoPendaftaran] = useState("");
-  const [hasil, setHasil] = useState<null | {
-    status: string;
-    nama: string;
-  }>(null);
-  const [loading, setLoading] = useState(false);
+  const [sidebarTerbuka, setSidebarTerbuka] = useState(true);
 
-  const handleSubmit = async () => {
-    try {
-      setLoading(true);
-      const response = await axios.post(
-        "http://localhost:8000/api/cek-pengumuman",
-        {
-          nisn,
-          nama,
-          no_pendaftaran: noPendaftaran,
-        }
-      );
-      setHasil(response.data);
-    } catch (error) {
-      setHasil({
-        status: "belum_ada",
-        nama: nama,
-      });
-    } finally {
-      setLoading(false);
+  // Ambil dari localStorage saat pertama kali load
+  useEffect(() => {
+    const saved = localStorage.getItem("sidebarTerbuka");
+    if (saved !== null) {
+      setSidebarTerbuka(saved === "true");
     }
-  };
+  }, []);
+
+  // Simpan ke localStorage setiap kali sidebarTerbuka berubah
+  useEffect(() => {
+    localStorage.setItem("sidebarTerbuka", sidebarTerbuka.toString());
+  }, [sidebarTerbuka]);
 
   return (
     <div className="flex">
       {/* Sidebar */}
-      <aside className="w-64 bg-white shadow-lg p-5 flex flex-col">
-        <div>
-          {/* Logo dan Nama Sekolah */}
-          <div className="items-center">
-            <Image src={logo} width={80} height={80} alt="Logo Sekolah" />
-          </div>
-          <h2 className="text-center font-bold text-lg flex-2 text-gray-800">
-            UPT SMPN 9 Binamu
+      <aside
+      className={`${
+        sidebarTerbuka ? "w-64" : "w-20"
+      } bg-white shadow-lg p-4 flex flex-col transition-all duration-300 relative`}
+    >
+      {/* Tombol Collapse */}
+      <button
+        onClick={() => setSidebarTerbuka(!sidebarTerbuka)}
+        className="absolute -right-3 top-5 bg-white border border-gray-300 rounded-full p-1 shadow-md z-10"
+      >
+        {sidebarTerbuka ? <FaChevronLeft /> : <FaChevronRight />}
+      </button>
+
+      {/* Logo */}
+      <div className="flex flex-col items-center">
+        <Image
+          src={logo}
+          width={sidebarTerbuka ? 80 : 40}
+          height={sidebarTerbuka ? 80 : 40}
+          alt="Logo Sekolah"
+          className="transition-all duration-300"
+        />
+        {sidebarTerbuka && (
+          <h2 className="text-center font-bold text-lg text-gray-800 mt-2 leading-tight">
+            UPT SMP 9 Binamu
+            <br />
+            <span className="text-sm font-medium">Jeneponto</span>
           </h2>
+        )}
+      </div>
 
-          {/* Menu Navigasi */}
-          <nav className="text-[#154472] space-y-4 mt-4">
-            <button
-              onClick={() => router.push("/Berandappdb")}
-              className="flex items-center text-left w-full px-4 py-2 rounded-lg "
-            >
-              <FaHome className="mr-2" /> Beranda
-            </button>
-            <button
-              onClick={() => router.push("/Pendaftaran")}
-              className="flex items-center text-left w-full px-4 py-2  hover:bg-gray-200 rounded-lg"
-            >
-              <FaUserPlus className="mr-2" /> Pendaftaran
-            </button>
-            <button
-              onClick={() => router.push("/Pengumuman")}
-              className="flex items-center text-left w-full px-4 py-2 bg-blue-100 font-semibold text-blue-800 hover:bg-gray-200 rounded-lg"
-            >
-              <FaBullhorn className="mr-2" /> Pengumuman
-            </button>
-            <button
-              onClick={() => router.push("/Bantuan")}
-              className="flex items-center text-left w-full px-4 py-2 hover:bg-gray-200 rounded-lg"
-            >
-              <FaQuestionCircle className="mr-2" /> Bantuan
-            </button>
-          </nav>
-        </div>
-        {/* Tombol Keluar */}
+      {/* Navigasi */}
+      <nav className="text-[#154472] space-y-4 mt-6">
         <button
-          onClick={() => router.push("/Welcome")}
-          className="mt-auto bg-[#154472] text-white py-2 flex items-center justify-center rounded-lg hover:bg-red-800"
+          onClick={() => router.push("/Berandappdb")}
+          className="flex items-center text-left w-full px-3 py-2 rounded-lg hover:bg-gray-100 transition-all"
         >
-          <FaSignOutAlt className="mr-2" /> Keluar
+          <FaHome className="text-xl mr-2" />
+          {sidebarTerbuka && "Beranda"}
         </button>
-      </aside>
+        <button
+          onClick={() => router.push("/Pendaftaran")}
+          className="flex items-center text-left w-full px-3 py-2 rounded-lg hover:bg-gray-100 transition-all"
+        >
+          <FaUserPlus className="text-xl mr-2" />
+          {sidebarTerbuka && "Pendaftaran"}
+        </button>
+        <button
+          onClick={() => router.push("/Pengumuman")}
+          className="flex items-center text-left w-full px-3 py-2 rounded-lg hover:bg-gray-100 transition-all"
+        >
+          <FaBullhorn className="text-xl mr-2" />
+          {sidebarTerbuka && "Pengumuman"}
+        </button>
+        <button
+          onClick={() => router.push("/Bantuan")}
+          className="flex items-center text-left w-full px-3 py-2 rounded-lg bg-blue-100 font-semibold text-blue-800 hover:bg-gray-100 transition-all"
+        >
+          <FaQuestionCircle className="text-xl mr-2" />
+          {sidebarTerbuka && "Bantuan"}
+        </button>
+      </nav>
 
-      <main className="flex-1 p-10 bg-[#f4f7fc] min-h-screen">
-        <h1 className="text-3xl font-bold text-[#154472] mb-2">Pengumuman</h1>
-        <p className="text-gray-400 mb-6">semoga kamu lulus yaaa!</p>
+      {/* Tombol Keluar */}
+      <button
+        onClick={() => router.push("/Welcome")}
+        className="mt-auto bg-[#154472] text-white py-2 flex items-center justify-center rounded-lg hover:bg-red-800 transition-all"
+      >
+        <FaSignOutAlt className="text-lg mr-2" />
+        {sidebarTerbuka && "Keluar"}
+      </button>
+    </aside>
 
-        <div className="bg-[#154472]  px-64 py-2 rounded-md shadow-md mb-6 w-fit">
-          <h1 className="text-left items-left text-white text-2xl font-medium">
-            Cek Pengumuman UPT SMPN 9 BINAMU JENEPONTO{" "}
-          </h1>
-          <span className="font-normal">disini !</span>
-        </div>
+      <main className="flex-1 p-10 bg-gray-100 min-h-screen">
+        <h1 className="text-2xl font-bold text-[#154472] mb-1">Bantuan</h1>
+        <p className="text-gray-400 mb-6">Silakan hubungi kami kapan saja, kami siap membantu Anda</p>
 
-        {!hasil && (
-          <div className=" text-[#154472]">
-            <p className="font-bold mb-4">
-              Masukkan NISN & nama lengkap kamu agar kami mudah mengecek status
-              kelulusanmu !
-            </p>
-
-            <label className="block mb-1 font-medium">NISN Siswa :</label>
-            <input
-              type="text"
-              placeholder="Masukkan NISN siswa"
-              className="w-full p-3 border border-gray-300 rounded-md mb-4 text-sm"
-              value={nisn}
-              onChange={(e) => setNisn(e.target.value)}
-            />
-
-            <label className="block mb-1 font-medium">Nama Lengkap :</label>
-            <input
-              type="text"
-              placeholder="Masukkan Nama Lengkap"
-              className="w-full p-3 border border-gray-300 rounded-md mb-4 text-sm"
-              value={nama}
-              onChange={(e) => setNama(e.target.value)}
-            />
-
-            <label className="block mb-1 font-medium">No. Pendaftaran :</label>
-            <input
-              type="text"
-              placeholder="Masukkan Nomor Pendaftaran Kamu"
-              className="w-full p-3 border border-gray-300 rounded-md mb-6 text-sm"
-              value={noPendaftaran}
-              onChange={(e) => setNoPendaftaran(e.target.value)}
-            />
-
-            <button
-              onClick={handleSubmit}
-              className="bg-[#154472] text-white px-6 py-3 rounded-md hover:bg-blue-800 w-full font-semibold"
-              disabled={loading}
-            >
-              {loading ? "Memproses..." : "Cek status kelulusan"}
-            </button>
-          </div>
-        )}
-
-        {hasil && (
-          <div
-            className={`mt-10 p-6 rounded-lg shadow-md max-w-xl text-white ${
-              hasil.status === "lulus"
-                ? "bg-green-600"
-                : hasil.status === "tidak_lulus"
-                ? "bg-red-600"
-                : "bg-gray-500"
-            }`}
-          >
-            <h2 className="text-2xl font-bold mb-2 text-center">
-              {hasil.status === "lulus"
-                ? "SELAMAT ANDA LULUS!"
-                : hasil.status === "tidak_lulus"
-                ? "MAAF ANDA TIDAK LULUS"
-                : "Pengumuman belum tersedia"}
+        <div className="bg-white rounded-lg shadow-md p-8 flex flex-col md:flex-row justify-between items-center gap-6">
+          {/* Kontak Person */}
+          <div className="space-y-6 w-full md:w-1/2">
+            <h2 className="text-xl font-bold text-[#154472] flex items-center gap-2">
+              <FaQuestionCircle className="text-2xl" /> Hubungi Kami
             </h2>
-            <div className="flex justify-center my-4">
-              <div className="bg-white w-24 h-24 rounded-md" />
-            </div>
-            <p className="text-center font-semibold text-lg">{hasil.nama}</p>
-            {hasil.status !== "belum_ada" && (
-              <p className="text-center mt-2">
-                Anda dinyatakan{" "}
-                <span className="font-bold uppercase">{hasil.status}</span> di
-                UPT SMPN 9 BINAMU JENEPONTO.
-              </p>
-            )}
-            <button
-              onClick={() => setHasil(null)}
-              className="mt-6 bg-white text-black px-4 py-2 rounded-md shadow mx-auto block"
-            >
-              <FaArrowLeft className="inline mr-2" /> Kembali
-            </button>
+
+            {/* Daftar Kontak */}
+            {[
+              {
+                nama: "Pak Fadjri",
+                nomor: "+62 852-9964-5636",
+                wa: "https://wa.me/6285299645636",
+              },
+              {
+                nama: "Ma’am Susi",
+                nomor: "+62 821-5465-8121",
+                wa: "https://wa.me/6282154658121",
+              },
+              {
+                nama: "Miss Nafilah",
+                nomor: "+62 853-4378-9697",
+                wa: "https://wa.me/6285343789697",
+              },
+            ].map((kontak, index) => (
+              <div key={index} className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="bg-[#E8F0FE] p-2 rounded-full">
+                    <svg
+                      className="w-6 h-6 text-[#154472]"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="1.5"
+                      viewBox="0 0 24 24"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"
+                      ></path>
+                    </svg>
+                  </div>
+                  <div>
+                    <p className="text-[#154472] font-semibold">{kontak.nama}</p>
+                    <p className="text-sm text-gray-500">{kontak.nomor}</p>
+                  </div>
+                </div>
+                <a
+                  href={kontak.wa}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="bg-green-500 hover:bg-green-600 text-white text-sm px-4 py-2 rounded-md"
+                >
+                  WhatsApp
+                </a>
+              </div>
+            ))}
           </div>
-        )}
+
+          {/* Gambar Samping */}
+          <div className="w-full md:w-1/3">
+            <Image
+              src="/images/kontak-bantuan.png" // ganti sesuai path gambar kamu
+              alt="Kontak Guru"
+              width={300}
+              height={300}
+              className="rounded-[30px] object-cover w-full"
+            />
+          </div>
+        </div>
       </main>
     </div>
   );

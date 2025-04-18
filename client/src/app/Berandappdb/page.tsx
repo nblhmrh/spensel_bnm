@@ -68,7 +68,7 @@ export default function Dashboard() {
               <FaBullhorn className="mr-2" /> Pengumuman
             </button>
             <button
-              onClick={() => router.push("/bantuan")}
+              onClick={() => router.push("/Bantuan")}
               className="flex items-center text-left w-full px-4 py-2 hover:bg-gray-200 rounded-lg"
             >
               <FaQuestionCircle className="mr-2" /> Bantuan
