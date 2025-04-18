@@ -9,9 +9,9 @@ import gerbang from '@/assets/gerbang.png'
   const router = useRouter();
 
   return (
-    <div className="relative w-full h-screen flex items-center justify-center bg-gray-800">
+    <div className="relative w-full h-screen flex items-center justify-center bg-black">
       {/* Background Image */}
-      <div className="absolute inset-0 bg-black/90">
+      <div className="absolute inset-0 bg-black/100">
         <Image 
           src={gerbang}
           alt="Background" 
@@ -22,13 +22,13 @@ import gerbang from '@/assets/gerbang.png'
       </div>
 
       {/* Content */}
-      <div className="relative z-10 text-center text-white">
+      <div className="relative z-10 text-center text-[#154472]">
         {/* Logo */}
         <div className="flex justify-center mb-4">
           <Image src={logo} alt="Logo" width={300} height={300} />
         </div>
 
-        <h1 className="text-4xl font-bold text-white">SELAMAT DATANG !</h1>
+        <h1 className="text-4xl font-bold text-white pb-4">SELAMAT DATANG !</h1>
         <div className=' inset-0 bg-blue-950 opacity-80 rounded-full relative z-10 mt-4'>
             <p className="mt-2 text-2xl text-white pb-2 relative px-8 py-2 font-semibold">Ikuti tahapan proses pendaftaran dengan teliti dan sesuai dengan data kamu ya!</p>
         </div>

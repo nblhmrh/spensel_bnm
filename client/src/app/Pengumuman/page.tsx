@@ -14,36 +14,35 @@ import {
 import logo from '@/assets/logo.png'
 import axios from "axios";
 
-export default function FormOrangTua() {
+export default function Pengumuman() {
     const router = useRouter();
-  const [formData, setFormData] = useState({
-    nama_ayah: "",
-    kontak_ayah: "",
-    pekerjaan_ayah: "",
-    penghasilan_ayah: "",
-    alamat_ayah: "",
-    nama_ibu: "",
-    kontak_ibu: "",
-    pekerjaan_ibu: "",
-    penghasilan_ibu: "",
-    alamat_ibu: "",
-  });
+    const [nisn, setNisn] = useState("");
+    const [nama, setNama] = useState("");
+    const [noPendaftaran, setNoPendaftaran] = useState("");
+    const [hasil, setHasil] = useState<null | {
+      status: string;
+      nama: string;
+    }>(null);
+    const [loading, setLoading] = useState(false);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
-
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    try {
-      const response = await axios.post("http://127.0.0.1:8000/api/orangtua", formData);
-      alert("Data berhasil dikirim!");
-      console.log(response.data);
-    } catch (error) {
-      console.error("Error mengirim data:", error);
-      alert("Gagal mengirim data.");
-    }
-  };
+    const handleSubmit = async () => {
+      try {
+        setLoading(true);
+        const response = await axios.post("http://localhost:8000/api/cek-pengumuman", {
+          nisn,
+          nama,
+          no_pendaftaran: noPendaftaran,
+        });
+        setHasil(response.data);
+      } catch (error) {
+        setHasil({
+          status: "belum_ada",
+          nama: nama,
+        });
+      } finally {
+        setLoading(false);
+      }
+    };
 
   return (
     <div className="flex">
@@ -67,13 +66,13 @@ export default function FormOrangTua() {
             </button>
             <button
               onClick={() => router.push("/Pendaftaran")}
-              className="flex items-center text-left w-full px-4 py-2 bg-blue-100 font-semibold text-blue-800 hover:bg-gray-200 rounded-lg"
+              className="flex items-center text-left w-full px-4 py-2  hover:bg-gray-200 rounded-lg"
             >
               <FaUserPlus className="mr-2" /> Pendaftaran
             </button>
             <button
               onClick={() => router.push("/Pengumuman")}
-              className="flex items-center text-left w-full px-4 py-2 hover:bg-gray-200 rounded-lg"
+              className="flex items-center text-left w-full px-4 py-2 bg-blue-100 font-semibold text-blue-800 hover:bg-gray-200 rounded-lg"
             >
               <FaBullhorn className="mr-2" /> Pengumuman
             </button>
@@ -94,65 +93,76 @@ export default function FormOrangTua() {
         </button>
       </aside>
 
-      {/* Formulir */}
-      <main className="flex-1 p-10">
-      <button onClick={() => router.push("/Berandappdb")} className="text-blue-800 flex items-center mb-4">
-                  <FaArrowLeft className="mr-2" /> Kembali
-        </button>
-        <h1 className="text-2xl font-bold text-[#154472]">Isi Data Orang Tua / Wali</h1>
-        
-        <a href="#" className="text-[#154472] underline">Kembali</a>
+      <main className="flex-1 p-10 bg-gray-100 min-h-screen">
+          <h1 className="text-2xl font-bold text-gray-800 mb-6">Pengumuman Kelulusan</h1>
+          
+          {!hasil && (
+            <div className="bg-white rounded-lg shadow-md p-6 max-w-xl">
+              <p className="text-gray-600 mb-4">Masukkan data sesuai pendaftaran:</p>
+              <input
+                type="text"
+                placeholder="NISN"
+                className="w-full p-3 border border-gray-300 rounded-md mb-4"
+                value={nisn}
+                onChange={(e) => setNisn(e.target.value)}
+              />
+              <input
+                type="text"
+                placeholder="Nama Lengkap"
+                className="w-full p-3 border border-gray-300 rounded-md mb-4"
+                value={nama}
+                onChange={(e) => setNama(e.target.value)}
+              />
+              <input
+                type="text"
+                placeholder="No. Pendaftaran"
+                className="w-full p-3 border border-gray-300 rounded-md mb-4"
+                value={noPendaftaran}
+                onChange={(e) => setNoPendaftaran(e.target.value)}
+              />
+              <button
+                onClick={handleSubmit}
+                className="bg-blue-900 text-white px-6 py-3 rounded-md hover:bg-blue-800 w-full"
+                disabled={loading}
+              >
+                {loading ? "Memproses..." : "Cek Status Kelulusan"}
+              </button>
+            </div>
+          )}
 
-        <form onSubmit={handleSubmit} className="mt-6 bg-white p-6 rounded-lg shadow-lg text-gray-700">
-          {/* Data Ayah */}
-          <h2 className="font-bold text-lg">Data Ayah</h2>
-          <div className="mt-4">
-            <label className="block text-sm font-semibold">Nama Ayah</label>
-            <input type="text" name="nama_ayah" value={formData.nama_ayah} onChange={handleChange} className="w-full p-2 border rounded-md" />
-          </div>
-          <div className="mt-4">
-            <label className="block text-sm font-semibold">No. Kontak/WhatsApp Ayah</label>
-            <input type="text" name="kontak_ayah" value={formData.kontak_ayah} onChange={handleChange} className="w-full p-2 border rounded-md" />
-          </div>
-          <div className="mt-4">
-            <label className="block text-sm font-semibold">Pekerjaan Ayah</label>
-            <input type="text" name="pekerjaan_ayah" value={formData.pekerjaan_ayah} onChange={handleChange} className="w-full p-2 border rounded-md" />
-          </div>
-          <div className="mt-4">
-            <label className="block text-sm font-semibold">Penghasilan Ayah (Rp/Bulan)</label>
-            <input type="text" name="penghasilan_ayah" value={formData.penghasilan_ayah} onChange={handleChange} className="w-full p-2 border rounded-md" />
-          </div>
-          <div className="mt-4">
-            <label className="block text-sm font-semibold">Alamat Ayah</label>
-            <input type="text" name="alamat_ayah" value={formData.alamat_ayah} onChange={handleChange} className="w-full p-2 border rounded-md" />
-          </div>
-
-          {/* Data Ibu */}
-          <h2 className="mt-6 font-bold text-lg">Data Ibu</h2>
-          <div className="mt-4">
-            <label className="block text-sm font-semibold">Nama Ibu</label>
-            <input type="text" name="nama_ibu" value={formData.nama_ibu} onChange={handleChange} className="w-full p-2 border rounded-md" />
-          </div>
-          <div className="mt-4">
-            <label className="block text-sm font-semibold">No. Kontak/WhatsApp Ibu</label>
-            <input type="text" name="kontak_ibu" value={formData.kontak_ibu} onChange={handleChange} className="w-full p-2 border rounded-md" />
-          </div>
-          <div className="mt-4">
-            <label className="block text-sm font-semibold">Pekerjaan Ibu</label>
-            <input type="text" name="pekerjaan_ibu" value={formData.pekerjaan_ibu} onChange={handleChange} className="w-full p-2 border rounded-md" />
-          </div>
-          <div className="mt-4">
-            <label className="block text-sm font-semibold">Penghasilan Ibu (Rp/Bulan)</label>
-            <input type="text" name="penghasilan_ibu" value={formData.penghasilan_ibu} onChange={handleChange} className="w-full p-2 border rounded-md" />
-          </div>
-          <div className="mt-4">
-            <label className="block text-sm font-semibold">Alamat Ibu</label>
-            <input type="text" name="alamat_ibu" value={formData.alamat_ibu} onChange={handleChange} className="w-full p-2 border rounded-md" />
-          </div>
-
-          <button type="submit" className="mt-6 w-full bg-[#154472] text-white p-3 rounded-md hover:bg-[#123A60]">Simpan</button>
-        </form>
-      </main>
+          {hasil && (
+            <div className={`mt-10 p-6 rounded-lg shadow-md max-w-xl text-white ${
+              hasil.status === "lulus"
+                ? "bg-green-600"
+                : hasil.status === "tidak_lulus"
+                ? "bg-red-600"
+                : "bg-gray-500"
+            }`}>
+              <h2 className="text-2xl font-bold mb-2 text-center">
+                {hasil.status === "lulus"
+                  ? "SELAMAT ANDA LULUS!"
+                  : hasil.status === "tidak_lulus"
+                  ? "MAAF ANDA TIDAK LULUS"
+                  : "Pengumuman belum tersedia"}
+              </h2>
+              <div className="flex justify-center my-4">
+                <div className="bg-white w-24 h-24 rounded-md" />
+              </div>
+              <p className="text-center font-semibold text-lg">{hasil.nama}</p>
+              {hasil.status !== "belum_ada" && (
+                <p className="text-center mt-2">
+                  Anda dinyatakan <span className="font-bold uppercase">{hasil.status}</span> di UPT SMPN 9 BINAMU JENEPONTO.
+                </p>
+              )}
+              <button
+                onClick={() => setHasil(null)}
+                className="mt-6 bg-white text-black px-4 py-2 rounded-md shadow mx-auto block"
+              >
+                <FaArrowLeft className="inline mr-2" /> Kembali
+              </button>
+            </div>
+          )}
+        </main>
     </div>
   );
 }

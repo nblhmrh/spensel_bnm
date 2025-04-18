@@ -41,7 +41,7 @@ export default function Dashboard() {
     <div className="flex min-h-screen bg-gray-100">
       {/* Sidebar */}
       <aside className="w-64 bg-white shadow-lg p-5 flex flex-col">
-        <div>
+        <div className="flex flex-col">
           {/* Logo dan Nama Sekolah */}
           <div className="mr-6">
             <Image src={logo} width={80} height={80} alt="Logo Sekolah" />
@@ -62,7 +62,7 @@ export default function Dashboard() {
               <FaUserPlus className="mr-2" /> Pendaftaran
             </button>
             <button
-              onClick={() => router.push("/pengumuman")}
+              onClick={() => router.push("/Pengumuman")}
               className="flex items-center text-left w-full px-4 py-2 hover:bg-gray-200 rounded-lg"
             >
               <FaBullhorn className="mr-2" /> Pengumuman
