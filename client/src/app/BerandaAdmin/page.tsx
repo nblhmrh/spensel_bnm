@@ -126,7 +126,7 @@ export default function Dashboard() {
           <table className="w-full border-collapse border border-gray-200">
             <thead>
               <tr className="bg-[#154472] text-white text-center">
-                <th className="p-2 border">Gmail</th>
+                <th className="p-2 border">Email</th>
                 <th className="p-2 border">Data Peserta didik</th>
                 <th className="p-2 border">Data Orang Tua/Wali</th>
                 <th className="p-2 border">Lulus/Tidak</th>
