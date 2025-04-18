@@ -14,6 +14,7 @@ class Datasiswa extends Model
 
     protected $fillable = [
         'nisn',
+        'nik',
         'nama',
         'jenis_kelamin',
         'tempat_lahir',

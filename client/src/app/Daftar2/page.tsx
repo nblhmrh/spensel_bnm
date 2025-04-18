@@ -25,28 +25,47 @@ export default function RegistrationForm() {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setIsLoading(true); // Mulai loading
-
+    setIsLoading(true);
+  
     try {
-      // Kirim data ke backend Laravel
-      const response = await axios.post("http://localhost:8000/api/daftar2", {
-        user_id: 1, // Ganti dengan user_id yang sesuai
-        full_name: formData.name,
-        birth_date: formData.birthDate,
-        nik: formData.nik,
-        whatsapp_number: formData.whatsapp,
-      });
-
-      // Jika berhasil, redirect ke halaman Berandappdb
+      // Format data sesuai kebutuhan backend
+      const payload = {
+        full_name: formData.name,  // Pastikan nama field match
+        birth_date: new Date(formData.birthDate).toISOString().split('T')[0], // Format YYYY-MM-DD
+        nik: formData.nik.toString().padStart(16, '0'), // Pastikan 16 digit
+        whatsapp_number: formData.whatsapp.toString().replace(/\D/g, '') // Hanya angka
+      };
+  
+      const response = await axios.post(
+        "http://localhost:8000/api/daftar2",
+        payload,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          }
+        }
+      );
+  
       if (response.status === 201) {
         router.push("/Berandappdb");
       }
-    } catch (error) {
-      console.error("Error mengirim data:", error);
-      // Tampilkan pesan error ke pengguna
-      alert("Terjadi kesalahan saat mengirim data. Silakan coba lagi.");
+    } catch (error: any) {
+      if (error.response?.status === 422) {
+        // Tampilkan error validasi spesifik
+        const errors = error.response.data.errors;
+        let errorMessage = "Validasi Error:\n";
+        
+        for (const [field, messages] of Object.entries(errors)) {
+          errorMessage += `${field}: ${messages.join(', ')}\n`;
+        }
+        
+        alert(errorMessage);
+      } else {
+        alert("Error: " + (error.response?.data.message || error.message));
+      }
     } finally {
-      setIsLoading(false); // Berhenti loading
+      setIsLoading(false);
     }
   };
 

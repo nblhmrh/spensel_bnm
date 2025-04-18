@@ -12,6 +12,7 @@ class DatasiswaController extends Controller
         // Validasi input
         $request->validate([
             'nisn' => 'required|string|unique:datasiswa',
+            'nik' => 'required|string',
             'nama' => 'required|string',
             'jenis_kelamin' => 'required|string',
             'tempat_lahir' => 'required|string',
