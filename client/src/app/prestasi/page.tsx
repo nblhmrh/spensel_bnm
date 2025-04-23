@@ -43,15 +43,15 @@ function Prestasi() {
         <section className="flex flex-col py-8 px-6">
           <h1 className="text-3xl md:text-4xl font-bold text-white">Prestasi</h1>
           <p className="text-white mt-2 py-3 font-normal">
-            <Link href="/" className="underline hover:text-gray-300">
+            <Link href="/" className=" hover:text-gray-300">
               Beranda
             </Link>{" "}
             &gt;{" "}
-            <Link href="/TentangKami" className="underline hover:text-gray-300">
+            <Link href="/TentangKami" className=" hover:text-gray-300">
               Tentang Kami
             </Link>{" "}
             &gt;{" "}
-            <Link href="/prestasi" className="underline hover:text-gray-300">
+            <Link href="/prestasi" className=" hover:text-gray-300">
               Prestasi
             </Link>
           </p>

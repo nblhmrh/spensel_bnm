@@ -23,11 +23,11 @@ export default function LayananBK() {
             Bimbingan & Konseling
           </h1>
           <p className="text-white mt-2 py-3 font-normal text-left">
-            <Link href="/" className="underline hover:text-gray-300">
+            <Link href="/" className=" hover:text-gray-300">
               Beranda
             </Link>{" "}
             &gt;{" "}
-            <Link href="/BK" className="underline hover:text-gray-300">
+            <Link href="/BK" className=" hover:text-gray-300">
               BK
             </Link>
           </p>

@@ -16,20 +16,20 @@ function Profil() {
            Profil BK
           </h1>
           <p className="text-white mt-2 py-3 font-normal">
-            <Link href="/" className="underline hover:text-gray-300">
+            <Link href="/" className=" hover:text-gray-300">
               Beranda
             </Link>{" "}
             &gt;{" "}
             <Link
               href="/BK"
-              className="underline hover:text-gray-300"
+              className=" hover:text-gray-300"
             >
               BK
             </Link>{" "}
             &gt;{" "}
             <Link
               href="/B-Profil"
-              className="underline hover:text-gray-300"
+              className=" hover:text-gray-300"
             >
               Profil BK
             </Link>{" "}

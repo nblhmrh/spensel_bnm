@@ -54,9 +54,9 @@ function Fasilitas() {
         <section className="flex flex-col py-8 px-6">
           <h1 className="text-3xl md:text-4xl font-bold text-[#ffff]">Fasilitas</h1>
           <p className="text-white mt-2 py-3 font-normal">
-            <Link href="/" className="underline hover:text-gray-300"> Beranda </Link> &gt;
-            <Link href="/TentangKami" className="underline hover:text-gray-300"> Tentang Kami </Link> &gt;
-            <Link href="/fasilitas" className="underline hover:text-gray-300"> Fasilitas </Link>
+            <Link href="/" className=" hover:text-gray-300"> Beranda </Link> &gt;
+            <Link href="/TentangKami" className=" hover:text-gray-300"> Tentang Kami </Link> &gt;
+            <Link href="/fasilitas" className=" hover:text-gray-300"> Fasilitas </Link>
           </p>
         </section>
       </div>

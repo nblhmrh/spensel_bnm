@@ -14,15 +14,15 @@ function Asesmen() {
             Kurikulum
           </h1>
           <p className="text-white mt-2 py-3 font-normal">
-            <Link href="/" className="underline hover:text-gray-300">
+            <Link href="/" className=" hover:text-gray-300">
               Beranda
             </Link>{" "}
             &gt;{" "}
-            <Link href="/BK" className="underline hover:text-gray-300">
+            <Link href="/BK" className=" hover:text-gray-300">
             BK
             </Link>{" "}
             &gt;{" "}
-            <Link href="/B-Asesmen" className="underline hover:text-gray-300">
+            <Link href="/B-Asesmen" className=" hover:text-gray-300">
               Asesmen
             </Link>{" "}
             

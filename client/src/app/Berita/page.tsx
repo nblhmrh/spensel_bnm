@@ -33,17 +33,17 @@ function Berita() {
             Berita Terkini
           </h1>
           <p className="text-white mt-2 py-3 font-normal">
-            <Link href="/" className="underline hover:text-gray-300">
+            <Link href="/" className=" hover:text-gray-300">
               Beranda
             </Link>{" "}
             &gt;{" "}
-            <Link href="/TentangKami" className="underline hover:text-gray-300">
+            <Link href="/TentangKami" className=" hover:text-gray-300">
               Tentang Kami
             </Link>{" "}
             &gt;{" "}
             <Link
               href="/Berita"
-              className="underline hover:text-gray-300"
+              className=" hover:text-gray-300"
             >
               Berita 
             </Link>

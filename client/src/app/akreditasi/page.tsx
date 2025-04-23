@@ -16,20 +16,20 @@ function Akreditasi() {
             Akreditasi
           </h1>
           <p className="text-white mt-2 py-3 font-normal">
-            <Link href="/" className="underline hover:text-gray-300">
+            <Link href="/" className=" hover:text-gray-300">
               Beranda
             </Link>{" "}
             &gt;{" "}
             <Link
               href="/TentangKami"
-              className="underline hover:text-gray-300"
+              className=" hover:text-gray-300"
             >
               Tentang Kami
             </Link>{" "}
             &gt;{" "}
             <Link
               href="/akreditasi"
-              className="underline hover:text-gray-300"
+              className=" hover:text-gray-300"
             >
               Akreditasi
             </Link>{" "}

@@ -37,15 +37,15 @@ function Parenting() {
             Kurikulum
           </h1>
           <p className="text-white mt-2 py-3 font-normal">
-            <Link href="/" className="underline hover:text-gray-300">
+            <Link href="/" className=" hover:text-gray-300">
               Beranda
             </Link>{" "}
             &gt;{" "}
-            <Link href="/Program" className="underline hover:text-gray-300">
+            <Link href="/Program" className=" hover:text-gray-300">
               Program
             </Link>{" "}
             &gt;{" "}
-            <Link href="/P-kurikulum" className="underline hover:text-gray-300">
+            <Link href="/P-kurikulum" className=" hover:text-gray-300">
               Kurikulum
             </Link>{" "}
           </p>

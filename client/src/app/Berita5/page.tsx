@@ -14,20 +14,20 @@ function Berita1() {
           Berita 1
           </h1>
           <p className="text-white mt-2 py-3 font-normal">
-            <Link href="/" className="underline hover:text-gray-300">
+            <Link href="/" className=" hover:text-gray-300">
               Beranda
             </Link>{" "}
             &gt;{" "}
             <Link
               href="/Berita"
-              className="underline hover:text-gray-300"
+              className=" hover:text-gray-300"
             >
               Berita 
             </Link>{" "}
             &gt; {" "}
             <Link
               href="/Berita1"
-              className="underline hover:text-gray-300"
+              className=" hover:text-gray-300"
             >
               Berita 1
             </Link>{" "}

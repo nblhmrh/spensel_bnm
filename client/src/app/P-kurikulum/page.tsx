@@ -24,11 +24,11 @@ function Kurikulum() {
         <section className="flex flex-col py-8 px-6">
           <h1 className="text-3xl md:text-4xl font-bold text-[#ffff]">Kurikulum</h1>
           <p className="text-white mt-2 py-3 font-normal">
-            <Link href="/" className="underline hover:text-gray-300">Beranda</Link>{" "}
+            <Link href="/" className=" hover:text-gray-300">Beranda</Link>{" "}
             &gt;{" "}
-            <Link href="/Program" className="underline hover:text-gray-300">Program</Link>{" "}
+            <Link href="/Program" className=" hover:text-gray-300">Program</Link>{" "}
             &gt;{" "}
-            <Link href="/P-kurikulum" className="underline hover:text-gray-300">Kurikulum</Link>{" "}
+            <Link href="/P-kurikulum" className=" hover:text-gray-300">Kurikulum</Link>{" "}
             
           </p>
         </section>

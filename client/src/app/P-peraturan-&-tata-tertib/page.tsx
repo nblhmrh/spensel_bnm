@@ -14,20 +14,20 @@ function Tatib() {
           Peraturan & Tata Tertib
           </h1>
           <p className="text-white mt-2 py-3 font-normal">
-            <Link href="/" className="underline hover:text-gray-300">
+            <Link href="/" className=" hover:text-gray-300">
               Beranda
             </Link>{" "}
             &gt;{" "}
             <Link
               href="/Program"
-              className="underline hover:text-gray-300"
+              className=" hover:text-gray-300"
             >
               Program
             </Link>{" "}
             &gt; {" "}
             <Link
               href="/P-peraturan-&-tata-tertib"
-              className="underline hover:text-gray-300"
+              className=" hover:text-gray-300"
             >
               Peraturan & Tata Tertib
             </Link>{" "}
