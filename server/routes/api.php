@@ -31,5 +31,14 @@ Route::post('/daftar2', [Daftar2Controller::class, 'store']);
 Route::post('/datasiswa', [DatasiswaController::class, 'store']);
 Route::post('/dataortu', [DataortuController::class, 'store']);
 Route::post('/pengaduan', [PengaduanController::class, 'store']);
+<<<<<<< HEAD
 Route::post('/hubungi-kami', [HubungiKamiController::class, 'store']);
 Route::get('/sambutan', [SambutanController::class, 'getSambutan']);
+=======
+
+// Update sambutan routes
+Route::get('/sambutan', [SambutanController::class, 'index']); // Changed from getSambutan to index
+Route::post('/sambutan', [SambutanController::class, 'store']);
+Route::put('/sambutan/{id}', [SambutanController::class, 'update']);
+Route::delete('/sambutan/{id}', [SambutanController::class, 'destroy']);
+>>>>>>> 3c79344fbb0dce26c0671a0eb8d1e6aafe27727b

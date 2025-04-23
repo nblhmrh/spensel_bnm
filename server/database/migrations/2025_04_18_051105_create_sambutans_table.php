@@ -13,9 +13,9 @@ return new class extends Migration
     {
         Schema::create('sambutans', function (Blueprint $table) {
             $table->id();
-            $table->string('foto');
             $table->string('nama');
-            $table->string('isi');
+            $table->text('isi');
+            $table->string('foto');
             $table->timestamps();
         });
     }
