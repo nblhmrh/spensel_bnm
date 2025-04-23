@@ -54,7 +54,7 @@ function Navbar() {
       {/* Hubungi Kami Button */}
       <div className="hidden md:block">
         <button
-          onClick={() => router.push("/Berandappdb")}
+          onClick={() => router.push("/HubungiKami")}
           className="ml-9 mr-11 px-4 py-2 bg-white text-blue-800 font-semibold border rounded-full hover:bg-gray-200"
         >
           Hubungi Kami

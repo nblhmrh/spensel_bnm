@@ -7,6 +7,7 @@ import React from "react";
 import Navbar from "../Navbar/page";
 import Link from "next/link";
 import News from "@/pages/News";
+import sekolah from "@/public/sekolah.png"
 export default function HubungiKami() {
   const [form, setForm] = useState({
     nama: "",
@@ -59,7 +60,7 @@ export default function HubungiKami() {
         <div className="grid md:grid-cols-2 gap-10 w-full max-w-5xl bg-white rounded-[40px] shadow-md overflow-hidden">
           <div className="relative w-full h-[500px]">
             <Image
-              src="/sekolah.png"
+              src={sekolah}
               alt="Sekolah"
               fill
               className="object-cover rounded-bl-[40px] rounded-tl-[40px]"
