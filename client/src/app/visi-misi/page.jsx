@@ -1,11 +1,20 @@
+
+'use client'
+import { useEffect, useState } from 'react';
+import axios from 'axios';
 import React from "react";
 import Navbar from "../Navbar/page";
 import Link from "next/link";
-import Image from "next/image";
-import visi from "@/assets/visi.png"; // Gambar untuk bagian visi
-import misi from "@/assets/misi.png"; // Gambar untuk bagian misi
 import News from "@/pages/News";
+
 export default function VisiMisi() {
+  const [data, setData] = useState({ visi: '', misi: '' })
+
+  useEffect(() => {
+    axios.get('http://localhost:8000/api/visi-misi')
+      .then(res => setData(res.data))
+      .catch(err => console.error(err))
+  }, [])
   return (
     <>
       {/* Navbar Section */}
@@ -32,66 +41,19 @@ export default function VisiMisi() {
       </div>
 
       {/* Visi & Misi Section */}
-      <section className="px-6 py-8 max-w-6xl mx-auto">
-        {/* Title */}
-        <h1 className="text-3xl font-bold text-center text-[#154472] mb-8">
-          Visi & Misi SMPN 9 Binamu Jeneponto
-        </h1>
-
-        {/* Grid Container */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
-          {/* Visi Section */}
-          <div className="bg-gray-200 p-8 rounded-lg py-6">
-            <h2 className="text-lg md:text-xl font-bold text-[#154472] mb-2">
-              Visi Kami
-            </h2>
-            <p className="text-gray-700">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-              Pellentesque gravida ultricies sapien sed mattis. Cras mattis
-              venenatis facilisis. Aliquam erat volutpat. Nunc suscipit gravida
-              nibh eu mollis. Nullam laoreet ante ac ligula commodo.
-            </p>
-          </div>
-          {/* Gambar Visi */}
-          <div className="relative">
-            <Image
-              src={misi}
-              alt="Visi Sekolah"
-              className="pt-20 w-full h-auto rounded-lg shadow-lg object-cover"
-              style={{
-                clipPath:
-                  "polygon(10% 0%, 100% 0%, 100% 85%, 80% 100%, 0% 100%, 0% 10%)",
-              }}
-            />
-          </div>
-
-          {/* Gambar Misi */}
-          <div className="relative order-2 md:order-1">
-            <Image
-              src={visi}
-              alt="Misi Sekolah"
-              className="w-full pb-16 h-auto rounded-lg shadow-lg object-cover"
-              style={{
-                clipPath:
-                  "polygon(0% 0%, 85% 0%, 100% 10%, 100% 100%, 10% 100%, 0% 85%)",
-              }}
-            />
-          </div>
-
-          {/* Misi Section */}
-          <div className="bg-gray-200 p-6 rounded-lg order-1 md:order-2">
-            <h2 className="text-lg md:text-xl font-bold text-[#154472] mb-2">
-              Misi Kami
-            </h2>
-            <p className="text-gray-700">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-              Pellentesque gravida ultricies sapien sed mattis. Cras mattis
-              venenatis facilisis. Aliquam erat volutpat. Nunc suscipit gravida
-              nibh eu mollis. Nullam laoreet ante ac ligula commodo.
-            </p>
-          </div>
+      <div className="p-6">
+      <h1 className="text-xl font-bold text-center">Visi & Misi UPT SMPN 9 Binamu Jeneponto</h1>
+      <div className="mt-6 space-y-4">
+        <div>
+          <h2 className="font-semibold text-lg text-blue-800">Visi</h2>
+          <p>{data.visi}</p>
         </div>
-      </section>
+        <div>
+          <h2 className="font-semibold text-lg text-blue-800">Misi</h2>
+          <p>{data.misi}</p>
+        </div>
+      </div>
+    </div>
       <News />
     </>
   );

@@ -10,6 +10,9 @@ use App\Http\Controllers\PengaduanController;
 use App\Http\Middleware\CheckRole;
 use App\Http\Controllers\SambutanController;
 use App\Http\Controllers\HubungiKamiController;
+use App\Http\Controllers\Api\VisiMisiController;
+
+
 
 use Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful;
 
@@ -33,6 +36,16 @@ Route::post('/dataortu', [DataortuController::class, 'store']);
 Route::post('/pengaduan', [PengaduanController::class, 'store']);
 Route::post('/hubungi-kami', [HubungiKamiController::class, 'store']);
 Route::get('/sambutan', [SambutanController::class, 'getSambutan']);
+
+
+// update visi misi routes
+// Visi Misi routes
+Route::get('/visi-misi', [VisiMisiController::class, 'show']);
+Route::post('/visi-misi', [VisiMisiController::class, 'store']);
+Route::put('/visi-misi', [VisiMisiController::class, 'update']);
+Route::delete('/visi-misi', [VisiMisiController::class, 'destroy']);
+
+
 
 
 // Update sambutan routes

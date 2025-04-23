@@ -39,8 +39,13 @@ export default function Pengumuman() {
           no_pendaftaran: noPendaftaran,
         }
       );
-      setHasil(response.data);
+      if (response.data && response.data.status) {
+        setHasil(response.data);
+      } else {
+        throw new Error('Invalid response data');
+      }
     } catch (error) {
+      console.error('Error checking announcement:', error);
       setHasil({
         status: "belum_ada",
         nama: nama,
