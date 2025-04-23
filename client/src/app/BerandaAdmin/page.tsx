@@ -22,6 +22,10 @@ export default function Dashboard() {
 
 
 
+  const handleNavigateToSambutan = () => {
+    router.push('/SambutanAdmin');
+  };
+
   const handleLogout = () => {
     localStorage.removeItem("token");
     window.history.replaceState(null, "", "/PPDB");
@@ -58,7 +62,10 @@ export default function Dashboard() {
                 <button className="flex items-center text-left w-full px-4 py-2 hover:bg-gray-200 rounded-lg">
                   <FaImage className="mr-2" /> Foto Sekolah
                 </button>
-                <button className="flex items-center text-left w-full px-4 py-2 hover:bg-gray-200 rounded-lg">
+                <button 
+                  onClick={handleNavigateToSambutan}
+                  className="flex items-center text-left w-full px-4 py-2 hover:bg-gray-200 rounded-lg"
+                >
                   <FaUserTie className="mr-2" /> Sambutan Kepala Sekolah
                 </button>
                 <button className="flex items-center text-left w-full px-4 py-2 hover:bg-gray-200 rounded-lg">

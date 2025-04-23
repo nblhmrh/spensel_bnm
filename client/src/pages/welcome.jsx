@@ -19,32 +19,20 @@ import {
 } from "react-icons/fa";
 
 export default function Home() {
-  // Tambahkan state untuk menyimpan data sambutan
   const [sambutanData, setSambutanData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-  // Fetch data from the API
   const fetchSambutan = async () => {
     setLoading(true);
     try {
       const response = await axios.get("http://localhost:8000/api/sambutan");
-      console.log("Response data:", response.data);
-
-      if (
-        response.data &&
-        response.data.status &&
-        response.data.data &&
-        response.data.data.length > 0
-      ) {
-        setSambutanData(response.data.data[0]); // Ambil data pertama dari array
-      } else {
-        setError("Format data tidak sesuai");
-        console.error("Format data tidak sesuai:", response.data);
+      if (response.data.status && response.data.data.length > 0) {
+        setSambutanData(response.data.data[0]);
       }
     } catch (err) {
       console.error("Error fetching sambutan:", err);
-      setError("Gagal mengambil data. Silakan coba lagi.");
+      setError("Gagal mengambil data sambutan");
     } finally {
       setLoading(false);
     }
@@ -52,6 +40,22 @@ export default function Home() {
 
   useEffect(() => {
     fetchSambutan();
+    
+    // Mendengarkan event storage untuk mendeteksi perubahan dari halaman admin
+    const handleStorageChange = (e) => {
+      if (e.key === 'sambutan_updated') {
+        fetchSambutan();
+        // Hapus flag setelah digunakan
+        localStorage.removeItem('sambutan_updated');
+      }
+    };
+    
+    window.addEventListener('storage', handleStorageChange);
+    
+    // Cleanup listener saat komponen unmount
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+    };
   }, []);
 
   const features = [
@@ -160,9 +164,11 @@ export default function Home() {
           ) : error ? (
             <p className="text-red-500">{error}</p>
           ) : sambutanData ? (
-            <img
-              src={`http://localhost:8000/storage/sambutan/${sambutanData.foto}`}
-              alt={sambutanData.nama}
+            <Image 
+              src={`http://localhost:8000/storage/${sambutanData.foto}`} 
+              width={600} 
+              height={800} 
+              alt="Foto Kepala Sekolah"
               className="object-cover h-full"
             />
           ) : (
@@ -188,7 +194,6 @@ export default function Home() {
               <p className="text-red-500">{error}</p>
             ) : sambutanData ? (
               <div>
-                <p>Assalamualaikum warahmatullahi wabarakatuh.</p>
                 <p className="py-2">{sambutanData.isi}</p>
               </div>
             ) : (

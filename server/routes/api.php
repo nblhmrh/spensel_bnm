@@ -32,4 +32,8 @@ Route::post('/datasiswa', [DatasiswaController::class, 'store']);
 Route::post('/dataortu', [DataortuController::class, 'store']);
 Route::post('/pengaduan', [PengaduanController::class, 'store']);
 
-Route::get('/sambutan', [SambutanController::class, 'getSambutan']);
+// Update sambutan routes
+Route::get('/sambutan', [SambutanController::class, 'index']); // Changed from getSambutan to index
+Route::post('/sambutan', [SambutanController::class, 'store']);
+Route::put('/sambutan/{id}', [SambutanController::class, 'update']);
+Route::delete('/sambutan/{id}', [SambutanController::class, 'destroy']);
