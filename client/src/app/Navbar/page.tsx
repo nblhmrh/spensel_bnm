@@ -99,7 +99,7 @@ function Navbar() {
           </li>
           <li>
             <button
-              onClick={() => router.push("/hubungi-kami")}
+              onClick={() => router.push("/HubungiKami")}
               className="px-4 py-2 bg-white text-blue-800 font-semibold rounded-lg hover:bg-gray-200"
             >
               Hubungi Kami

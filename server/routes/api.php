@@ -9,7 +9,7 @@ use App\Http\Controllers\DataortuController;
 use App\Http\Controllers\PengaduanController;
 use App\Http\Middleware\CheckRole;
 use App\Http\Controllers\SambutanController;
-
+use App\Http\Controllers\HubungiKamiController;
 
 use Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful;
 
@@ -31,5 +31,5 @@ Route::post('/daftar2', [Daftar2Controller::class, 'store']);
 Route::post('/datasiswa', [DatasiswaController::class, 'store']);
 Route::post('/dataortu', [DataortuController::class, 'store']);
 Route::post('/pengaduan', [PengaduanController::class, 'store']);
-
+Route::post('/hubungi-kami', [HubungiKamiController::class, 'store']);
 Route::get('/sambutan', [SambutanController::class, 'getSambutan']);
