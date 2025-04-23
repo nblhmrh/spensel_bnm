@@ -1,4 +1,4 @@
-'use client'
+
 'use client'
 import { useEffect, useState } from 'react'
 import axios from 'axios'
@@ -29,13 +29,25 @@ export default function VisiMisiAdmin() {
     }
   }
 
+  const formatContent = (content: string) => {
+    // Format the content with proper HTML structure
+    return `
+      <div class="text-sm">
+        <p class="text-justify mb-6 leading-relaxed">${content}</p>
+      </div>
+    `
+  }
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     try {
       const method = isNew ? 'post' : 'put'
+      const formattedVisi = formatContent(visi.trim())
+      const formattedMisi = formatContent(misi.trim())
+      
       const response = await axios[method]('http://localhost:8000/api/visi-misi', {
-        visi: visi.trim(),
-        misi: misi.trim()
+        visi: formattedVisi,
+        misi: formattedMisi
       })
       
       console.log('Server response:', response.data)

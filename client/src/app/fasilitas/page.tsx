@@ -4,7 +4,7 @@ import Navbar from "../Navbar/page";
 import Link from "next/link";
 import News from "@/pages/News";
 import Image from "next/image";
-import smbt from "@/assets/smbt.png";
+// import smbt from "@/assets/smbt.png";
 import type { StaticImageData } from "next/image";
 import klasik1 from "@/assets/klasik1.png";
 import klasik2 from "@/assets/klasik2.png";
@@ -32,16 +32,16 @@ const fasilitasData = [
     description: "TV, Meja, AC dan CCTV",
     image: ftskul,
   },
-  {
-    title: "Perpustakaan",
-    description: "Menyediakan sumber belajar berupa buku dan majalah",
-    image: smbt,
-  },
-  {
-    title: "Perpustakaan",
-    description: "Menyediakan sumber belajar berupa buku dan majalah",
-    image: smbt,
-  },
+  // {
+  //   title: "Perpustakaan",
+  //   description: "Menyediakan sumber belajar berupa buku dan majalah",
+  //   image: smbt,
+  // },
+  // {
+  //   title: "Perpustakaan",
+  //   description: "Menyediakan sumber belajar berupa buku dan majalah",
+  //   image: smbt,
+  // },
 ];
 
 function Fasilitas() {
