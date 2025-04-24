@@ -9,8 +9,10 @@ use App\Http\Controllers\DataortuController;
 use App\Http\Controllers\PengaduanController;
 use App\Http\Middleware\CheckRole;
 use App\Http\Controllers\SambutanController;
-use App\Http\Controllers\HubungiKamiController;
 use App\Http\Controllers\Api\VisiMisiController;
+use App\Http\Controllers\HubungiKamiController;
+
+
 
 
 
@@ -30,11 +32,11 @@ Route::get('/csrf-cookie', function (Request $request) {
     return response()->json(['message' => 'CSRF Cookie Set']);
 });
 
+
 Route::post('/daftar2', [Daftar2Controller::class, 'store']);
 Route::post('/datasiswa', [DatasiswaController::class, 'store']);
 Route::post('/dataortu', [DataortuController::class, 'store']);
 Route::post('/pengaduan', [PengaduanController::class, 'store']);
-Route::post('/hubungi-kami', [HubungiKamiController::class, 'store']);
 Route::get('/sambutan', [SambutanController::class, 'getSambutan']);
 
 
@@ -45,8 +47,13 @@ Route::post('/visi-misi', [VisiMisiController::class, 'store']);
 Route::put('/visi-misi', [VisiMisiController::class, 'update']);
 Route::delete('/visi-misi', [VisiMisiController::class, 'destroy']);
 
+Route::post('/hubungi-kami', [HubungiKamiController::class, 'store']); // User Kirim
 
-
+// ADMIN (bisa dibatasi dengan middleware jika pakai auth)
+Route::get('/hubungi-kami', [HubungiKamiController::class, 'index']);
+Route::get('/hubungi-kami/{id}', [HubungiKamiController::class, 'show']);
+Route::put('/hubungi-kami/{id}', [HubungiKamiController::class, 'update']);
+Route::delete('/hubungi-kami/{id}', [HubungiKamiController::class, 'destroy']);
 
 // Update sambutan routes
 Route::get('/sambutan', [SambutanController::class, 'index']); // Changed from getSambutan to index

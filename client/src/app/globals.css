@@ -19,3 +19,41 @@ body {
   background: var(--background);
   font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif
 }
+
+.modern-toast {
+  border-radius: 8px !important;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1) !important;
+  font-weight: 500 !important;
+  padding: 12px 24px !important;
+  transform: translateY(-50%) !important;
+  animation: slideUp 0.3s ease-out !important;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes animate-enter {
+  0% { transform: translateY(100%); opacity: 0; }
+  100% { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes animate-leave {
+  0% { transform: translateY(0); opacity: 1; }
+  100% { transform: translateY(100%); opacity: 0; }
+}
+
+.animate-enter {
+  animation: animate-enter 0.2s ease-out;
+}
+
+.animate-leave {
+  animation: animate-leave 0.15s ease-in forwards;
+}

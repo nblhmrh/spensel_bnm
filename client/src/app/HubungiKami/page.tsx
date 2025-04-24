@@ -7,13 +7,16 @@ import React from "react";
 import Navbar from "../Navbar/page";
 import Link from "next/link";
 import News from "@/pages/News";
-import sekolah from "@/public/sekolah.png"
+import { toast } from "sonner";
+import sekolah from "@/public/sekolah.png";
+
 export default function HubungiKami() {
   const [form, setForm] = useState({
     nama: "",
     email: "",
     pesan: "",
   });
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -23,12 +26,32 @@ export default function HubungiKami() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (isSubmitting) return;
+    
+    setIsSubmitting(true);
     try {
-      await axios.post("http://localhost:8000/api/hubungi-kami", form);
-      alert("Pesan berhasil dikirim!");
-      setForm({ nama: "", email: "", pesan: "" });
-    } catch {
-      alert("Gagal mengirim pesan!");
+      const response = await axios.post(
+        "http://localhost:8000/api/hubungi-kami",
+        form,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          }
+        }
+      );
+
+      if (response.status === 201 || response.status === 200) {
+        toast.success("Pesan berhasil dikirim! Terima kasih atas masukan Anda.");
+        setForm({ nama: "", email: "", pesan: "" });
+      } else {
+        toast.error("Gagal mengirim pesan: " + response.data.message);
+      }
+    } catch (error) {
+      console.error("Error submitting form:", error);
+      toast.error("Gagal mengirim pesan! Silakan coba lagi nanti.");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -78,7 +101,7 @@ export default function HubungiKami() {
                 value={form.nama}
                 onChange={handleChange}
                 required
-                className="w-full border-b border-[#1D3557] focus:outline-none placeholder:text-[#999]"
+                className="w-full border-b border-[#1D3557] text-gray-700 focus:outline-none placeholder:text-[#434343]"
               />
               <input
                 type="email"
@@ -87,7 +110,7 @@ export default function HubungiKami() {
                 value={form.email}
                 onChange={handleChange}
                 required
-                className="w-full border-b border-[#1D3557] focus:outline-none placeholder:text-[#999]"
+                className="w-full border-b border-[#1D3557] text-gray-700 focus:outline-none placeholder:text-[#434343]"
               />
               <textarea
                 name="pesan"
@@ -96,13 +119,15 @@ export default function HubungiKami() {
                 onChange={handleChange}
                 required
                 rows={3}
-                className="w-full border-b border-[#1D3557] focus:outline-none placeholder:text-[#999] resize-none"
+                className="w-full border-b border-[#1D3557] text-gray-700 focus:outline-none placeholder:text-[#434343] resize-none"
               />
               <button
                 type="submit"
-                className="bg-[#1D3557] text-white px-6 py-2 rounded-full text-sm font-semibold hover:bg-[#163152]"
+                disabled={isSubmitting}
+                className={`bg-[#1D3557] text-white px-6 py-2 rounded-full text-sm font-semibold 
+                  ${isSubmitting ? 'opacity-70 cursor-not-allowed' : 'hover:bg-[#163152]'}`}
               >
-                Hubungi Kami
+                {isSubmitting ? 'Mengirim...' : 'Hubungi Kami'}
               </button>
             </form>
 

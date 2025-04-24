@@ -42,13 +42,17 @@ export default function Dashboard({ children }: { children?: React.ReactNode }) 
   };
 
   const handleNavigateToVisiMisi = () => {
-    setActivePath('/visi-misi-admin');
-    router.push("/visi-misi-admin");
+    setActivePath('/VisiMisiAdmin');
+    router.push("/VisiMisiAdmin");
   };
 
   const handleNavigateToSambutan = () => {
     setActivePath('/SambutanAdmin');
     router.push("/SambutanAdmin");
+  };
+  const handleNavigateToHubungiKamiAdmin = () => {
+    setActivePath('/HubungiKamiAdmin');
+    router.push("/HubungiKamiAdmin");
   };
 
   // Update button classes to include active state
@@ -115,7 +119,7 @@ export default function Dashboard({ children }: { children?: React.ReactNode }) 
                 <button
                   onClick={handleNavigateToVisiMisi}
                   className={`flex items-center text-left w-full px-4 py-2 rounded-lg ${
-                    activePath === '/visi-misi-admin'
+                    activePath === '/VisiMisiAdmin'
                       ? 'bg-blue-100 text-blue-800 border-2 border-[#154472]'
                       : 'hover:bg-gray-200'
                   }`}
@@ -159,9 +163,16 @@ export default function Dashboard({ children }: { children?: React.ReactNode }) 
             {/* Footer */}
             <div>
               <p className="text-sm text-gray-500 mb-2">FOOTER</p>
-              <button className="flex items-center text-left w-full px-4 py-2 hover:bg-gray-200 rounded-lg">
-                <FaPhone className="mr-2" /> Hubungi Kami
-              </button>
+              <button
+                  onClick={handleNavigateToHubungiKamiAdmin}
+                  className={`flex items-center text-left w-full px-4 py-2 rounded-lg ${
+                    activePath === '/HubungiKamiAdmin'
+                      ? 'bg-blue-100 text-blue-800 border-2 border-[#154472]'
+                      : 'hover:bg-gray-200'
+                  }`}
+                >
+                  <FaPhone className="mr-2" /> Hubungi Kami
+                </button>
             </div>
           </nav>
         </div>

@@ -4,21 +4,21 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateVisiMisiTable extends Migration
+return new class extends Migration
 {
     public function up()
     {
-        Schema::create('visi_misi', function (Blueprint $table) {
+        Schema::create('hubungi_kamis', function (Blueprint $table) {
             $table->id();
-            $table->text('visi');
-            $table->json('tujuan');
-            $table->json('misi');
+            $table->string('nama');
+            $table->string('email');
+            $table->text('pesan');
             $table->timestamps();
         });
     }
 
     public function down()
     {
-        Schema::dropIfExists('visi_misi');
+        Schema::dropIfExists('hubungi_kamis');
     }
-}
+};
