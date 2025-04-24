@@ -13,7 +13,7 @@ import {
 import Image from "next/image";
 import logo from "@/assets/logo.png";
 import { useRouter } from "next/navigation";
-import { FaArrowLeft } from "react-icons/fa";
+// import { FaArrowLeft } from "react-icons/fa";
 
 // import axios from "axios";
 

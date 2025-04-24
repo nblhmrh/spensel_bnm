@@ -1,12 +1,22 @@
+"use client";
+
 import React from "react";
 import Navbar from "../Navbar/page";
 import Link from "next/link";
 import Image from "next/image";
-import akreditasi from "@/assets/akreditasi.png";
+// import akreditasi from "@/assets/akreditasi.png";
 import News from "@/pages/News";
 import { FaDownload } from "react-icons/fa";
+import { useEffect, useState } from "react";
+import API from "@/utils/api";
+
 
 function Akreditasi() {
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    API.get("/akreditasi").then(res => setData(res.data));
+  }, []);
   return (
     <>
       <div className="bg-[#154472] w-[1382px] h-[300px]">
@@ -32,33 +42,30 @@ function Akreditasi() {
         </section>
       </div>
 
-      <div className="px-6 py-8">
-        <h1 className="text-3xl text-[#154472] font-semibold">
-          Akreditasi UPT SMPN 9 Binamu
-        </h1>
-        <p className="text-gray-800 text-1xl font-medium py-1">
-          Berikut merupakan Akreditasi dari SMPN 9 Binamu Jeneponto
-        </p>
-      </div>
+      <div className="p-6">
+      <h1 className="text-3xl font-bold text-[#154472] mb-4">Akreditasi UPT SMPN 9 Binamu</h1>
+      <p className="text-gray-700 mb-6">Berikut merupakan Akreditasi dari SMPN 9 Binamu Jeneponto</p>
 
-      <div className="py-16 px-12 items-center justify-center flex flex-col">
-        <a
-          href={akreditasi.src}
-          download="akreditasi.png"
-          className="mb-4 flex items-center gap-2 text-white bg-[#154472] hover:bg-[#1a5a99] hover:scale-105 transition-all duration-300 font-medium py-2 px-4 rounded-lg"
-        >
-          <FaDownload className="text-lg" />
-          Download Gambar
-        </a>
-        <Image
-          src={akreditasi}
-          alt="akreditasi"
-          width={1300}
-          height={1000}
-          className="rounded-lg shadow-lg"
-        />
-      </div>
-
+      {data.map((item, i) => (
+        <div key={i} className="mb-8 flex flex-col items-center justify-center">
+          <a
+            href={`http://localhost:8000/storage/${item.file}`}
+            download
+            className="mb-4 flex items-center gap-2 text-white bg-[#154472] hover:bg-[#1a5a99] transition-all font-medium py-2 px-4 rounded-lg"
+          >
+            <FaDownload />
+            Download Gambar
+          </a>
+          <Image
+            src={`http://localhost:8000/storage/${item.file}`}
+            alt="akreditasi"
+            width={1300}
+            height={1000}
+            className="rounded-lg shadow-lg"
+          />
+        </div>
+      ))}
+    </div>
       <News />
     </>
   );

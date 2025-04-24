@@ -32,13 +32,11 @@ Route::get('/csrf-cookie', function (Request $request) {
     return response()->json(['message' => 'CSRF Cookie Set']);
 });
 
-
 Route::post('/daftar2', [Daftar2Controller::class, 'store']);
 Route::post('/datasiswa', [DatasiswaController::class, 'store']);
 Route::post('/dataortu', [DataortuController::class, 'store']);
 Route::post('/pengaduan', [PengaduanController::class, 'store']);
 Route::get('/sambutan', [SambutanController::class, 'getSambutan']);
-
 
 // update visi misi routes
 // Visi Misi routes
@@ -61,3 +59,7 @@ Route::post('/sambutan', [SambutanController::class, 'store']);
 Route::put('/sambutan/{id}', [SambutanController::class, 'update']);
 Route::delete('/sambutan/{id}', [SambutanController::class, 'destroy']);
 
+//akreditasi
+Route::get('/akreditasi', [AkreditasiController::class, 'index']);
+Route::post('/akreditasi', [AkreditasiController::class, 'store']);
+Route::delete('/akreditasi/{id}', [AkreditasiController::class, 'destroy']);

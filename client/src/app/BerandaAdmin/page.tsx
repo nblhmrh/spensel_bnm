@@ -50,6 +50,11 @@ export default function Dashboard({ children }: { children?: React.ReactNode }) 
     setActivePath('/SambutanAdmin');
     router.push("/SambutanAdmin");
   };
+
+  const handleNavigateToAkreditasiAdmin = () => {
+    setActivePath('/AkreditasiAdmin');
+    router.push("/AkreditasiAdmin");
+  };
   const handleNavigateToHubungiKamiAdmin = () => {
     setActivePath('/HubungiKamiAdmin');
     router.push("/HubungiKamiAdmin");
@@ -154,7 +159,14 @@ export default function Dashboard({ children }: { children?: React.ReactNode }) 
                 <button className="flex items-center text-left w-full px-4 py-2 hover:bg-gray-200 rounded-lg">
                   <FaSitemap className="mr-2" /> Struktur Organisasi
                 </button>
-                <button className="flex items-center text-left w-full px-4 py-2 hover:bg-gray-200 rounded-lg">
+                <button
+                  onClick={handleNavigateToAkreditasiAdmin}
+                  className={`flex items-center text-left w-full px-4 py-2 rounded-lg ${
+                    activePath === '/AkreditasiAdmin'
+                      ? 'bg-blue-100 text-blue-800 border-2 border-[#154472]'
+                      : 'hover:bg-gray-200'
+                  }`}
+                >
                   <FaMedal className="mr-2" /> Akreditasi
                 </button>
               </div>

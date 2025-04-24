@@ -14,7 +14,7 @@ import {
 import Image from "next/image";
 import logo from "@/assets/logo.png";
 import { useRouter } from "next/navigation";
-import { FaArrowLeft } from "react-icons/fa";
+// import { FaArrowLeft } from "react-icons/fa";
 import akun from "@/assets/akun.png";
 import datadiri from "@/assets/datadiri.png";
 import berkas from "@/assets/berkas.png";
@@ -122,7 +122,7 @@ export default function Dashboard() {
 
       {/* Tombol Keluar */}
       <button
-        onClick={() => router.push("/Welcome")}
+        onClick={handleLogout}
         className="mt-auto bg-[#154472] text-white py-2 flex items-center justify-center rounded-lg hover:bg-red-800 transition-all"
       >
         <FaSignOutAlt className="text-lg mr-2" />
