@@ -11,6 +11,10 @@ use App\Http\Middleware\CheckRole;
 use App\Http\Controllers\SambutanController;
 use App\Http\Controllers\Api\VisiMisiController;
 use App\Http\Controllers\HubungiKamiController;
+use App\Http\Controllers\AkreditasiController;
+use App\Http\Controllers\StrukturController;
+use App\Http\Controllers\FotoSekolahController;
+use App\Http\Controllers\FasilitasController;
 
 
 
@@ -63,3 +67,25 @@ Route::delete('/sambutan/{id}', [SambutanController::class, 'destroy']);
 Route::get('/akreditasi', [AkreditasiController::class, 'index']);
 Route::post('/akreditasi', [AkreditasiController::class, 'store']);
 Route::delete('/akreditasi/{id}', [AkreditasiController::class, 'destroy']);
+Route::get('/akreditasi/download/{filename}', [AkreditasiController::class, 'download']);
+
+//struktur
+Route::get('/struktur', [StrukturController::class, 'index']);
+Route::post('/struktur', [StrukturController::class, 'store']);
+Route::delete('/struktur/{id}', [StrukturController::class, 'destroy']);
+Route::get('/struktur/download/{filename}', [StrukturController::class, 'download']);
+
+//foto sekolah
+Route::get('/foto-sekolah', [FotoSekolahController::class, 'index']);
+Route::post('/foto-sekolah', [FotoSekolahController::class, 'store']);
+Route::delete('/foto-sekolah/{id}', [FotoSekolahController::class, 'destroy']);
+Route::get('/struktur/download/{filename}', [StrukturController::class, 'download']);
+
+// Fasilitas routes
+Route::get('/fasilitas', [FasilitasController::class, 'index']);
+Route::post('/fasilitas', [FasilitasController::class, 'store']);
+Route::put('/fasilitas/{id}', [FasilitasController::class, 'update']); // Tambahkan ini
+Route::delete('/fasilitas/{id}', [FasilitasController::class, 'destroy']);
+Route::get('/fasilitas/{id}', [FasilitasController::class, 'show']);
+Route::delete('/fasilitas/{id}', [FasilitasController::class, 'destroy']);
+

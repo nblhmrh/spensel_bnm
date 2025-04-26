@@ -1,5 +1,4 @@
 'use client'
-'use client'
 import { useState, useEffect, ChangeEvent, FormEvent } from 'react';
 import axios from 'axios';
 
@@ -91,6 +90,15 @@ export default function SambutanContent() {
           'Accept': 'application/json'
         }
       });
+      
+      console.log('API Response:', response.data);
+      console.log('Foto path:', response.data.data.foto);
+      
+      // Tambahkan notifikasi untuk pengguna
+      alert('Sambutan berhasil ditambahkan! Refresh halaman untuk melihat perubahan.');
+      
+      // Tambahkan trigger untuk memperbarui halaman welcome
+      localStorage.setItem('sambutan_updated', Date.now().toString());
       
       if (response.data.status) {
         setMessage('Sambutan berhasil ditambahkan');

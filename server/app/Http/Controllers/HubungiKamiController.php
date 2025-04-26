@@ -4,59 +4,172 @@ namespace App\Http\Controllers;
 
 use App\Models\HubungiKami;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
+use Exception;
 
 class HubungiKamiController extends Controller
 {
-    // USER: Kirim pesan
-    public function store(Request $request)
-    {
-        $validated = $request->validate([
-            'nama' => 'required|string|max:255',
-            'email' => 'required|email',
-            'pesan' => 'required|string',
-        ]);
-
-        $hubungiKami = HubungiKami::create($validated);
-
-        return response()->json([
-            'message' => 'Pesan berhasil dikirim!',
-            'data' => $hubungiKami
-        ], 201);
-    }
-
-    // ADMIN: Lihat semua pesan
+    /**
+     * Menampilkan semua pesan.
+     */
     public function index()
     {
-        return HubungiKami::orderBy('created_at', 'desc')->get();
+        try {
+            $messages = HubungiKami::orderBy('created_at', 'desc')->get();
+            return response()->json([
+                'status' => true,
+                'message' => 'Data berhasil diambil',
+                'data' => $messages
+            ]);
+        } catch (Exception $e) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Gagal mengambil data: ' . $e->getMessage()
+            ], 500);
+        }
     }
 
-    // ADMIN: Hapus pesan
-    public function destroy($id)
+    /**
+     * Menyimpan pesan baru.
+     */
+    public function store(Request $request)
     {
-        $hubungiKami = HubungiKami::findOrFail($id);
-        $hubungiKami->delete();
+        try {
+            $validator = Validator::make($request->all(), [
+                'nama' => 'required|string|max:255',
+                'email' => 'required|email|max:255',
+                'pesan' => 'required|string'
+            ]);
 
-        return response()->json(['message' => 'Pesan berhasil dihapus.']);
+            if ($validator->fails()) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Validasi gagal',
+                    'errors' => $validator->errors()
+                ], 422);
+            }
+
+            $message = HubungiKami::create([
+                'nama' => $request->nama,
+                'email' => $request->email,
+                'pesan' => $request->pesan
+            ]);
+
+            return response()->json([
+                'status' => true,
+                'message' => 'Pesan berhasil disimpan',
+                'data' => $message
+            ], 201);
+        } catch (Exception $e) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Gagal menyimpan pesan: ' . $e->getMessage()
+            ], 500);
+        }
     }
 
-    // ADMIN: Update pesan (opsional)
-    public function update(Request $request, $id)
-    {
-        $hubungiKami = HubungiKami::findOrFail($id);
-
-        $hubungiKami->update($request->all());
-
-        return response()->json([
-            'message' => 'Pesan berhasil diperbarui.',
-            'data' => $hubungiKami
-        ]);
-    }
-
-    // ADMIN: Tampilkan pesan tertentu
+    /**
+     * Menampilkan pesan tertentu.
+     */
     public function show($id)
     {
-        $hubungiKami = HubungiKami::findOrFail($id);
+        try {
+            $message = HubungiKami::find($id);
 
-        return response()->json($hubungiKami);
+            if (!$message) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Pesan tidak ditemukan'
+                ], 404);
+            }
+
+            return response()->json([
+                'status' => true,
+                'message' => 'Pesan ditemukan',
+                'data' => $message
+            ]);
+        } catch (Exception $e) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Gagal mengambil pesan: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * Memperbarui pesan.
+     */
+    public function update(Request $request, $id)
+    {
+        try {
+            $message = HubungiKami::find($id);
+
+            if (!$message) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Pesan tidak ditemukan'
+                ], 404);
+            }
+
+            $validator = Validator::make($request->all(), [
+                'nama' => 'required|string|max:255',
+                'email' => 'required|email|max:255',
+                'pesan' => 'required|string'
+            ]);
+
+            if ($validator->fails()) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Validasi gagal',
+                    'errors' => $validator->errors()
+                ], 422);
+            }
+
+            $message->update([
+                'nama' => $request->nama,
+                'email' => $request->email,
+                'pesan' => $request->pesan
+            ]);
+
+            return response()->json([
+                'status' => true,
+                'message' => 'Pesan berhasil diperbarui',
+                'data' => $message
+            ]);
+        } catch (Exception $e) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Gagal memperbarui pesan: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * Menghapus pesan.
+     */
+    public function destroy($id)
+    {
+        try {
+            $message = HubungiKami::find($id);
+
+            if (!$message) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Pesan tidak ditemukan'
+                ], 404);
+            }
+
+            $message->delete();
+
+            return response()->json([
+                'status' => true,
+                'message' => 'Pesan berhasil dihapus'
+            ]);
+        } catch (Exception $e) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Gagal menghapus pesan: ' . $e->getMessage()
+            ], 500);
+        }
     }
 }

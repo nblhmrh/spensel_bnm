@@ -4,7 +4,6 @@ import React from "react";
 import Navbar from "../Navbar/page";
 import Link from "next/link";
 import Image from "next/image";
-// import akreditasi from "@/assets/akreditasi.png";
 import News from "@/pages/News";
 import { FaDownload } from "react-icons/fa";
 import { useEffect, useState } from "react";
@@ -49,9 +48,10 @@ function Akreditasi() {
       {data.map((item, i) => (
         <div key={i} className="mb-8 flex flex-col items-center justify-center">
           <a
-            href={`http://localhost:8000/storage/${item.file}`}
-            download
-            className="mb-4 flex items-center gap-2 text-white bg-[#154472] hover:bg-[#1a5a99] transition-all font-medium py-2 px-4 rounded-lg"
+            href={`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/api/akreditasi/download/${item.file}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mb-4 flex items-center gap-2 text-white bg-[#154472] hover:bg-[#1a5a99] transition-all font-medium py-2 px-4 rounded-lg cursor-pointer"
           >
             <FaDownload />
             Download Gambar

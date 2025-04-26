@@ -16,42 +16,35 @@ export default function HubungiKamiContent() {
   const [data, setData] = useState<Pesan[]>([]);
   const [editId, setEditId] = useState<number | null>(null);
   const [form, setForm] = useState({ nama: "", email: "", pesan: "" });
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
-  const fetchData = async (showToast = false) => {
+  const fetchData = async () => {
     try {
-      setIsLoading(true);
       const res = await axios.get("http://localhost:8000/api/hubungi-kami");
+      // Handle both array and object responses
       const messages = Array.isArray(res.data)
         ? res.data
         : res.data.data
         ? res.data.data
         : [];
-      setData(messages);
 
-      if (showToast) {
-        toast.success("Data berhasil dimuat", {
-          position: "bottom-center",
-          duration: 2000,
-        });
-      }
+      setData(messages); // Set data regardless of length
+      setIsLoading(false); // Stop loading state
     } catch (error) {
-      console.error("Gagal memuat data", error);
+      console.error("Error fetching data:", error);
       setData([]);
-      toast.error("Gagal memuat data", {
-        position: "bottom-center",
-        duration: 2000,
-      });
     } finally {
       setIsLoading(false);
     }
   };
 
   useEffect(() => {
-    fetchData(true); // load saat pertama mount + tampilkan toast
+    fetchData();
+    // Remove the interval - we don't want auto refresh
   }, []);
 
   const handleDelete = async (id: number) => {
+    // Replace window.confirm with a custom modal
     const confirmDelete = () => {
       return new Promise((resolve) => {
         const modal = document.createElement("div");
@@ -62,13 +55,18 @@ export default function HubungiKamiContent() {
             <h3 class="text-lg font-semibold text-gray-900 mb-4">Konfirmasi Hapus</h3>
             <p class="text-gray-600 mb-6">Yakin ingin menghapus pesan ini?</p>
             <div class="flex justify-end gap-3">
-              <button class="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg" id="cancel">Batal</button>
-              <button class="px-4 py-2 bg-red-800 text-white hover:bg-red-700 rounded-lg" id="confirm">Hapus</button>
+              <button class="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg" id="cancel">
+                Batal
+              </button>
+              <button class="px-4 py-2 bg-red-800 text-white hover:bg-red-700 rounded-lg" id="confirm">
+                Hapus
+              </button>
             </div>
           </div>
         `;
 
         document.body.appendChild(modal);
+
         const confirmBtn = modal.querySelector("#confirm");
         const cancelBtn = modal.querySelector("#cancel");
 
@@ -82,6 +80,7 @@ export default function HubungiKamiContent() {
           resolve(false);
         });
 
+        // Close on outside click
         modal.addEventListener("click", (e) => {
           if (e.target === modal) {
             document.body.removeChild(modal);
@@ -96,17 +95,63 @@ export default function HubungiKamiContent() {
       if (!confirmed) return;
 
       await axios.delete(`http://localhost:8000/api/hubungi-kami/${id}`);
-      toast.success("Pesan berhasil dihapus", {
-        position: "bottom-center",
-        duration: 2000,
-      });
+      toast.custom(
+        () => (
+          <div
+            className={`${"animate-enter"} max-w-md w-full bg-white shadow-lg rounded-lg pointer-events-auto flex flex-row ring-1 ring-black ring-opacity-5`}
+          ></div>
+        ),
+        {
+          duration: 2000,
+          position: "bottom-center",
+        }
+      );
       fetchData();
     } catch (error) {
       console.error("Gagal menghapus data", error);
-      toast.error("Gagal menghapus pesan", {
-        position: "bottom-center",
-        duration: 2000,
-      });
+      toast.custom(
+        () => (
+          <div className="max-w-md w-full bg-white shadow-lg rounded-lg pointer-events-auto flex ring-1 ring-black ring-opacity-5">
+            <div className="flex-1 w-0 p-4">
+              <div className="flex items-center">
+                <div className="flex-shrink-0 pt-0.5">
+                  <svg
+                    className="h-10 w-10 text-red-500"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M6 18L18 6M6 6l12 12"
+                    />
+                  </svg>
+                </div>
+                <div className="ml-3 flex-1">
+                  <p className="text-sm font-medium text-gray-900">Gagal!</p>
+                  <p className="mt-1 text-sm text-gray-500">
+                    Gagal menghapus pesan.
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div className="flex border-l border-gray-200">
+              <button
+                onClick={() => toast.dismiss()}
+                className="w-full border border-transparent rounded-none rounded-r-lg p-4 flex items-center justify-center text-sm font-medium text-red-600 hover:text-red-500 focus:outline-none"
+              >
+                Tutup
+              </button>
+            </div>
+          </div>
+        ),
+        {
+          duration: 2000,
+          position: "bottom-center",
+        }
+      );
     }
   };
 
@@ -119,14 +164,26 @@ export default function HubungiKamiContent() {
           form
         );
         toast.success("Pesan berhasil diperbarui", {
+          style: {
+            background: "#4CAF50",
+            color: "white",
+            border: "none",
+          },
           position: "bottom-center",
           duration: 2000,
+          className: "modern-toast",
         });
       } else {
         await axios.post("http://localhost:8000/api/hubungi-kami", form);
         toast.success("Pesan berhasil ditambahkan", {
+          style: {
+            background: "#4CAF50",
+            color: "white",
+            border: "none",
+          },
           position: "bottom-center",
           duration: 2000,
+          className: "modern-toast",
         });
       }
       setForm({ nama: "", email: "", pesan: "" });
@@ -135,8 +192,14 @@ export default function HubungiKamiContent() {
     } catch (error) {
       console.error("Gagal menyimpan data", error);
       toast.error("Gagal menyimpan pesan", {
+        style: {
+          background: "#f44336",
+          color: "white",
+          border: "none",
+        },
         position: "bottom-center",
         duration: 2000,
+        className: "modern-toast",
       });
     }
   };
@@ -152,15 +215,6 @@ export default function HubungiKamiContent() {
       <h1 className="text-3xl font-bold text-[#1D3557] mb-6">
         Admin - Hubungi Kami
       </h1>
-
-      <div className="flex justify-end mb-6">
-        <button
-          onClick={() => fetchData(true)}
-          className="bg-green-600 text-white px-4 py-2 rounded-full hover:bg-green-700"
-        >
-          Reload Data
-        </button>
-      </div>
 
       <form onSubmit={handleSubmit} className="space-y-4 mb-8">
         <input
@@ -246,7 +300,7 @@ export default function HubungiKamiContent() {
                           pesan: pesan.pesan,
                         });
                       }}
-                      className="bg-yellow-400 text-white px-3 py-1 rounded hover:bg-yellow-500"
+                      className="bg-yellow-300 text-white px-3 py-1 rounded hover:bg-yellow-500"
                     >
                       Edit
                     </button>

@@ -7,7 +7,7 @@ import "react-toastify/dist/ReactToastify.css";
 
 export default function AkreditasiContent() {
   const [data, setData] = useState<
-    { id: number; instansi: string; no_sk: string; npsn: string }[]
+    { id: number; instansi: string; no_sk: string; npsn: string; file: string }[]
   >([]);
   const [form, setForm] = useState<{
     instansi: string;
@@ -108,7 +108,7 @@ export default function AkreditasiContent() {
               setForm({ ...form, file: e.target.files[0] });
             }
           }}
-          className="w-full"
+          className="w-full text-black"
           accept="image/*"
           required
         />
