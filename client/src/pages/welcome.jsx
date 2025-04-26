@@ -20,6 +20,7 @@ import {
 
 export default function Home() {
   const [sambutanData, setSambutanData] = useState(null);
+  const [fotoSekolah, setFotoSekolah] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
@@ -38,9 +39,21 @@ export default function Home() {
     }
   };
 
+  const fetchFotoSekolah = async () => {
+    try {
+      const response = await axios.get("http://localhost:8000/api/foto-sekolah");
+      if (response.data && response.data.length > 0) {
+        setFotoSekolah(response.data[0]);
+      }
+    } catch (err) {
+      console.error("Error fetching foto sekolah:", err);
+    }
+  };
+
   useEffect(() => {
     fetchSambutan();
-    
+    fetchFotoSekolah();
+  
     // Mendengarkan event storage untuk mendeteksi perubahan dari halaman admin
     const handleStorageChange = (e) => {
       if (e.key === 'sambutan_updated') {
@@ -48,10 +61,15 @@ export default function Home() {
         // Hapus flag setelah digunakan
         localStorage.removeItem('sambutan_updated');
       }
+      if (e.key === 'foto_sekolah_updated') {
+        fetchFotoSekolah();
+        // Hapus flag setelah digunakan
+        localStorage.removeItem('foto_sekolah_updated');
+      }
     };
-    
+  
     window.addEventListener('storage', handleStorageChange);
-    
+  
     // Cleanup listener saat komponen unmount
     return () => {
       window.removeEventListener('storage', handleStorageChange);
@@ -90,13 +108,25 @@ export default function Home() {
             UPT SMP NEGERI 9 BINAMU <br /> JENEPONTO
           </h1>
           <div className="mt-4 w-full max-w-4xl mx-auto pt-6">
-            <Image
-              src={smp9}
-              alt="Gedung Sekolah"
-              className="rounded-lg shadow-lg w-full h-auto"
-              width={1200}
-              height={750}
-            />
+            {fotoSekolah ? (
+              <img
+                src={`http://localhost:8000/storage/${fotoSekolah.file}`}
+                alt="Gedung Sekolah"
+                className="rounded-lg shadow-lg w-full h-auto"
+                onError={(e) => {
+                  console.error("Error loading image");
+                  e.target.src = smp9.src;
+                }}
+              />
+            ) : (
+              <Image
+                src={smp9}
+                alt="Gedung Sekolah"
+                className="rounded-lg shadow-lg w-full h-auto"
+                width={1200}
+                height={750}
+              />
+            )}
           </div>
         </section>
       </div>
@@ -164,13 +194,18 @@ export default function Home() {
           ) : error ? (
             <p className="text-red-500">{error}</p>
           ) : sambutanData ? (
-            <Image 
-              src={`http://localhost:8000/storage/${sambutanData.foto}`} 
-              width={600} 
-              height={800} 
-              alt="Foto Kepala Sekolah"
-              className="object-cover h-full"
-            />
+            <div className="w-full h-full">
+              <img 
+                src={`http://localhost:8000/storage/sambutan/${sambutanData.foto.split('/').pop()}`} 
+                alt="Foto Kepala Sekolah"
+                className="object-cover h-full w-full"
+                onError={(e) => {
+                  console.error("Error loading image from:", `http://localhost:8000/storage/${sambutanData.foto}`);
+                  console.log("Sambutan data:", sambutanData);
+                  e.target.src = ayah.src;
+                }}
+              />
+            </div>
           ) : (
             <Image
               src={ayah}

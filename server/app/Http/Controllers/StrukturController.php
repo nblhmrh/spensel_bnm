@@ -2,39 +2,34 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Akreditasi;
+use App\Models\Struktur;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
-class AkreditasiController {
-
-    public function index() {
-        return Akreditasi::all();
+class StrukturController
+{
+    public function index()
+    {
+        return Struktur::all();
     }
 
     public function store(Request $request)
     {
         try {
             $validated = $request->validate([
-                'instansi' => 'required|string|max:255',
-                'no_sk' => 'required|string|max:255',
-                'npsn' => 'required|string|max:255',
-                'file' => 'required|file|mimes:pdf,jpg,jpeg,png,webp|max:2048'
+                'file' => 'required|file|mimes:jpg,jpeg,png,webp|max:2048'
             ]);
 
-            $filePath = $request->file('file')->store('akreditasi', 'public');
+            $filePath = $request->file('file')->store('struktur', 'public');
 
-            $akreditasi = Akreditasi::create([
-                'instansi' => $validated['instansi'],
-                'no_sk' => $validated['no_sk'],
-                'npsn' => $validated['npsn'],
+            $struktur = Struktur::create([
                 'file' => $filePath,
             ]);
 
             return response()->json([
                 'success' => true,
-                'message' => 'Data akreditasi berhasil disimpan',
-                'data' => $akreditasi
+                'message' => 'Data struktur berhasil disimpan',
+                'data' => $struktur
             ], 201);
 
         } catch (\Illuminate\Validation\ValidationException $e) {
@@ -52,23 +47,22 @@ class AkreditasiController {
         }
     }
 
-    public function destroy($id) {
-        $data = Akreditasi::findOrFail($id);
+    public function destroy($id)
+    {
+        $data = Struktur::findOrFail($id);
         Storage::disk('public')->delete($data->file);
         $data->delete();
         return response()->json(['message' => 'Deleted']);
     }
 
     public function download($filename)
-{
-    $path = storage_path('app/public/akreditasi/' . $filename);
+    {
+        $path = storage_path('app/public/struktur/' . $filename);
 
-    if (!file_exists($path)) {
-        return response()->json(['error' => 'File tidak ditemukan'], 404);
+        if (!file_exists($path)) {
+            return response()->json(['error' => 'File tidak ditemukan'], 404);
+        }
+
+        return response()->download($path);
     }
-
-    return response()->download($path);
 }
-}
-
-

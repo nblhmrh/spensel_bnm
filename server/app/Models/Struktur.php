@@ -5,10 +5,10 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Akreditasi extends Model
+class Struktur extends Model
 {
-    protected $table = 'akreditasi';
-    protected $fillable = ['instansi', 'no_sk', 'npsn', 'file'];
-
     use HasFactory;
+
+    protected $table = 'struktur';
+    protected $fillable = ['file'];
 }

@@ -110,20 +110,70 @@ export default function HubungiKamiContent() {
     }
   };
 
+  const validateForm = () => {
+    if (!form.nama.trim()) {
+      toast.error("Nama tidak boleh kosong", {
+        position: "bottom-center",
+        duration: 2000,
+      });
+      return false;
+    }
+    
+    if (!form.email.trim()) {
+      toast.error("Email tidak boleh kosong", {
+        position: "bottom-center",
+        duration: 2000,
+      });
+      return false;
+    }
+    
+    // Validasi format email
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(form.email)) {
+      toast.error("Format email tidak valid", {
+        position: "bottom-center",
+        duration: 2000,
+      });
+      return false;
+    }
+    
+    if (!form.pesan.trim()) {
+      toast.error("Pesan tidak boleh kosong", {
+        position: "bottom-center",
+        duration: 2000,
+      });
+      return false;
+    }
+    
+    return true;
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    if (!validateForm()) {
+      return;
+    }
+    
+    // Pastikan data yang dikirim bersih
+    const formData = {
+      nama: form.nama.trim(),
+      email: form.email.trim(),
+      pesan: form.pesan.trim()
+    };
+    
     try {
       if (editId) {
         await axios.put(
           `http://localhost:8000/api/hubungi-kami/${editId}`,
-          form
+          formData
         );
         toast.success("Pesan berhasil diperbarui", {
           position: "bottom-center",
           duration: 2000,
         });
       } else {
-        await axios.post("http://localhost:8000/api/hubungi-kami", form);
+        await axios.post("http://localhost:8000/api/hubungi-kami", formData);
         toast.success("Pesan berhasil ditambahkan", {
           position: "bottom-center",
           duration: 2000,
@@ -132,12 +182,32 @@ export default function HubungiKamiContent() {
       setForm({ nama: "", email: "", pesan: "" });
       setEditId(null);
       fetchData();
-    } catch (error) {
+    } catch (error: any) {
       console.error("Gagal menyimpan data", error);
-      toast.error("Gagal menyimpan pesan", {
-        position: "bottom-center",
-        duration: 2000,
-      });
+      
+      // Tampilkan detail error yang lebih spesifik
+      if (error.response) {
+        // Server merespons dengan status code di luar range 2xx
+        console.error('Error response data:', error.response.data);
+        console.error('Error response status:', error.response.status);
+        toast.error(`Error: ${error.response.data?.message || 'Terjadi kesalahan pada server'}`, {
+          position: "bottom-center",
+          duration: 3000,
+        });
+      } else if (error.request) {
+        // Request dibuat tapi tidak ada respons
+        console.error('Error request:', error.request);
+        toast.error('Tidak ada respons dari server. Periksa koneksi Anda.', {
+          position: "bottom-center",
+          duration: 3000,
+        });
+      } else {
+        // Kesalahan lainnya
+        toast.error(`Error: ${error.message}`, {
+          position: "bottom-center",
+          duration: 3000,
+        });
+      }
     }
   };
 

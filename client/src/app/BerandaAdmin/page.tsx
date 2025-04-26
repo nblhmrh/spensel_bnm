@@ -59,6 +59,14 @@ export default function Dashboard({ children }: { children?: React.ReactNode }) 
     setActivePath('/HubungiKamiAdmin');
     router.push("/HubungiKamiAdmin");
   };
+  const handleNavigateToStrukturadmin = () => {
+    setActivePath('/StrukturAdmin');
+    router.push("/StrukturAdmin");
+  };
+  const handleNavigateToFotoSekolahAdmin = () => {
+    setActivePath('/FotoSekolahAdmin');
+    router.push("/FotoSekolahAdmin");
+  };
 
   // Update button classes to include active state
   return (
@@ -96,8 +104,12 @@ export default function Dashboard({ children }: { children?: React.ReactNode }) 
               <p className="text-sm text-gray-500 mb-2">BERANDA</p>
               <div className="space-y-2">
                 <button 
-                  onClick={handleNavigateToFoto}
-                  className="flex items-center text-left w-full px-4 py-2 hover:bg-gray-200 rounded-lg"
+                  onClick={handleNavigateToFotoSekolahAdmin}
+                  className={`flex items-center text-left w-full px-4 py-2 rounded-lg ${
+                    activePath === '/FotoSekolahAdmin'
+                      ? 'bg-blue-100 text-blue-800 border-2 border-[#154472]'
+                      : 'hover:bg-gray-200'
+                  }`}
                 >
                   <FaImage className="mr-2" /> Foto Sekolah
                 </button>
@@ -132,16 +144,6 @@ export default function Dashboard({ children }: { children?: React.ReactNode }) 
                   <FaSchool className="mr-2" /> Visi Misi
                 </button>
                 
-                <button
-                  onClick={handleNavigateToFoto}
-                  className={`flex items-center text-left w-full px-4 py-2 rounded-lg ${
-                    activePath === '/foto-sekolah-admin'
-                      ? 'bg-blue-100 text-blue-800 border-2 border-[#154472]'
-                      : 'hover:bg-gray-200'
-                  }`}
-                >
-                  <FaImage className="mr-2" /> Foto Sekolah
-                </button>
                 
                 <button className={`flex items-center text-left w-full px-4 py-2 rounded-lg ${
                   activePath === '/berita-admin'
@@ -156,7 +158,14 @@ export default function Dashboard({ children }: { children?: React.ReactNode }) 
                 <button className="flex items-center text-left w-full px-4 py-2 hover:bg-gray-200 rounded-lg">
                   <FaTrophy className="mr-2" /> Prestasi
                 </button>
-                <button className="flex items-center text-left w-full px-4 py-2 hover:bg-gray-200 rounded-lg">
+                <button
+                  onClick={handleNavigateToStrukturadmin}
+                  className={`flex items-center text-left w-full px-4 py-2 rounded-lg ${
+                    activePath === '/StrukturAdmin'
+                      ? 'bg-blue-100 text-blue-800 border-2 border-[#154472]'
+                      : 'hover:bg-gray-200'
+                  }`}
+                >
                   <FaSitemap className="mr-2" /> Struktur Organisasi
                 </button>
                 <button

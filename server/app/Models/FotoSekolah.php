@@ -5,10 +5,10 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Akreditasi extends Model
+class FotoSekolah extends Model
 {
-    protected $table = 'akreditasi';
-    protected $fillable = ['instansi', 'no_sk', 'npsn', 'file'];
-
     use HasFactory;
+
+    protected $table = 'foto_sekolah';
+    protected $fillable = ['file'];
 }

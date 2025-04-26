@@ -7,7 +7,7 @@ import "react-toastify/dist/ReactToastify.css";
 
 export default function AkreditasiContent() {
   const [data, setData] = useState<
-    { id: number; instansi: string; no_sk: string; npsn: string }[]
+    { id: number; instansi: string; no_sk: string; npsn: string; file: string }[]
   >([]);
   const [form, setForm] = useState<{
     instansi: string;
@@ -82,7 +82,7 @@ export default function AkreditasiContent() {
           placeholder="Instansi"
           value={form.instansi}
           onChange={(e) => setForm({ ...form, instansi: e.target.value })}
-          className="border w-full p-2 rounded"
+          className="border w-full p-2 rounded text-black"
           required
         />
         <input
@@ -90,7 +90,7 @@ export default function AkreditasiContent() {
           placeholder="No SK"
           value={form.no_sk}
           onChange={(e) => setForm({ ...form, no_sk: e.target.value })}
-          className="border w-full p-2 rounded"
+          className="border w-full p-2 rounded text-black"
           required
         />
         <input
@@ -98,7 +98,7 @@ export default function AkreditasiContent() {
           placeholder="NPSN"
           value={form.npsn}
           onChange={(e) => setForm({ ...form, npsn: e.target.value })}
-          className="border w-full p-2 rounded"
+          className="border w-full p-2 rounded text-black"
           required
         />
         <input
@@ -108,7 +108,7 @@ export default function AkreditasiContent() {
               setForm({ ...form, file: e.target.files[0] });
             }
           }}
-          className="w-full"
+          className="w-full text-black"
           accept="image/*"
           required
         />
@@ -131,6 +131,23 @@ export default function AkreditasiContent() {
               <p className="font-semibold text-[#154472]">{item.instansi}</p>
               <p className="text-sm text-gray-600">No SK: {item.no_sk}</p>
               <p className="text-sm text-gray-600">NPSN: {item.npsn}</p>
+              {item.file && (
+                <div className="mt-2">
+                  <a
+                    href={`http://localhost:8000/storage/${item.file}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-blue-600 underline"
+                  >
+                    Lihat File
+                  </a>
+                  <img
+                    src={`http://localhost:8000/storage/${item.file}`}
+                    alt="akreditasi"
+                    className="mt-2 rounded shadow max-h-48"
+                  />
+                </div>
+              )}
             </div>
             <button
               onClick={() => handleDelete(item.id)}

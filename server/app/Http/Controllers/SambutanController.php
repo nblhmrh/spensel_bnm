@@ -33,7 +33,7 @@ class SambutanController extends Controller
             $request->validate([
                 'nama' => 'required',
                 'isi' => 'required',
-                'foto' => 'required|image|mimes:jpeg,png,jpg|max:2048'
+                'foto' => 'required|image|mimes:jpeg,png,jpg,webp|max:2048'
             ]);
 
             // Delete all existing sambutan records first
