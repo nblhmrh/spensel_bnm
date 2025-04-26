@@ -5,6 +5,7 @@ import React from "react";
 import Navbar from "../Navbar/page";
 import Link from "next/link";
 import News from "@/pages/News";
+import { motion } from "framer-motion";
 
 export default function VisiMisi() {
   const [data, setData] = useState({ visi: "", misi: "" });
@@ -18,27 +19,37 @@ export default function VisiMisi() {
 
   return (
     <>
-      <div className="bg-[#154472]">
+      <motion.div 
+        className="bg-[#154472]"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.8 }}
+      >
         <Navbar />
-        <section className="flex flex-col py-8 px-6">
-          <h1 className="text-3xl md:text-4xl font-bold text-white">
+        <motion.section 
+          className="flex flex-col py-8 px-6"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+        >
+          <h1 className="text-3xl md:text-4xl font-bold text-white font-poppins tracking-wide">
             Visi & Misi
           </h1>
-          <p className="text-white mt-2 py-3 font-normal">
-            <Link href="/" className="hover:text-gray-300">
+          <p className="text-white mt-2 py-3 font-normal font-inter">
+            <Link href="/" className="hover:text-gray-300 transition-colors duration-300">
               Beranda
             </Link>{" "}
             &gt;{" "}
-            <Link href="/TentangKami" className="hover:text-gray-300">
+            <Link href="/TentangKami" className="hover:text-gray-300 transition-colors duration-300">
               Tentang Kami
             </Link>{" "}
             &gt;{" "}
-            <Link href="/visi-misi" className="hover:text-gray-300">
+            <Link href="/visi-misi" className="hover:text-gray-300 transition-colors duration-300">
               Visi & Misi
             </Link>
           </p>
-        </section>
-      </div>
+        </motion.section>
+      </motion.div>
 
       <div className="relative bg-gray-200">
         {/* Wave SVG at the top */}
@@ -53,32 +64,57 @@ export default function VisiMisi() {
         </div>
 
         <div className="container mx-auto px-4 py-12 max-w-7xl">
-          <h1 className="text-2xl font-bold text-center z-0 text-[#154472] mt-28 ">
+          <motion.h1 
+            className="text-2xl font-bold text-center z-0 text-[#154472] mt-28 font-poppins tracking-wider"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+          >
             VISI & MISI UPT SMPN 9 BINAMU JENEPONTO
-          </h1>
+          </motion.h1>
 
-          <div className="mt-20 space-y-8 ">
+          <div className="mt-20 space-y-8">
             {/* Visi Section */}
-            <div className="bg-[#154472] rounded-lg p-8 relative">
-              <h2 className="text-3xl font-bold text-white mb-6">Visi</h2>
-              <div className="text-white">
+            <motion.div 
+              className="bg-[#154472] rounded-lg p-8 relative transform hover:scale-[1.01] transition-all duration-300 hover:shadow-xl"
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.3 }}
+            >
+              <h2 className="text-3xl font-bold text-white mb-6 font-poppins">Visi</h2>
+              <motion.div 
+                className="text-white"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.4 }}
+              >
                 <div
-                  className="text-sm leading-relaxed "
+                  className="text-sm leading-relaxed font-inter"
                   dangerouslySetInnerHTML={{ __html: data.visi }}
                 />
-              </div>
-            </div>
+              </motion.div>
+            </motion.div>
 
             {/* Misi Section */}
-            <div className="bg-[#154472] rounded-lg p-8">
-              <h2 className="text-3xl font-bold text-white mb-6">Misi</h2>
-              <div className="text-white">
+            <motion.div 
+              className="bg-[#154472] rounded-lg p-8 transform hover:scale-[1.01] transition-all duration-300 hover:shadow-xl"
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.5 }}
+            >
+              <h2 className="text-3xl font-bold text-white mb-6 font-poppins">Misi</h2>
+              <motion.div 
+                className="text-white"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.6 }}
+              >
                 <div
-                  className="text-sm leading-relaxed mb-16"
+                  className="text-sm leading-relaxed mb-16 font-inter"
                   dangerouslySetInnerHTML={{ __html: data.misi }}
                 />
-              </div>
-            </div>
+              </motion.div>
+            </motion.div>
           </div>
         </div>
         <div className="bg-gray-200 h-36"></div>

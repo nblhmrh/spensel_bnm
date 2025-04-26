@@ -30,12 +30,20 @@ export default function VisiMisiAdmin() {
   }
 
   const formatContent = (content: string) => {
-    // Format the content with proper HTML structure
+    // Split content by newlines and filter out empty lines
+    const lines = content.split('\n').filter(line => line.trim());
+    
+    // Format each line as a paragraph with proper styling
+    const formattedLines = lines.map(line => 
+      `<p class="text-justify mb-4 leading-relaxed text-base">${line.trim()}</p>`
+    );
+    
+    // Join all paragraphs and wrap in a container
     return `
-      <div class="text-sm">
-        <p class="text-justify mb-6 leading-relaxed">${content}</p>
+      <div class="prose prose-sm max-w-none">
+        ${formattedLines.join('\n      ')}
       </div>
-    `
+    `;
   }
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
