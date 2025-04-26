@@ -75,14 +75,14 @@ export default function AkreditasiContent() {
 
       <form
         onSubmit={handleSubmit}
-        className="bg-white shadow-md p-6 rounded-lg mb-8 space-y-4"
+        className="bg-white shadow-md p-6 rounded-lg mb-8 space-y-4 text-gray-700"
       >
         <input
           type="text"
           placeholder="Instansi"
           value={form.instansi}
           onChange={(e) => setForm({ ...form, instansi: e.target.value })}
-          className="border w-full p-2 rounded"
+          className="border w-full p-2 rounded text-gray-700"
           required
         />
         <input
@@ -90,7 +90,7 @@ export default function AkreditasiContent() {
           placeholder="No SK"
           value={form.no_sk}
           onChange={(e) => setForm({ ...form, no_sk: e.target.value })}
-          className="border w-full p-2 rounded"
+          className="border w-full p-2 rounded text-gray-700"
           required
         />
         <input
@@ -98,7 +98,7 @@ export default function AkreditasiContent() {
           placeholder="NPSN"
           value={form.npsn}
           onChange={(e) => setForm({ ...form, npsn: e.target.value })}
-          className="border w-full p-2 rounded"
+          className="border w-full p-2 rounded text-gray-700"
           required
         />
         <input
@@ -125,12 +125,12 @@ export default function AkreditasiContent() {
         {data.map((item) => (
           <div
             key={item.id}
-            className="bg-white p-4 rounded-lg shadow flex justify-between items-center"
+            className="bg-white p-4 rounded-lg shadow flex justify-between items-center text-gray-700"
           >
             <div>
               <p className="font-semibold text-[#154472]">{item.instansi}</p>
-              <p className="text-sm text-gray-600">No SK: {item.no_sk}</p>
-              <p className="text-sm text-gray-600">NPSN: {item.npsn}</p>
+              <p className="text-sm text-gray-700">No SK: {item.no_sk}</p>
+              <p className="text-sm text-gray-700">NPSN: {item.npsn}</p>
             </div>
             <button
               onClick={() => handleDelete(item.id)}
