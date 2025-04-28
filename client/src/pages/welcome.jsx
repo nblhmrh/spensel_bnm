@@ -53,26 +53,31 @@ export default function Home() {
   useEffect(() => {
     fetchSambutan();
     fetchFotoSekolah();
-  
-    // Mendengarkan event storage untuk mendeteksi perubahan dari halaman admin
-    const handleStorageChange = (e) => {
-      if (e.key === 'sambutan_updated') {
-        fetchSambutan();
-        // Hapus flag setelah digunakan
-        localStorage.removeItem('sambutan_updated');
-      }
-      if (e.key === 'foto_sekolah_updated') {
+
+    // Fungsi untuk menangani perubahan storage dan custom event
+    const handleStorageChange = () => {
+      const lastUpdate = localStorage.getItem('foto_sekolah_updated');
+      if (lastUpdate) {
         fetchFotoSekolah();
-        // Hapus flag setelah digunakan
         localStorage.removeItem('foto_sekolah_updated');
       }
     };
-  
+
+    // Fungsi untuk menangani custom event
+    const handleCustomEvent = (event) => {
+      if (event.type === 'foto_sekolah_updated') {
+        fetchFotoSekolah();
+      }
+    };
+
+    // Tambahkan event listener
     window.addEventListener('storage', handleStorageChange);
-  
-    // Cleanup listener saat komponen unmount
+    window.addEventListener('foto_sekolah_updated', handleCustomEvent);
+
+    // Cleanup function
     return () => {
       window.removeEventListener('storage', handleStorageChange);
+      window.removeEventListener('foto_sekolah_updated', handleCustomEvent);
     };
   }, []);
 
@@ -265,7 +270,7 @@ export default function Home() {
           >
             <path
               fill="#154472"
-              d="M0,128L48,144C96,160,192,192,288,197.3C384,203,480,181,576,165.3C672,149,768,139,864,154.7C960,171,1056,213,1152,218.7C1248,224,1344,192,1392,176L1440,160L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"
+              d="M0,128L48,144C96,160,192,192,288,197.3C384,203,480,181,576,165.3C672,149,768,139,864,154.7C960,171,1056,213,1152,218.7C1248,224,1344,192,1392,176L1440,160L1440,320L1392,320C1280,320,1120,320,960,320C800,320,640,320,480,320C320,320,160,320,80,320L0,320Z"
             />
           </svg>
         </div>

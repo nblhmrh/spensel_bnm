@@ -25,7 +25,49 @@ export default function FotoSekolahContent() {
 
   useEffect(() => {
     fetchData();
+
+    // Fungsi untuk menangani perubahan storage
+    const handleStorageChange = () => {
+      const lastUpdate = localStorage.getItem('foto_sekolah_updated');
+      if (lastUpdate) {
+        fetchData();
+        // Hapus flag setelah digunakan
+        localStorage.removeItem('foto_sekolah_updated');
+      }
+    };
+
+    // Tambahkan event listener untuk storage dan custom event
+    window.addEventListener('storage', handleStorageChange);
+    window.addEventListener('foto_sekolah_updated', handleStorageChange);
+
+    // Cleanup function
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+      window.removeEventListener('foto_sekolah_updated', handleStorageChange);
+    };
   }, []);
+
+  const handleDelete = async (id: number) => {
+    try {
+      await API.delete(`/foto-sekolah/${id}`);
+      toast.success("Data berhasil dihapus!");
+      
+      // Set flag di localStorage
+      localStorage.setItem('foto_sekolah_updated', Date.now().toString());
+      
+      // Dispatch custom event
+      window.dispatchEvent(new CustomEvent('foto_sekolah_updated'));
+      
+      // Reset form state
+      setForm({ file: null });
+      
+      // Tambahkan delay kecil sebelum fetch data baru
+      await new Promise(resolve => setTimeout(resolve, 500));
+      fetchData();
+    } catch {
+      toast.error("Gagal menghapus data.");
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -58,22 +100,6 @@ export default function FotoSekolahContent() {
       toast.error("Gagal menambahkan foto: " + (err.response?.data?.message || err.message));
     } finally {
       setLoading(false);
-    }
-  };
-
-  const handleDelete = async (id: number) => {
-    try {
-      await API.delete(`/foto-sekolah/${id}`);
-      toast.success("Foto berhasil dihapus!");
-      
-      // Trigger refresh di halaman welcome
-      localStorage.setItem('foto_sekolah_updated', 'true');
-      // Dispatch event untuk halaman lain yang mungkin terbuka
-      window.dispatchEvent(new Event('storage'));
-      
-      fetchData();
-    } catch {
-      toast.error("Gagal menghapus foto.");
     }
   };
 

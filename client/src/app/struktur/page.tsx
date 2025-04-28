@@ -12,8 +12,38 @@ import API from "@/utils/api";
 function StrukturOrganisasi() {
   const [data, setData] = useState([]);
 
+  const fetchData = async () => {
+    try {
+      const res = await API.get("/struktur");
+      setData(res.data);
+    } catch (error) {
+      console.error("Error detail:", error.response?.data);
+      console.error("Error fetching struktur:", error);
+    }
+  };
+
   useEffect(() => {
-    API.get("/struktur").then(res => setData(res.data));
+    fetchData();
+
+    // Fungsi untuk menangani perubahan storage
+    const handleStorageChange = () => {
+      const lastUpdate = localStorage.getItem('struktur_updated');
+      if (lastUpdate) {
+        fetchData();
+        // Hapus flag setelah digunakan
+        localStorage.removeItem('struktur_updated');
+      }
+    };
+
+    // Tambahkan event listener untuk storage dan custom event
+    window.addEventListener('storage', handleStorageChange);
+    window.addEventListener('struktur_updated', handleStorageChange);
+
+    // Cleanup function
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+      window.removeEventListener('struktur_updated', handleStorageChange);
+    };
   }, []);
 
   return (

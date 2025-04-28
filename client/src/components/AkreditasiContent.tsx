@@ -33,6 +33,26 @@ export default function AkreditasiContent() {
 
   useEffect(() => {
     fetchData();
+
+    // Fungsi untuk menangani perubahan storage
+    const handleStorageChange = () => {
+      const lastUpdate = localStorage.getItem('akreditasi_updated');
+      if (lastUpdate) {
+        fetchData();
+        // Hapus flag setelah digunakan
+        localStorage.removeItem('akreditasi_updated');
+      }
+    };
+
+    // Tambahkan event listener untuk storage dan custom event
+    window.addEventListener('storage', handleStorageChange);
+    window.addEventListener('akreditasi_updated', handleStorageChange);
+
+    // Cleanup function
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+      window.removeEventListener('akreditasi_updated', handleStorageChange);
+    };
   }, []);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -46,12 +66,36 @@ export default function AkreditasiContent() {
     });
 
     try {
-      await API.post("/akreditasi", formData);
+      // Tambahkan delay kecil sebelum upload
+      await new Promise(resolve => setTimeout(resolve, 500));
+
+      const response = await API.post("/akreditasi", formData);
+      console.log("Response upload:", response.data);
+
       toast.success("Data berhasil ditambahkan!");
+      localStorage.setItem('akreditasi_updated', Date.now().toString());
+      window.dispatchEvent(new CustomEvent('akreditasi_updated'));
+      
       setForm({ instansi: "", no_sk: "", npsn: "", file: null });
+      
+      // Reset form
+      const fileInput = e.target as HTMLFormElement;
+      fileInput.reset();
+      
       fetchData();
-    } catch {
-      toast.error("Gagal menambahkan data.");
+    } catch (error) {
+      console.error("Error detail:", error.response?.data);
+      console.error("Error uploading:", error);
+      
+      let errorMessage = "Gagal menambahkan data.";
+      if (error && typeof error === 'object' && 'response' in error) {
+        const errorResponse = (error as { response?: { data?: { message?: string } } }).response?.data;
+        if (errorResponse?.message) {
+          errorMessage = errorResponse.message;
+        }
+      }
+      
+      toast.error(errorMessage);
     } finally {
       setLoading(false);
     }
@@ -61,6 +105,18 @@ export default function AkreditasiContent() {
     try {
       await API.delete(`/akreditasi/${id}`);
       toast.success("Data berhasil dihapus!");
+      
+      // Set flag di localStorage
+      localStorage.setItem('akreditasi_updated', Date.now().toString());
+      
+      // Dispatch custom event
+      window.dispatchEvent(new CustomEvent('akreditasi_updated'));
+      
+      // Reset form state
+      setForm({ instansi: "", no_sk: "", npsn: "", file: null });
+      
+      // Tambahkan delay kecil sebelum fetch data baru
+      await new Promise(resolve => setTimeout(resolve, 500));
       fetchData();
     } catch {
       toast.error("Gagal menghapus data.");

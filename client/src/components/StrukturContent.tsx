@@ -34,18 +34,28 @@ export default function StrukturContent() {
       formData.append('file', form.file);
     }
   
-    console.log("Data yang dikirim ke API:", formData.get('file'));
-  
     try {
+      // Tambahkan delay kecil setelah menghapus
+      await new Promise(resolve => setTimeout(resolve, 500));
+  
+      // Upload file baru
       const response = await API.post("/struktur", formData);
       console.log("Response upload:", response.data);
-      toast.success("Data berhasil ditambahkan!");
+  
+      toast.success("Data berhasil diperbarui!");
+      localStorage.setItem('struktur_updated', Date.now().toString());
+      window.dispatchEvent(new CustomEvent('struktur_updated'));
       setForm({ file: null });
+      
+      // Reset input file
+      const fileInput = e.target as HTMLFormElement;
+      fileInput.reset();
+      
       fetchData();
     } catch (error) {
+      console.error("Error detail:", error.response?.data);
       console.error("Error uploading file:", error);
       
-      // Improved error handling
       let errorMessage = "Gagal menambahkan data.";
       if (error && typeof error === 'object' && 'response' in error) {
         const errorResponse = (error as { response?: { data?: { message?: string } } }).response?.data;
@@ -64,6 +74,18 @@ export default function StrukturContent() {
     try {
       await API.delete(`/struktur/${id}`);
       toast.success("Data berhasil dihapus!");
+      
+      // Set flag di localStorage
+      localStorage.setItem('struktur_updated', Date.now().toString());
+      
+      // Dispatch custom event
+      window.dispatchEvent(new CustomEvent('struktur_updated'));
+      
+      // Reset form state
+      setForm({ file: null });
+      
+      // Tambahkan delay kecil sebelum fetch data baru
+      await new Promise(resolve => setTimeout(resolve, 500));
       fetchData();
     } catch {
       toast.error("Gagal menghapus data.");

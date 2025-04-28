@@ -69,6 +69,11 @@ export default function Dashboard({ children }: { children?: React.ReactNode }) 
     router.push("/FasilitasAdmin");
   };
 
+  const handleNavigateToBeritaAdmin = () => {
+    setActivePath('/BeritaAdmin');
+    router.push("/BeritaAdmin");
+  };
+
   // Update button classes to include active state
   return (
     <div className="flex min-h-screen bg-gray-100">
@@ -124,7 +129,14 @@ export default function Dashboard({ children }: { children?: React.ReactNode }) 
                 >
                   <FaUserTie className="mr-2" /> Sambutan Kepala Sekolah
                 </button>
-                <button className="flex items-center text-left w-full px-4 py-2 hover:bg-gray-200 rounded-lg">
+                <button
+                  onClick={handleNavigateToBeritaAdmin}
+                  className={`flex items-center text-left w-full px-4 py-2 rounded-lg ${
+                    activePath === '/BeritaAdmin'
+                      ? 'bg-blue-100 text-blue-800 border-2 border-[#154472]'
+                      : 'hover:bg-gray-200'
+                  }`}
+                >
                   <FaNewspaper className="mr-2" /> Berita
                 </button>
               </div>
