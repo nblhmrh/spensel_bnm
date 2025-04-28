@@ -31,10 +31,7 @@ export default function Dashboard({ children }: { children?: React.ReactNode }) 
   };
 
   // Update navigation handlers to set active path
-  const handleNavigateToFoto = () => {
-    setActivePath('/foto-sekolah-admin');
-    router.push("/foto-sekolah-admin");
-  };
+
 
   const handleNavigateToDashboard = () => {
     setActivePath('/BerandaAdmin');
@@ -66,6 +63,11 @@ export default function Dashboard({ children }: { children?: React.ReactNode }) 
   const handleNavigateToFotoSekolahAdmin = () => {
     setActivePath('/FotoSekolahAdmin');
     router.push("/FotoSekolahAdmin");
+  };
+
+  const handleNavigateToFasilitasAdmin = () => {
+    setActivePath('/FasilitasAdmin');
+    router.push("/FasilitasAdmin");
   };
 
   // Update button classes to include active state
@@ -143,16 +145,14 @@ export default function Dashboard({ children }: { children?: React.ReactNode }) 
                 >
                   <FaSchool className="mr-2" /> Visi Misi
                 </button>
-                
-                
-                <button className={`flex items-center text-left w-full px-4 py-2 rounded-lg ${
-                  activePath === '/berita-admin'
-                    ? 'bg-blue-100 text-blue-800 border-2 border-[#154472]'
-                    : 'hover:bg-gray-200'
-                }`}>
-                  <FaNewspaper className="mr-2" /> Berita
-                </button>
-                <button className="flex items-center text-left w-full px-4 py-2 hover:bg-gray-200 rounded-lg">
+                <button
+                  onClick={handleNavigateToFasilitasAdmin}
+                  className={`flex items-center text-left w-full px-4 py-2 rounded-lg ${
+                    activePath === '/FasilitasAdmin'
+                      ? 'bg-blue-100 text-blue-800 border-2 border-[#154472]'
+                      : 'hover:bg-gray-200'
+                  }`}
+                >
                   <FaBuilding className="mr-2" /> Fasilitas
                 </button>
                 <button className="flex items-center text-left w-full px-4 py-2 hover:bg-gray-200 rounded-lg">

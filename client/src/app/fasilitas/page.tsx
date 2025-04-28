@@ -28,21 +28,36 @@ function Fasilitas() {
     isFromApi: boolean;
   } | null>(null);
 
-  // Fetch data dari API
+  const fetchData = async () => {
+    try {
+      const res = await API.get("/fasilitas");
+      setFasilitasData(res.data);
+      setLoading(false);
+    } catch (error) {
+      console.error("Error fetching fasilitas:", error);
+      setError("Gagal memuat data fasilitas");
+      setLoading(false);
+    }
+  };
+
+  // Menambahkan useEffect untuk memantau perubahan di localStorage
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const res = await API.get("/fasilitas");
-        setFasilitasData(res.data);
-        setLoading(false);
-      } catch (error) {
-        console.error("Error fetching fasilitas:", error);
-        setError("Gagal memuat data fasilitas");
-        setLoading(false);
+    fetchData();
+
+    // Fungsi untuk menangani event storage
+    const handleStorageChange = (e: StorageEvent) => {
+      if (e.key === 'fasilitas_updated') {
+        fetchData();
       }
     };
 
-    fetchData();
+    // Menambahkan event listener
+    window.addEventListener('storage', handleStorageChange);
+
+    // Cleanup function
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+    };
   }, []);
 
   return (

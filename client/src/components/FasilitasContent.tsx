@@ -78,6 +78,7 @@ export default function FasilitasContent() {
         console.log(pair[0] + ': ' + pair[1]);
     }
 
+    // Di dalam fungsi handleSubmit, setelah operasi berhasil
     try {
         const config = {
             headers: {
@@ -96,10 +97,12 @@ export default function FasilitasContent() {
             });
             console.log("Respons dari server:", response);
             toast.success("Data berhasil diperbarui!");
+            localStorage.setItem('fasilitas_updated', Date.now().toString());
         } else {
             const response = await API.post("/fasilitas", formData, config);
             console.log("Respons dari server:", response);
             toast.success("Data berhasil ditambahkan!");
+            localStorage.setItem('fasilitas_updated', Date.now().toString());
         }
         
         resetForm();
@@ -140,9 +143,11 @@ export default function FasilitasContent() {
   const handleDelete = async (id) => {
     if (!confirm("Apakah Anda yakin ingin menghapus data ini?")) return;
     
+    // Di dalam fungsi handleDelete, setelah operasi berhasil
     try {
       await API.delete(`/fasilitas/${id}`);
       toast.success("Data berhasil dihapus!");
+      localStorage.setItem('fasilitas_updated', Date.now().toString());
       fetchData();
     } catch {
       toast.error("Gagal menghapus data.");
