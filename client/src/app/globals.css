@@ -30,6 +30,23 @@ body {
   transform: translateY(-50%) !important;
   animation: slideUp 0.3s ease-out !important;
 }
+
+@keyframes wave {
+  0% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
+}
+
+.animate-wave {
+  animation: wave 3s ease-in-out infinite;
+}
+
 @keyframes fadeSlideUp {
   from {
     opacity: 0;

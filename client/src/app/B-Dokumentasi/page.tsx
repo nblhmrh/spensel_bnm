@@ -78,11 +78,17 @@ const DokumentasiBK = () => {
               Dokumentasi BK
             </h1>
             <p className="text-white mt-2 py-3 font-normal ">
-              <Link href="/" className="transition-colors duration-300 hover:text-gray-300">
+              <Link
+                href="/"
+                className="transition-colors duration-300 hover:text-gray-300"
+              >
                 Beranda
               </Link>{" "}
               &gt;{" "}
-              <Link href="/BK" className="transition-colors duration-300 hover:text-gray-300">
+              <Link
+                href="/BK"
+                className="transition-colors duration-300 hover:text-gray-300"
+              >
                 BK
               </Link>{" "}
               &gt;{" "}
@@ -96,7 +102,10 @@ const DokumentasiBK = () => {
           </section>
         </div>
 
-        <div className="px-6 py-8 animate-fadeIn" style={{ animationDelay: '0.3s' }}>
+        <div
+          className="px-6 py-8 animate-fadeIn"
+          style={{ animationDelay: "0.3s" }}
+        >
           <p className="text-gray-700 text-2xl font-medium py-1 text-center transform transition-all duration-500 hover:scale-105">
             Kami percaya bahwa setiap siswa memiliki potensi untuk sukses.
             Melalui layanan BK yang komprehensif, kami berupaya memfasilitasi
@@ -110,9 +119,11 @@ const DokumentasiBK = () => {
                 key={index}
                 className="relative cursor-pointer group perspective-1000"
                 onClick={() => openModal(index)}
-                style={{ 
+                style={{
                   opacity: 0,
-                  animation: `fadeSlideUp 0.6s ease-out ${index * 0.2}s forwards`
+                  animation: `fadeSlideUp 0.6s ease-out ${
+                    index * 0.2
+                  }s forwards`,
                 }}
               >
                 <div className="transform transition-transform duration-500 group-hover:scale-105">
