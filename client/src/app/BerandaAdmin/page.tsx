@@ -30,7 +30,6 @@ export default function Dashboard({ children }: { children?: React.ReactNode }) 
     router.push("/Welcome");
   };
 
-  // Update navigation handlers to set active path
 
 
   const handleNavigateToDashboard = () => {

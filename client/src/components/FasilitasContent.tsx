@@ -3,17 +3,22 @@
 import { useState, useEffect } from "react";
 import API from "@/utils/api";
 import { toast } from "react-hot-toast";
+import { AxiosError } from "axios";
 
 export default function FasilitasContent() {
-  const [data, setData] = useState([]);
-  const [form, setForm] = useState({
+  const [data, setData] = useState<{ id: number; judul: string; deskripsi: string; foto: string }[]>([]);
+  const [form, setForm] = useState<{
+    judul: string;
+    deskripsi: string;
+    foto: File | null;
+  }>({
     judul: "",
     deskripsi: "",
     foto: null,
   });
   const [loading, setLoading] = useState(false);
   const [editMode, setEditMode] = useState(false);
-  const [editId, setEditId] = useState(null);
+  const [editId, setEditId] = useState<number | null>(null);
 
   const fetchData = async () => {
     try {
@@ -21,7 +26,9 @@ export default function FasilitasContent() {
       setData(res.data);
     } catch (error) {
       console.error("Error fetching fasilitas:", error);
-      console.log("Response data:", error.response?.data);
+      if (error instanceof Error && (error as import("axios").AxiosError).response?.data) {
+        console.log("Response data:", (error as import("axios").AxiosError).response?.data);
+      }
       toast.error("Gagal memuat data");
     } finally {
       setLoading(false);
@@ -32,7 +39,7 @@ export default function FasilitasContent() {
     fetchData();
   }, []);
 
-  const handleChange = (e) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setForm((prev) => ({
       ...prev,
@@ -40,11 +47,11 @@ export default function FasilitasContent() {
     }));
   };
 
-  const handleFileChange = (e) => {
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
       setForm((prev) => ({
         ...prev,
-        foto: e.target.files[0],
+        foto: e.target.files ? e.target.files[0] : null,
       }));
     }
   };
@@ -59,7 +66,7 @@ export default function FasilitasContent() {
     setEditId(null);
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
     const formData = new FormData();
@@ -74,7 +81,7 @@ export default function FasilitasContent() {
     }
 
     // Debug untuk melihat isi FormData
-    for (let pair of formData.entries()) {
+    for (const pair of formData.entries()) {
         console.log(pair[0] + ': ' + pair[1]);
     }
 
@@ -108,29 +115,34 @@ export default function FasilitasContent() {
         resetForm();
         fetchData();
     } catch (error) {
-        console.error("Error detail:", error.response?.data);
+        if (error instanceof Error && (error as import("axios").AxiosError).response) {
+          console.error("Error detail:", (error as import("axios").AxiosError).response?.data);
+        } else {
+          console.error("Error detail:", error);
+        }
         
-        if (error.response) {
-            if (error.response.status === 422) {
-                const validationErrors = error.response.data.errors || {};
+        if (error instanceof Error && (error as import("axios").AxiosError).response) {
+            if ((error as AxiosError).response?.status === 422) {
+                const validationErrors = ((error as AxiosError).response?.data as { errors: Record<string, string[]> }).errors || {};
                 const errorMessages = Object.entries(validationErrors)
                     .map(([field, messages]) => `${field}: ${messages.join(', ')}`)
                     .join('\n');
                 toast.error(`Validasi gagal:\n${errorMessages}`);
             } else {
-                toast.error("Gagal menyimpan data: " + (error.response.data.message || error.message));
+                const responseData = (error as AxiosError<{ message?: string }>).response?.data;
+                toast.error("Gagal menyimpan data: " + (responseData?.message || error.message));
             }
-        } else if (error.request) {
+        } else if (error instanceof Error && (error as AxiosError).request) {
             toast.error("Tidak ada respons dari server. Periksa koneksi Anda.");
         } else {
-            toast.error("Gagal menyimpan data: " + error.message);
+            toast.error("Gagal menyimpan data: " + (error instanceof Error ? error.message : "Unknown error"));
         }
     } finally {
         setLoading(false);
     }
 };
 
-  const handleEdit = (item) => {
+  const handleEdit = (item: { id: number; judul: string; deskripsi: string; foto: string }) => {
     setForm({
       judul: item.judul,
       deskripsi: item.deskripsi,
@@ -140,7 +152,7 @@ export default function FasilitasContent() {
     setEditId(item.id);
   };
 
-  const handleDelete = async (id) => {
+  const handleDelete = async (id: number) => {
     if (!confirm("Apakah Anda yakin ingin menghapus data ini?")) return;
     
     // Di dalam fungsi handleDelete, setelah operasi berhasil

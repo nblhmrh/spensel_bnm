@@ -5,8 +5,10 @@ import API from "@/utils/api";
 import { toast } from "react-hot-toast";
 
 export default function StrukturContent() {
-  const [data, setData] = useState([]);
-  const [form, setForm] = useState({
+  const [data, setData] = useState<{ id: number; file: string }[]>([]);
+  const [form, setForm] = useState<{
+    file: File | null;
+  }>({
     file: null,
   });
   const [loading, setLoading] = useState(false);
@@ -24,7 +26,7 @@ export default function StrukturContent() {
     fetchData();
   }, []);
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
     const formData = new FormData();
@@ -32,21 +34,33 @@ export default function StrukturContent() {
       formData.append('file', form.file);
     }
   
+    console.log("Data yang dikirim ke API:", formData.get('file'));
+  
     try {
       const response = await API.post("/struktur", formData);
-      console.log("Response upload:", response.data); // Tambahkan log untuk debugging
+      console.log("Response upload:", response.data);
       toast.success("Data berhasil ditambahkan!");
       setForm({ file: null });
       fetchData();
     } catch (error) {
-      console.error("Error upload:", error); // Log error lengkap
-      toast.error("Gagal menambahkan data: " + (error.response?.data?.message || error.message));
+      console.error("Error uploading file:", error);
+      
+      // Improved error handling
+      let errorMessage = "Gagal menambahkan data.";
+      if (error && typeof error === 'object' && 'response' in error) {
+        const errorResponse = (error as { response?: { data?: { message?: string } } }).response?.data;
+        if (errorResponse?.message) {
+          errorMessage = errorResponse.message;
+        }
+      }
+      
+      toast.error(errorMessage);
     } finally {
       setLoading(false);
     }
   };
 
-  const handleDelete = async (id) => {
+  const handleDelete = async (id: number) => {
     try {
       await API.delete(`/struktur/${id}`);
       toast.success("Data berhasil dihapus!");

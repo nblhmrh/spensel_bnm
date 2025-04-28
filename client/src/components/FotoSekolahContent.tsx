@@ -3,10 +3,13 @@
 import { useState, useEffect } from "react";
 import API from "@/utils/api";
 import { toast } from "react-hot-toast";
+import { AxiosError } from "axios";
 
 export default function FotoSekolahContent() {
-  const [data, setData] = useState([]);
-  const [form, setForm] = useState({
+  const [data, setData] = useState<{ id: number; file: string }[]>([]);
+  const [form, setForm] = useState<{
+    file: File | null;
+  }>({
     file: null,
   });
   const [loading, setLoading] = useState(false);
@@ -24,7 +27,7 @@ export default function FotoSekolahContent() {
     fetchData();
   }, []);
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
     const formData = new FormData();
@@ -50,14 +53,15 @@ export default function FotoSekolahContent() {
       
       fetchData();
     } catch (error) {
-      console.error("Error upload:", error);
-      toast.error("Gagal menambahkan foto: " + (error.response?.data?.message || error.message));
+      // AxiosError import moved to the top of the file
+      const err = error as AxiosError<{ message?: string }>;
+      toast.error("Gagal menambahkan foto: " + (err.response?.data?.message || err.message));
     } finally {
       setLoading(false);
     }
   };
 
-  const handleDelete = async (id) => {
+  const handleDelete = async (id: number) => {
     try {
       await API.delete(`/foto-sekolah/${id}`);
       toast.success("Foto berhasil dihapus!");
