@@ -48,7 +48,7 @@ function ContactSection() {
         </button>
       </div>
 
-      <div className="bg-[#154472] text-white p-6 md:p-12 flex flex-col md:flex-row items-center justify-between gap-6 animate-slideUp">
+      <div className="bg-[#154472] w-full text-white p-6 md:p-12 flex flex-col md:flex-row items-center justify-between gap-6 animate-slideUp">
         {/* Left Section */}
         <div className="align-items-left transform transition-all duration-500 hover:scale-105">
           <Image

@@ -70,25 +70,25 @@ const DokumentasiBK = () => {
   return (
     <>
       <div>
-        <div className="bg-[#154472] w-[1382px] h-[300px]">
+        <div className="bg-[#154472] w-[1382px] h-[300px] transition-all duration-500">
           <Navbar />
 
-          <section className="flex flex-col py-8 px-6">
-            <h1 className="text-3xl md:text-4xl font-bold  text-[#ffff]">
+          <section className="flex flex-col py-8 px-6 ">
+            <h1 className="text-3xl md:text-4xl font-bold text-[#ffff] ">
               Dokumentasi BK
             </h1>
-            <p className="text-white mt-2 py-3 font-normal">
-              <Link href="/" className=" hover:text-gray-300">
+            <p className="text-white mt-2 py-3 font-normal ">
+              <Link href="/" className="transition-colors duration-300 hover:text-gray-300">
                 Beranda
               </Link>{" "}
               &gt;{" "}
-              <Link href="/BK" className=" hover:text-gray-300">
+              <Link href="/BK" className="transition-colors duration-300 hover:text-gray-300">
                 BK
               </Link>{" "}
               &gt;{" "}
               <Link
                 href="/B-Dokumentasi"
-                className=" hover:text-gray-300"
+                className="transition-colors duration-300 hover:text-gray-300"
               >
                 Dokumentasi
               </Link>{" "}
@@ -96,8 +96,8 @@ const DokumentasiBK = () => {
           </section>
         </div>
 
-        <div className="px-6 py-8">
-          <p className="text-gray-700 text-2xl font-medium py-1 text-center">
+        <div className="px-6 py-8 animate-fadeIn" style={{ animationDelay: '0.3s' }}>
+          <p className="text-gray-700 text-2xl font-medium py-1 text-center transform transition-all duration-500 hover:scale-105">
             Kami percaya bahwa setiap siswa memiliki potensi untuk sukses.
             Melalui layanan BK yang komprehensif, kami berupaya memfasilitasi
             pengembangan diri siswa secara optimal.
@@ -108,34 +108,41 @@ const DokumentasiBK = () => {
             {images.map((img, index) => (
               <div
                 key={index}
-                className="relative cursor-pointer"
+                className="relative cursor-pointer group perspective-1000"
                 onClick={() => openModal(index)}
+                style={{ 
+                  opacity: 0,
+                  animation: `fadeSlideUp 0.6s ease-out ${index * 0.2}s forwards`
+                }}
               >
-                <Image
-                  src={img.src[0]}
-                  alt={img.title}
-                  width={400}
-                  height={300}
-                  className="rounded-lg shadow-lg"
-                />
-                <div className="absolute bottom-0 bg-black bg-opacity-50 text-white text-center w-full py-2 rounded-b-lg">
-                  {img.title}
+                <div className="transform transition-transform duration-500 group-hover:scale-105">
+                  <Image
+                    src={img.src[0]}
+                    alt={img.title}
+                    width={400}
+                    height={300}
+                    className="rounded-lg shadow-lg transition-all duration-500 group-hover:shadow-2xl"
+                  />
+                  <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent text-white text-center py-4 rounded-b-lg opacity-0 transform translate-y-4 transition-all duration-300 group-hover:opacity-100 group-hover:translate-y-0">
+                    <span className="font-medium text-lg">{img.title}</span>
+                  </div>
                 </div>
+                <div className="absolute inset-0 bg-blue-500/20 rounded-lg opacity-0 transition-opacity duration-300 group-hover:opacity-100"></div>
               </div>
             ))}
           </div>
         </div>
 
         {selectedImage && (
-          <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50">
+          <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 animate-modalFadeIn">
             <button
-              className="absolute top-4 right-4 text-white text-2xl"
+              className="absolute top-4 right-4 text-white text-2xl transition-transform duration-300 hover:scale-125 hover:rotate-90"
               onClick={closeModal}
             >
               &times;
             </button>
             <button
-              className="absolute left-4 text-white text-2xl"
+              className="absolute left-4 text-white text-2xl transition-transform duration-300 hover:scale-125"
               onClick={prevImage}
             >
               &lt;
@@ -145,10 +152,10 @@ const DokumentasiBK = () => {
               alt={selectedImage.title}
               width={600}
               height={450}
-              className="rounded-lg"
+              className="rounded-lg transform transition-all duration-500 animate-scaleIn"
             />
             <button
-              className="absolute right-4 text-white text-2xl"
+              className="absolute right-4 text-white text-2xl transition-transform duration-300 hover:scale-125"
               onClick={nextImage}
             >
               &gt;

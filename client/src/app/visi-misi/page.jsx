@@ -121,7 +121,7 @@ export default function VisiMisi() {
 
         {/* Wave SVG at the bottom */}
         <div className="absolute bottom-0 left-0 w-full overflow-hidden rotate-180">
-          <svg viewBox="0 0 1440 325" className="w-full h-79">
+          <svg viewBox="0 0 1440 328" className="w-full h-70">
             <path
               fill="#154472"
               fillOpacity="1"
