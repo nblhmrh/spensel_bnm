@@ -17,7 +17,8 @@ class StrukturController
     {
         try {
             $validated = $request->validate([
-                'file' => 'required|file|mimes:jpg,jpeg,png,webp|max:2048'
+                'file' => 'required|file|mimes:jpg,jpeg,png,webp|max:5120'
+
             ]);
 
             $filePath = $request->file('file')->store('struktur', 'public');

@@ -6,6 +6,23 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
+    public function up(): void
+    {
+        Schema::create('akreditasi', function (Blueprint $table) {
+            $table->id();
+            $table->string('file');
+            $table->timestamps();
+        });
+    }
+
+    public function down(): void
+    {
+        Schema::dropIfExists('akreditasi');
+    }
+};
+
+return new class extends Migration
+{
     /**
      * Run the migrations.
      */
@@ -13,13 +30,9 @@ return new class extends Migration
     {
         Schema::create('akreditasi', function (Blueprint $table) {
             $table->id();
-            $table->string('instansi');
-            $table->string('no_sk');
-            $table->string('npsn');
             $table->string('file'); // nama file gambar
             $table->timestamps();
         });
-
     }
 
     /**

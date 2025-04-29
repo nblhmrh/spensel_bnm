@@ -15,12 +15,17 @@ use App\Http\Controllers\AkreditasiController;
 use App\Http\Controllers\StrukturController;
 use App\Http\Controllers\FotoSekolahController;
 use App\Http\Controllers\FasilitasController;
-
+use App\Http\Controllers\ProfilBKController;
 
 
 
 
 use Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful;
+
+
+Route::get('/health-check', function () {
+    return response()->json(['status' => 'ok']);
+});
 
 Route::post('/register', [authController::class, 'register']);
 Route::middleware([EnsureFrontendRequestsAreStateful::class])->group(function () {
@@ -89,3 +94,7 @@ Route::delete('/fasilitas/{id}', [FasilitasController::class, 'destroy']);
 Route::get('/fasilitas/{id}', [FasilitasController::class, 'show']);
 Route::delete('/fasilitas/{id}', [FasilitasController::class, 'destroy']);
 
+// Add these routes with the existing routes
+Route::get('/profil-bk', [ProfilBKController::class, 'index']);
+Route::post('/profil-bk', [ProfilBKController::class, 'store']);
+Route::post('/profil-bk/update', [ProfilBKController::class, 'update']);

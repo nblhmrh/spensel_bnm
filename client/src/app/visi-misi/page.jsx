@@ -59,6 +59,34 @@ export default function VisiMisi() {
           </p>
         </motion.section>
       </motion.div>
+      <div className="relative w-full overflow-hidden -mt-1">
+                    <motion.svg 
+                      viewBox="0 70 1440 120" 
+                      className="w-full h-auto"
+                      initial={{ y: -50, opacity: 0 }}
+                      animate={{ y: 0, opacity: 1 }}
+                      transition={{ duration: 1 }}
+                    >
+                      <motion.path
+                        fill="#154472"
+                        fillOpacity="1"
+                        d="M0,160L48,144C96,128,192,96,288,96C384,96,480,128,576,144C672,160,768,160,864,144C960,128,1056,96,1152,96C1248,96,1344,128,1392,144L1440,160L1440,0L1392,0C1344,0,1248,0,1152,0C1056,0,960,0,864,0C768,0,672,0,576,0C480,0,384,0,288,0C192,0,96,0,48,0L0,0Z"
+                        animate={{
+                          d: [
+                            "M0,160L48,144C96,128,192,96,288,96C384,96,480,128,576,144C672,160,768,160,864,144C960,128,1056,96,1152,96C1248,96,1344,128,1392,144L1440,160L1440,0L1392,0C1344,0,1248,0,1152,0C1056,0,960,0,864,0C768,0,672,0,576,0C480,0,384,0,288,0C192,0,96,0,48,0L0,0Z",
+                            "M0,128L48,122.7C96,117,192,107,288,101.3C384,96,480,96,576,112C672,128,768,160,864,165.3C960,171,1056,149,1152,138.7C1248,128,1344,128,1392,128L1440,128L1440,0L1392,0C1344,0,1248,0,1152,0C1056,0,960,0,864,0C768,0,672,0,576,0C480,0,384,0,288,0C192,0,96,0,48,0L0,0Z"
+                          ]
+                        }}
+                        transition={{
+                          repeat: Infinity,
+                          repeatType: "reverse",
+                          duration: 4,
+                          ease: "easeInOut"
+                        }}
+                      />
+                    </motion.svg>
+                  </div>
+            
 
       <div className="relative bg-gradient-to-b from-gray-50 via-blue-50 to-gray-100 min-h-screen">
         {/* Decorative Elements */}

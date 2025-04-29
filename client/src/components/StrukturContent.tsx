@@ -30,17 +30,41 @@ export default function StrukturContent() {
     e.preventDefault();
     setLoading(true);
     const formData = new FormData();
+    
+    // Add validation for file type and size
     if (form.file) {
+      if (!form.file.type.startsWith('image/')) {
+        toast.error('Please upload an image file');
+        setLoading(false);
+        return;
+      }
+      
+      // 5MB max size
+      if (form.file.size > 5 * 1024 * 1024) {
+        toast.error('File size should not exceed 5MB');
+        setLoading(false);
+        return;
+      }
+      
       formData.append('file', form.file);
+    } else {
+      toast.error('Please select a file');
+      setLoading(false);
+      return;
     }
   
     try {
+      const response = await API.post("/struktur", formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      });
       // Tambahkan delay kecil setelah menghapus
       await new Promise(resolve => setTimeout(resolve, 500));
   
       // Upload file baru
-      const response = await API.post("/struktur", formData);
       console.log("Response upload:", response.data);
+    
   
       toast.success("Data berhasil diperbarui!");
       localStorage.setItem('struktur_updated', Date.now().toString());

@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Akreditasi extends Model
 {
     protected $table = 'akreditasi';
-    protected $fillable = ['instansi', 'no_sk', 'npsn', 'file'];
+    protected $fillable = ['file'];
 
     use HasFactory;
 }
