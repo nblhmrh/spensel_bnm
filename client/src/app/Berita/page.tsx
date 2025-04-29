@@ -1,28 +1,25 @@
 "use client";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Navbar from "../Navbar/page";
 import Link from "next/link";
-import Image from "next/image";
-import Card from '@/pages/Card'
-// Import gambar dari folder assets
-import lynan1 from "@/assets/lynan1.png";
-import lynan2 from "@/assets/lynan2.png";
-import lynan3 from "@/assets/lynan3.png";
-import lynan4 from "@/assets/lynan4.png";
-import lynan5 from "@/assets/lynan5.png";
-import bk from "@/assets/bk.png";
-
-
-const newsData = [
-  { id: 1, title: "Kegiatan Literasi", image: lynan1, link: "/Berita1" },
-  { id: 2, title: "Penyerahan Piala", image: lynan2, link: "/Berita2" },
-  { id: 3, title: "Siswa Berprestasi", image: lynan3, link: "/Berita3" },
-  { id: 4, title: "Kegiatan Sekolah", image: lynan4, link: "/Berita4" },
-  { id: 5, title: "Lomba Akademik", image: lynan5, link: "/Berita5" },
-  { id: 6, title: "Pentas Seni", image: bk, link: "/Berita6" },
-];
+import Card from '@/pages/Card';
+import API from '@/utils/api';
 
 function Berita() {
+  const [berita, setBerita] = useState([]);
+
+  useEffect(() => {
+    const fetchBerita = async () => {
+      try {
+        const response = await API.get('/berita');
+        setBerita(response.data);
+      } catch (error) {
+        console.error('Gagal memuat berita:', error);
+      }
+    };
+    fetchBerita();
+  }, []);
+
   return (
     <>
       <div className="bg-[#154472] w-full h-[300px]">
@@ -63,20 +60,25 @@ function Berita() {
       </div>
 
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-6 px-6 pb-16">
-        {newsData.map((news) => (
-          <div key={news.id} className="relative group">
-            <Link href={news.link}>
-              <Image
-                src={news.image}
-                alt={news.title}
+        {berita.map((item) => (
+          <div key={item.id} className="relative group">
+            <Link href={`/Berita1?id=${item.id}`}>
+              <img
+                src={`http://localhost:8000/storage/${item.thumbnail}`}
+                alt={item.judul}
                 className="w-full h-[250px] object-cover rounded-lg"
+                onError={(e) => {
+                  const target = e.target as HTMLImageElement;
+                  target.onerror = null;
+                  target.src = "/default-image.png"; // Gambar default jika gagal load
+                }}
               />
               <div className="absolute inset-0 bg-black bg-opacity-40 opacity-0 group-hover:opacity-100 transition-opacity flex justify-center items-center text-white text-xl font-bold">
-                {news.title}
+                {item.judul}
               </div>
             </Link>
             <Link
-              href={news.link}
+              href={`/Berita1?id=${item.id}`}
               className="absolute top-2 right-2 bg-gray-800 rounded-full p-2 shadow-md hover:bg-[#154472]"
             >
               ➤
