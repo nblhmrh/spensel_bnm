@@ -10,47 +10,54 @@ use Intervention\Image\Facades\Image;
 
 class BeritaController extends Controller
 {
-    // ... existing code ...
+    public function index()
+    {
+        try {
+            $berita = Berita::all();
+            return response()->json($berita);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Gagal mengambil data berita',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
 
     public function store(Request $request)
     {
         $validated = $request->validate([
             'judul' => 'required|string|max:255',
-            'thumbnail' => 'required|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
-            'foto' => 'required|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
-            'konten' => 'required|string'
+            'konten' => 'required|string',
+            'thumbnail' => 'required|image|mimes:jpeg,png,jpg,webp|max:2048',
+            'foto' => 'required|image|mimes:jpeg,png,jpg,webp|max:2048',
         ]);
 
-        // Proses thumbnail
-        $thumbnail = $request->file('thumbnail');
-        $thumbnailName = time() . '_thumb.' . 'webp';
-        $thumbnailPath = 'berita/thumbnail/' . $thumbnailName;
+        // Proses upload thumbnail
+        if ($request->hasFile('thumbnail')) {
+            $thumbnail = $request->file('thumbnail');
+            $thumbnailPath = $thumbnail->store('berita/thumbnail', 'public');
+        } else {
+            $thumbnailPath = null;
+        }
 
-        $thumbnailImage = Image::make($thumbnail)
-            ->encode('webp', 80);
-        Storage::disk('public')->put($thumbnailPath, $thumbnailImage);
+        // Proses upload foto
+        if ($request->hasFile('foto')) {
+            $foto = $request->file('foto');
+            $fotoPath = $foto->store('berita/foto', 'public');
+        } else {
+            $fotoPath = null;
+        }
 
-        // Proses foto
-        $foto = $request->file('foto');
-        $fotoName = time() . '_foto.' . 'webp';
-        $fotoPath = 'berita/foto/' . $fotoName;
+        // Simpan data ke database
+        $berita = new Berita();
+        $berita->judul = $validated['judul'];
+        $berita->konten = $validated['konten'];
+        $berita->thumbnail = $thumbnailPath;
+        $berita->foto = $fotoPath;
+        $berita->slug = \Str::slug($validated['judul']) . '-' . uniqid();
+        $berita->save();
 
-        $fotoImage = Image::make($foto)
-            ->encode('webp', 80);
-        Storage::disk('public')->put($fotoPath, $fotoImage);
-
-        $berita = Berita::create([
-            'judul' => $validated['judul'],
-            'thumbnail' => $thumbnailPath,
-            'foto' => $fotoPath,
-            'konten' => $validated['konten'],
-            'slug' => Str::slug($validated['judul'])
-        ]);
-
-        return response()->json([
-            'message' => 'Berita berhasil ditambahkan',
-            'data' => $berita
-        ], 201);
+        return response()->json(['message' => 'Berita berhasil ditambahkan', 'data' => $berita], 201);
     }
 
     public function update(Request $request, $id)
@@ -104,5 +111,19 @@ class BeritaController extends Controller
         ]);
     }
 
-    // ... existing code ...
+    private function uploadFile($file, $type)
+    {
+        if (!$file->isValid()) {
+            throw new \Exception("File {$type} tidak valid");
+        }
+
+        // Tambahkan konversi ke WebP seperti di method update
+        $image = Image::make($file)->encode('webp', 80);
+        $fileName = time() . '_' . $type . '.webp';
+        $path = "berita/{$type}/" . $fileName;
+
+        Storage::disk('public')->put($path, $image);
+
+        return $path;
+    }
 }

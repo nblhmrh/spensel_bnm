@@ -52,10 +52,9 @@ export default function FotoSekolahContent() {
       await API.delete(`/foto-sekolah/${id}`);
       toast.success("Data berhasil dihapus!");
       
-      // Set flag di localStorage
+      // Set flag di localStorage dan dispatch event
       localStorage.setItem('foto_sekolah_updated', Date.now().toString());
-      
-      // Dispatch custom event
+      window.dispatchEvent(new Event('storage'));
       window.dispatchEvent(new CustomEvent('foto_sekolah_updated'));
       
       // Reset form state
@@ -78,6 +77,12 @@ export default function FotoSekolahContent() {
     }
 
     try {
+      // Hapus file lama terlebih dahulu
+      if (data.length > 0) {
+        await API.delete(`/foto-sekolah/${data[0].id}`);
+      }
+
+      // Upload file baru
       const config = {
         headers: {
           'Content-Type': 'multipart/form-data'
@@ -88,14 +93,13 @@ export default function FotoSekolahContent() {
       toast.success("Foto berhasil ditambahkan!");
       setForm({ file: null });
       
-      // Trigger refresh di halaman welcome
-      localStorage.setItem('foto_sekolah_updated', 'true');
-      // Dispatch event untuk halaman lain yang mungkin terbuka
+      // Trigger refresh di halaman welcome dengan kedua event
+      localStorage.setItem('foto_sekolah_updated', Date.now().toString());
       window.dispatchEvent(new Event('storage'));
+      window.dispatchEvent(new CustomEvent('foto_sekolah_updated'));
       
       fetchData();
     } catch (error) {
-      // AxiosError import moved to the top of the file
       const err = error as AxiosError<{ message?: string }>;
       toast.error("Gagal menambahkan foto: " + (err.response?.data?.message || err.message));
     } finally {

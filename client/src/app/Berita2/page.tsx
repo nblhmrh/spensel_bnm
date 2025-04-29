@@ -1,9 +1,27 @@
 "use client";
-import React from 'react'
+
+import React, { useEffect } from 'react';
 import Navbar from '../Navbar/page'
 import Link from 'next/link'
 import News from '@/pages/News';
-function Berita1() {
+// Ganti nama fungsi menjadi Berita2
+function Berita2() {
+
+  useEffect(() => {
+    const fetchBerita = async () => {
+      try {
+        const response = await API.get('/berita');
+        const berita2Data = response.data.find((item: Berita) => item.slug.includes('berita2'));
+        setBerita(berita2Data || null);
+      } catch (error) {
+        console.error('Error fetching berita:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+  
+    fetchBerita();
+  }, []);
   return (
     <>
        <div className="bg-[#154472] w-[1382px] h-[300px]">
@@ -47,4 +65,6 @@ function Berita1() {
   )
 }
 
-export default Berita1
+
+
+export default Berita2;

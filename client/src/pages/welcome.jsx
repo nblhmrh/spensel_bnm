@@ -63,21 +63,14 @@ export default function Home() {
       }
     };
 
-    // Fungsi untuk menangani custom event
-    const handleCustomEvent = (event) => {
-      if (event.type === 'foto_sekolah_updated') {
-        fetchFotoSekolah();
-      }
-    };
-
-    // Tambahkan event listener
+    // Tambahkan event listener untuk storage dan custom event
     window.addEventListener('storage', handleStorageChange);
-    window.addEventListener('foto_sekolah_updated', handleCustomEvent);
+    window.addEventListener('foto_sekolah_updated', handleStorageChange);
 
     // Cleanup function
     return () => {
       window.removeEventListener('storage', handleStorageChange);
-      window.removeEventListener('foto_sekolah_updated', handleCustomEvent);
+      window.removeEventListener('foto_sekolah_updated', handleStorageChange);
     };
   }, []);
 
