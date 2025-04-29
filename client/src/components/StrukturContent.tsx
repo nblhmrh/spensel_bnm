@@ -53,7 +53,9 @@ export default function StrukturContent() {
       
       fetchData();
     } catch (error) {
-      console.error("Error detail:", error.response?.data);
+      if (error && typeof error === 'object' && 'response' in error) {
+        console.error("Error detail:", (error as { response?: { data?: { message?: string } } }).response?.data);
+      }
       console.error("Error uploading file:", error);
       
       let errorMessage = "Gagal menambahkan data.";
