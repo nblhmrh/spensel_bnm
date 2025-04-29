@@ -167,49 +167,52 @@ export default function FasilitasContent() {
   };
 
   return (
-    <div className="max-w-4xl mx-auto px-4 py-10">
-      <h1 className="text-3xl font-bold text-[#154472] mb-6">
+    <div className="max-w-4xl mx-auto px-4 py-10 animate-fadeIn">
+      <h1 className="text-3xl font-bold text-[#154472] mb-2 transform transition-all duration-500 hover:scale-105">
         Kelola Fasilitas Sekolah
       </h1>
+      <p className="text-lg text-gray-600 mb-8 font-normal leading-relaxed tracking-wide animate-slideIn">
+        Halaman ini digunakan untuk mengelola informasi fasilitas yang ada di sekolah
+      </p>
 
       <form
         onSubmit={handleSubmit}
-        className="bg-white shadow-md p-6 rounded-lg mb-8 space-y-4"
+        className="bg-white shadow-md p-6 rounded-lg mb-8 space-y-4 transform transition-all duration-300 hover:shadow-xl"
       >
-        <div>
+        <div className="transform transition-all duration-300 hover:translate-x-2">
           <label className="block text-gray-700 mb-2">Judul Fasilitas</label>
           <input
             type="text"
             name="judul"
             value={form.judul}
             onChange={handleChange}
-            className="w-full border border-gray-300 rounded-md px-3 py-2 text-black"
+            className="w-full border border-gray-300 rounded-md px-3 py-2 text-black transition-all duration-300 focus:ring-2 focus:ring-[#154472] focus:border-[#154472]"
             required
           />
         </div>
         
-        <div>
+        <div className="transform transition-all duration-300 hover:translate-x-2">
           <label className="block text-gray-700 mb-2">Deskripsi</label>
           <textarea
             name="deskripsi"
             value={form.deskripsi}
             onChange={handleChange}
-            className="w-full border border-gray-300 rounded-md px-3 py-2 min-h-[100px] text-black"
+            className="w-full border border-gray-300 rounded-md px-3 py-2 min-h-[100px] text-black transition-all duration-300 focus:ring-2 focus:ring-[#154472] focus:border-[#154472]"
             required
           ></textarea>
         </div>
         
-        <div>
+        <div className="transform transition-all duration-300 hover:translate-x-2">
           <label className="block text-gray-700 mb-2">Foto</label>
           <input
             type="file"
             onChange={handleFileChange}
-            className="w-full text-black"
+            className="w-full text-black transition-all duration-300"
             accept="image/*"
             required={!editMode}
           />
           {editMode && (
-            <p className="text-sm text-gray-500 mt-1">
+            <p className="text-sm text-gray-500 mt-1 animate-fadeIn">
               Biarkan kosong jika tidak ingin mengubah foto
             </p>
           )}
@@ -219,16 +222,24 @@ export default function FasilitasContent() {
           <button
             type="submit"
             disabled={loading}
-            className="bg-[#154472] hover:bg-[#1a5a99] text-white py-2 px-4 rounded-lg transition-all"
+            className="bg-[#154472] hover:bg-[#1a5a99] text-white py-2 px-4 rounded-lg transition-all duration-300 transform hover:scale-105 hover:shadow-lg"
           >
-            {loading ? "Menyimpan..." : editMode ? "Perbarui" : "Simpan"}
+            {loading ? (
+              <span className="flex items-center">
+                <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                Menyimpan...
+              </span>
+            ) : editMode ? "Perbarui" : "Simpan"}
           </button>
           
           {editMode && (
             <button
               type="button"
               onClick={resetForm}
-              className="bg-gray-500 hover:bg-gray-600 text-white py-2 px-4 rounded-lg transition-all"
+              className="bg-gray-500 hover:bg-gray-600 text-white py-2 px-4 rounded-lg transition-all duration-300 transform hover:scale-105 hover:shadow-lg"
             >
               Batal
             </button>
@@ -237,30 +248,35 @@ export default function FasilitasContent() {
       </form>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {data.map((item) => (
+        {data.map((item, index) => (
           <div
             key={item.id}
-            className="bg-white p-4 rounded-lg shadow"
+            className="bg-white p-4 rounded-lg shadow transform transition-all duration-300 hover:shadow-xl hover:-translate-y-2 opacity-0 animate-fadeInUp"
+            style={{ animationDelay: `${index * 0.1}s` }}
           >
-            <div className="mb-4">
+            <div className="mb-4 overflow-hidden rounded-lg">
               <img
                 src={`http://localhost:8000/storage/${item.foto}`}
                 alt={item.judul}
-                className="w-full h-48 object-cover rounded"
+                className="w-full h-48 object-cover rounded transition-transform duration-300 hover:scale-110"
               />
             </div>
-            <h3 className="text-xl font-semibold text-[#154472]">{item.judul}</h3>
-            <p className="text-gray-600 mt-2 mb-4">{item.deskripsi}</p>
+            <h3 className="text-xl font-semibold text-[#154472] transition-all duration-300 hover:text-[#1a5a99]">
+              {item.judul}
+            </h3>
+            <p className="text-gray-600 mt-2 mb-4 transition-all duration-300 hover:text-gray-800">
+              {item.deskripsi}
+            </p>
             <div className="flex justify-end gap-2">
               <button
                 onClick={() => handleEdit(item)}
-                className="bg-yellow-500 hover:bg-yellow-600 text-white py-1 px-3 rounded transition"
+                className="bg-yellow-500 hover:bg-yellow-600 text-white py-1 px-3 rounded transition-all duration-300 transform hover:scale-105 hover:shadow-md"
               >
                 Edit
               </button>
               <button
                 onClick={() => handleDelete(item.id)}
-                className="bg-red-500 hover:bg-red-600 text-white py-1 px-3 rounded transition"
+                className="bg-red-500 hover:bg-red-600 text-white py-1 px-3 rounded transition-all duration-300 transform hover:scale-105 hover:shadow-md"
               >
                 Hapus
               </button>

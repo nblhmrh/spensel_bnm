@@ -19,14 +19,14 @@ export default function VisiMisi() {
 
   return (
     <>
-      <motion.div 
+      <motion.div
         className="bg-[#154472] relative overflow-hidden"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.8 }}
       >
         <Navbar />
-        <motion.section 
+        <motion.section
           className="flex flex-col py-8 px-6"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -36,15 +36,24 @@ export default function VisiMisi() {
             Visi & Misi
           </h1>
           <p className="text-white mt-2 py-3 font-normal font-inter">
-            <Link href="/" className="hover:text-gray-300 transition-colors duration-300">
+            <Link
+              href="/"
+              className="hover:text-gray-300 transition-colors duration-300"
+            >
               Beranda
             </Link>{" "}
             &gt;{" "}
-            <Link href="/TentangKami" className="hover:text-gray-300 transition-colors duration-300">
+            <Link
+              href="/TentangKami"
+              className="hover:text-gray-300 transition-colors duration-300"
+            >
               Tentang Kami
             </Link>{" "}
             &gt;{" "}
-            <Link href="/visi-misi" className="hover:text-gray-300 transition-colors duration-300">
+            <Link
+              href="/visi-misi"
+              className="hover:text-gray-300 transition-colors duration-300"
+            >
               Visi & Misi
             </Link>
           </p>
@@ -60,7 +69,7 @@ export default function VisiMisi() {
         </div>
 
         <div className="container mx-auto px-4 py-12 max-w-4xl relative z-10">
-          <motion.div 
+          <motion.div
             className="text-center mb-16"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -86,7 +95,7 @@ export default function VisiMisi() {
 
           <div className="flex flex-col space-y-8 mt-12">
             {/* Visi Card */}
-            <motion.div 
+            <motion.div
               className="group relative h-auto w-full"
               initial={{ opacity: 0, y: -30 }}
               animate={{ opacity: 1, y: 0 }}
@@ -97,7 +106,7 @@ export default function VisiMisi() {
                 <div className="bg-yellow-400 text-[#154472] px-6 py-2 rounded-full font-bold font-poppins text-xl inline-block mb-6 shadow-lg">
                   Visi
                 </div>
-                <motion.div 
+                <motion.div
                   className="text-white prose prose-lg prose-invert"
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
@@ -112,7 +121,7 @@ export default function VisiMisi() {
             </motion.div>
 
             {/* Misi Card */}
-            <motion.div 
+            <motion.div
               className="group relative h-auto w-full"
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
@@ -123,7 +132,7 @@ export default function VisiMisi() {
                 <div className="bg-yellow-400 text-[#154472] px-6 py-2 rounded-full font-bold font-poppins text-xl inline-block mb-6 shadow-lg">
                   Misi
                 </div>
-                <motion.div 
+                <motion.div
                   className="text-white prose prose-lg prose-invert"
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
@@ -142,13 +151,13 @@ export default function VisiMisi() {
         {/* Bottom Wave with gradient */}
         <div className="relative w-full mt-26">
           <div className="absolute inset-0 bg-gradient-to-b from-transparent to-[#154472] opacity-30"></div>
-          <svg 
-            xmlns="http://www.w3.org/2000/svg" 
-            viewBox="0 0 1434 320" 
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 1434 320"
             className="w-full h-auto relative z-10"
           >
-            <path 
-              fill="#154472" 
+            <path
+              fill="#154472"
               fillOpacity="1"
               d="M0,192L48,197.3C96,203,192,213,288,229.3C384,245,480,267,576,250.7C672,235,768,181,864,181.3C960,181,1056,235,1152,234.7C1248,235,1344,181,1392,154.7L1440,128L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"
             >
