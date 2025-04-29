@@ -13,4 +13,5 @@ class Berita extends Model
         'konten',
         'slug'
     ];
+    protected $table = 'berita';
 }

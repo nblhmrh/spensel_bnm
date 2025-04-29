@@ -16,6 +16,8 @@ use App\Http\Controllers\StrukturController;
 use App\Http\Controllers\FotoSekolahController;
 use App\Http\Controllers\FasilitasController;
 use App\Http\Controllers\ProfilBKController;
+use App\Http\Controllers\BeritaController;
+
 
 
 
@@ -92,9 +94,13 @@ Route::post('/fasilitas', [FasilitasController::class, 'store']);
 Route::put('/fasilitas/{id}', [FasilitasController::class, 'update']); // Tambahkan ini
 Route::delete('/fasilitas/{id}', [FasilitasController::class, 'destroy']);
 Route::get('/fasilitas/{id}', [FasilitasController::class, 'show']);
-Route::delete('/fasilitas/{id}', [FasilitasController::class, 'destroy']);
 
 // Add these routes with the existing routes
 Route::get('/profil-bk', [ProfilBKController::class, 'index']);
 Route::post('/profil-bk', [ProfilBKController::class, 'store']);
 Route::post('/profil-bk/update', [ProfilBKController::class, 'update']);
+Route::get('/berita', [BeritaController::class, 'index']);
+Route::post('/berita', [BeritaController::class, 'store']);
+Route::get('/berita/{id}', [BeritaController::class, 'show']);
+Route::post('/berita/{id}', [BeritaController::class, 'update']);
+Route::delete('/berita/{id}', [BeritaController::class, 'destroy']);
