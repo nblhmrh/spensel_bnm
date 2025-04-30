@@ -65,7 +65,7 @@ function Akreditasi() {
           transition={{ duration: 0.5 }}
         >
           <h1 className="text-3xl md:text-4xl font-bold text-white font-poppins tracking-wide">
-            Berita
+           Akreditasi
           </h1>
           <p className="text-white mt-2 py-3 font-normal font-inter">
             <Link
@@ -83,10 +83,10 @@ function Akreditasi() {
             </Link>{" "}
             &gt;{" "}
             <Link
-              href="/Berita"
+              href="/akreditasi"
               className="hover:text-gray-300 transition-colors duration-300"
             >
-              Berita Terkini
+              Akreditasi
             </Link>
           </p>
         </motion.section>
