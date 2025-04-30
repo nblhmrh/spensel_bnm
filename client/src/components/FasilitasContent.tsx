@@ -257,7 +257,7 @@ export default function FasilitasContent() {
             <div className="mb-4 overflow-hidden rounded-lg">
               <img
                 src={`http://localhost:8000/storage/${item.foto}`}
-                alt={item.judul}
+                alt={`Fasilitas ${item.judul}`}
                 className="w-full h-48 object-cover rounded transition-transform duration-300 hover:scale-110"
               />
             </div>

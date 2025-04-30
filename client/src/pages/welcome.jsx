@@ -27,9 +27,21 @@ export default function Home() {
   const fetchSambutan = async () => {
     setLoading(true);
     try {
-      const response = await axios.get("http://localhost:8000/api/sambutan");
+      const response = await axios.get("http://localhost:8000/api/sambutan", {
+        // Tambahkan header untuk mencegah cache
+        headers: {
+          'Cache-Control': 'no-cache',
+          'Pragma': 'no-cache',
+          'Expires': '0',
+        }
+      });
       if (response.data.status && response.data.data.length > 0) {
-        setSambutanData(response.data.data[0]);
+        const data = response.data.data[0];
+        // Tambahkan timestamp untuk memaksa browser memuat ulang gambar
+        setSambutanData({
+          ...data,
+          foto: `${data.foto}?v=${new Date().getTime()}`
+        });
       }
     } catch (err) {
       console.error("Error fetching sambutan:", err);
@@ -56,21 +68,21 @@ export default function Home() {
 
     // Fungsi untuk menangani perubahan storage dan custom event
     const handleStorageChange = () => {
-      const lastUpdate = localStorage.getItem('foto_sekolah_updated');
+      const lastUpdate = localStorage.getItem('sambutan_updated');
       if (lastUpdate) {
-        fetchFotoSekolah();
-        localStorage.removeItem('foto_sekolah_updated');
+        fetchSambutan();
+        localStorage.removeItem('sambutan_updated');
       }
     };
 
     // Tambahkan event listener untuk storage dan custom event
     window.addEventListener('storage', handleStorageChange);
-    window.addEventListener('foto_sekolah_updated', handleStorageChange);
+    window.addEventListener('sambutan_updated', handleStorageChange);
 
     // Cleanup function
     return () => {
       window.removeEventListener('storage', handleStorageChange);
-      window.removeEventListener('foto_sekolah_updated', handleStorageChange);
+      window.removeEventListener('sambutan_updated', handleStorageChange);
     };
   }, []);
 
@@ -205,14 +217,17 @@ export default function Home() {
           ) : sambutanData ? (
             <div className="w-full h-full absolute bottom-0">
               <img 
-                src={`http://localhost:8000/storage/sambutan/${sambutanData.foto.split('/').pop()}`} 
+                src={`http://localhost:8000/storage/${sambutanData.foto}`}
                 alt="Foto Kepala Sekolah"
                 className="object-cover h-full w-full"
                 onError={(e) => {
+                  const target = e.target;
+                  target.onerror = null; // Mencegah infinite loop
+                  target.src = ayah.src;
                   console.error("Error loading image from:", `http://localhost:8000/storage/${sambutanData.foto}`);
-                  console.log("Sambutan data:", sambutanData);
-                  e.target.src = ayah.src;
                 }}
+                // Tambahkan key yang unik untuk memaksa re-render
+                key={`sambutan-${sambutanData.foto}`}
               />
             </div>
           ) : (
