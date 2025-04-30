@@ -143,7 +143,7 @@ export default function Home() {
       <div>
         <section className="text-center pt-52 mb-8 px-8 bg-white ">
           <h1 className="text-3xl md:text-4xl font-bold text-[#154472] mb-4 mt-20 transform transition-all duration-500 hover:scale-105">
-            Temukan Keunggulan
+            Temukan Keunggulan!
           </h1>
           <p className="text-gray-700 text-2xl font-inter leading-relaxed animate-slideUp relative group">
             <span className="inline-block transition-all duration-300 group-hover:translate-y-[-8px] group-hover:text-[#154472]">Ini dia beberapa alasan kuat untuk bergabung dengan</span>{" "}

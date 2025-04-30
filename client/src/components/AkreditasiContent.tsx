@@ -1,54 +1,52 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Image from "next/image";
 import API from "@/utils/api";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 export default function AkreditasiContent() {
   const [data, setData] = useState<
-    { id: number; instansi: string; no_sk: string; npsn: string; file: string }[]
+    { id: number; file: string }[]
   >([]);
   const [form, setForm] = useState<{
-    instansi: string;
-    no_sk: string;
-    npsn: string;
     file: File | null;
-  }>({
-    instansi: "",
-    no_sk: "",
-    npsn: "",
-    file: null,
-  });
+  }>({file: null});
   const [loading, setLoading] = useState(false);
 
   const fetchData = async () => {
     try {
       const res = await API.get("/akreditasi");
       setData(res.data);
-    } catch {
-      toast.error("Gagal memuat data");
+    } catch (error) {
+      let errorMessage = "Gagal memuat data";
+      if (error instanceof Error) {
+        errorMessage = error.message;
+      } else if (error && typeof error === 'object' && 'response' in error) {
+        const axiosError = error as { response?: { data?: { message?: string } } };
+        errorMessage = axiosError.response?.data?.message || "Gagal memuat data";
+      }
+      toast.error(errorMessage);
+      console.error("Error fetching data:", error);
+      setData([]); // Reset data on error
     }
   };
 
   useEffect(() => {
     fetchData();
 
-    // Fungsi untuk menangani perubahan storage
     const handleStorageChange = () => {
       const lastUpdate = localStorage.getItem('akreditasi_updated');
       if (lastUpdate) {
         fetchData();
-        // Hapus flag setelah digunakan
         localStorage.removeItem('akreditasi_updated');
       }
     };
 
-    // Tambahkan event listener untuk storage dan custom event
     window.addEventListener('storage', handleStorageChange);
     window.addEventListener('akreditasi_updated', handleStorageChange);
 
-    // Cleanup function
     return () => {
       window.removeEventListener('storage', handleStorageChange);
       window.removeEventListener('akreditasi_updated', handleStorageChange);
@@ -58,40 +56,64 @@ export default function AkreditasiContent() {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
-    const formData = new FormData();
-    Object.entries(form).forEach(([k, v]) => {
-      if (v !== null) {
-        formData.append(k, v as string | Blob);
-      }
-    });
-
+    
     try {
-      // Tambahkan delay kecil sebelum upload
-      await new Promise(resolve => setTimeout(resolve, 500));
+      // File validation
+      if (!form.file) {
+        toast.error("Please select a file");
+        return;
+      }
 
-      const response = await API.post("/akreditasi", formData);
-      console.log("Response upload:", response.data);
+      // Validate file type
+      const allowedTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/jpg'];
+      if (!allowedTypes.includes(form.file.type)) {
+        toast.error("Please select a valid image file (JPG, JPEG, PNG, or WEBP)");
+        return;
+      }
 
-      toast.success("Data berhasil ditambahkan!");
-      localStorage.setItem('akreditasi_updated', Date.now().toString());
-      window.dispatchEvent(new CustomEvent('akreditasi_updated'));
-      
-      setForm({ instansi: "", no_sk: "", npsn: "", file: null });
-      
-      // Reset form
-      const fileInput = e.target as HTMLFormElement;
-      fileInput.reset();
-      
-      fetchData();
+      // Validate file size (2MB = 2 * 1024 * 1024 bytes)
+      if (form.file.size > 2 * 1024 * 1024) {
+        toast.error("File size must be less than 2MB");
+        return;
+      }
+
+      const formData = new FormData();
+      formData.append('file', form.file);
+
+      const response = await API.post("/akreditasi", formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        },
+        onUploadProgress: (progressEvent) => {
+          const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total!);
+          console.log('Upload progress:', percentCompleted);
+        }
+      });
+
+      if (response.data?.success) {
+        toast.success("Data berhasil ditambahkan!");
+        localStorage.setItem('akreditasi_updated', Date.now().toString());
+        window.dispatchEvent(new CustomEvent('akreditasi_updated'));
+        
+        setForm({ file: null });
+        (e.target as HTMLFormElement).reset();
+        fetchData();
+      } else {
+        throw new Error(response.data?.message || "Failed to upload file");
+      }
     } catch (error) {
-      console.error("Error detail:", error.response?.data);
-      console.error("Error uploading:", error);
+      console.error("Error detail:", error);
       
       let errorMessage = "Gagal menambahkan data.";
-      if (error && typeof error === 'object' && 'response' in error) {
-        const errorResponse = (error as { response?: { data?: { message?: string } } }).response?.data;
-        if (errorResponse?.message) {
-          errorMessage = errorResponse.message;
+      if (error instanceof Error) {
+        errorMessage = error.message;
+      } else if (error && typeof error === 'object' && 'response' in error) {
+        const axiosError = error as { response?: { data?: { message?: string, errors?: Record<string, string[]> } } };
+        if (axiosError.response?.data?.errors) {
+          const errors = axiosError.response.data.errors;
+          errorMessage = Object.values(errors).flat().join(', ');
+        } else {
+          errorMessage = axiosError.response?.data?.message || "Gagal mengunggah file";
         }
       }
       
@@ -105,17 +127,9 @@ export default function AkreditasiContent() {
     try {
       await API.delete(`/akreditasi/${id}`);
       toast.success("Data berhasil dihapus!");
-      
-      // Set flag di localStorage
       localStorage.setItem('akreditasi_updated', Date.now().toString());
-      
-      // Dispatch custom event
       window.dispatchEvent(new CustomEvent('akreditasi_updated'));
-      
-      // Reset form state
-      setForm({ instansi: "", no_sk: "", npsn: "", file: null });
-      
-      // Tambahkan delay kecil sebelum fetch data baru
+      setForm({ file: null });
       await new Promise(resolve => setTimeout(resolve, 500));
       fetchData();
     } catch {
@@ -134,34 +148,10 @@ export default function AkreditasiContent() {
         className="bg-white shadow-md p-6 rounded-lg mb-8 space-y-4 text-gray-700"
       >
         <input
-          type="text"
-          placeholder="Instansi"
-          value={form.instansi}
-          onChange={(e) => setForm({ ...form, instansi: e.target.value })}
-          className="border w-full p-2 rounded text-gray-700"
-          required
-        />
-        <input
-          type="text"
-          placeholder="No SK"
-          value={form.no_sk}
-          onChange={(e) => setForm({ ...form, no_sk: e.target.value })}
-          className="border w-full p-2 rounded text-gray-700"
-          required
-        />
-        <input
-          type="text"
-          placeholder="NPSN"
-          value={form.npsn}
-          onChange={(e) => setForm({ ...form, npsn: e.target.value })}
-          className="border w-full p-2 rounded text-gray-700"
-          required
-        />
-        <input
           type="file"
           onChange={(e) => {
             if (e.target.files) {
-              setForm({ ...form, file: e.target.files[0] });
+              setForm({ file: e.target.files[0] });
             }
           }}
           className="w-full text-black"
@@ -183,10 +173,13 @@ export default function AkreditasiContent() {
             key={item.id}
             className="bg-white p-4 rounded-lg shadow flex justify-between items-center text-gray-700"
           >
-            <div>
-              <p className="font-semibold text-[#154472]">{item.instansi}</p>
-              <p className="text-sm text-gray-700">No SK: {item.no_sk}</p>
-              <p className="text-sm text-gray-700">NPSN: {item.npsn}</p>
+            <div className="w-20 h-20 relative overflow-hidden rounded">
+              <Image
+                src={`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/storage/${item.file}`}
+                alt="Dokumen Akreditasi"
+                fill
+                className="object-cover"
+              />
             </div>
             <button
               onClick={() => handleDelete(item.id)}

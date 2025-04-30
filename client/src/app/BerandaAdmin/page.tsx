@@ -16,6 +16,7 @@ import {
   FaImage,
   FaUserTie,
   FaMedal,
+  FaUserCircle
 } from "react-icons/fa";
 
 // Add this near the top of the component
@@ -72,6 +73,11 @@ export default function Dashboard({ children }: { children?: React.ReactNode }) 
   const handleNavigateToBeritaAdmin = () => {
     setActivePath('/BeritaAdmin');
     router.push("/BeritaAdmin");
+  };
+
+  const handleNavigateToProfilBKAdmin = () => {
+    setActivePath('/ProfilBKAdmin');
+    router.push("/ProfilBKAdmin");
   };
 
   // Update button classes to include active state
@@ -189,6 +195,14 @@ export default function Dashboard({ children }: { children?: React.ReactNode }) 
                 >
                   <FaMedal className="mr-2" /> Akreditasi
                 </button>
+
+                <button
+  onClick={handleNavigateToProfilBKAdmin}
+  className="flex items-center space-x-2 w-full p-2 rounded hover:bg-blue-600 transition-colors"
+>
+  <FaUserCircle className="text-xl" />
+  <span>Profil BK</span>
+</button>
               </div>
             </div>
 
