@@ -2,7 +2,7 @@
 
 import { motion, AnimatePresence } from "framer-motion";
 import "../style.css"
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Navbar from "../Navbar/page";
 import Link from "next/link";
 import Image, { StaticImageData } from "next/image";
@@ -12,6 +12,7 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import News from "@/pages/News";
+import API from "@/utils/api";
 import lynan1 from "@/assets/lynan1.png";
 import lynan2 from "@/assets/lynan2.png";
 import lynan3 from "@/assets/lynan3.png";
@@ -135,20 +136,55 @@ const prestasiData = [
   },
 ];
 
+// Definisikan interface untuk data prestasi
+interface Prestasi {
+  id: number;
+  judul: string;
+  tingkat: string;
+  siswa: string[];
+  tanggal: string;
+  tahun: string;
+  deskripsi: string;
+  foto: string;
+}
+
 function Prestasi() {
-  type Prestasi = {
-    id: number;
-    image: StaticImageData;
-    title: string;
-    level: string;
-    students: string[];
-    date: string;
-    year: string;
-    description?: string;
-    link?: string;
-  };
-  
+  const [prestasiData, setPrestasiData] = useState<Prestasi[]>([]);
   const [selectedPrestasi, setSelectedPrestasi] = useState<Prestasi | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    fetchPrestasi();
+    
+    const handleStorageChange = () => {
+      const lastUpdate = localStorage.getItem('prestasi_updated');
+      if (lastUpdate) {
+        fetchPrestasi();
+        localStorage.removeItem('prestasi_updated');
+      }
+    };
+
+    window.addEventListener('storage', handleStorageChange);
+    window.addEventListener('prestasi_updated', handleStorageChange);
+
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+      window.removeEventListener('prestasi_updated', handleStorageChange);
+    };
+  }, []);
+
+  const fetchPrestasi = async () => {
+    try {
+      const response = await API.get('/prestasi');
+      setPrestasiData(response.data);
+      setLoading(false);
+    } catch (error) {
+      console.error('Error fetching prestasi:', error);
+      setError('Gagal memuat data prestasi');
+      setLoading(false);
+    }
+  };
 
   return (
     <>
@@ -271,33 +307,43 @@ function Prestasi() {
               }}
               className="pb-12"
             >
-              {prestasiData.map((prestasi) => (
-                <SwiperSlide key={prestasi.id}>
-                  <motion.div
-                    whileHover={{ scale: 1.03 }}
-                    whileTap={{ scale: 0.98 }}
-                    className="p-2"
-                  >
-                    <button 
-                      onClick={() => setSelectedPrestasi(prestasi)}
-                      className="block w-full overflow-hidden rounded-xl"
+              {loading ? (
+                <div className="flex justify-center items-center min-h-[300px]">
+                  <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#154472]"></div>
+                </div>
+              ) : error ? (
+                <div className="text-center text-red-500 py-8">
+                  {error}
+                </div>
+              ) : (
+                prestasiData.map((prestasi) => (
+                  <SwiperSlide key={prestasi.id}>
+                    <motion.div
+                      whileHover={{ scale: 1.03 }}
+                      whileTap={{ scale: 0.98 }}
+                      className="p-2"
                     >
-                      <div className="relative group">
-                        <Image
-                          src={prestasi.image}
-                          alt={`Prestasi ${prestasi.id}`}
-                          width={400}
-                          height={400}
-                          className="w-full h-[350px] object-cover rounded-xl shadow-lg transition-transform duration-500 group-hover:scale-110"
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-center pb-6">
-                          <span className="text-white text-lg font-semibold">Lihat Detail</span>
+                      <button 
+                        onClick={() => setSelectedPrestasi(prestasi)}
+                        className="block w-full overflow-hidden rounded-xl"
+                      >
+                        <div className="relative group">
+                          <Image
+                            src={`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/storage/${prestasi.foto}`}
+                            alt={`Prestasi ${prestasi.id}`}
+                            width={400}
+                            height={400}
+                            className="w-full h-[350px] object-cover rounded-xl shadow-lg transition-transform duration-500 group-hover:scale-110"
+                          />
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-center pb-6">
+                            <span className="text-white text-lg font-semibold">Lihat Detail</span>
+                          </div>
                         </div>
-                      </div>
-                    </button>
-                  </motion.div>
-                </SwiperSlide>
-              ))}
+                      </button>
+                    </motion.div>
+                  </SwiperSlide>
+                ))
+              )}
             </Swiper>
           </div>
         </motion.div>

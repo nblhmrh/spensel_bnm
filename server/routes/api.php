@@ -17,6 +17,7 @@ use App\Http\Controllers\FotoSekolahController;
 use App\Http\Controllers\FasilitasController;
 use App\Http\Controllers\ProfilBKController;
 use App\Http\Controllers\BeritaController;
+use App\Http\Controllers\PrestasiController;
 
 
 
@@ -104,3 +105,9 @@ Route::post('/berita', [BeritaController::class, 'store']);
 Route::get('/berita/{id}', [BeritaController::class, 'show']);
 Route::post('/berita/{id}', [BeritaController::class, 'update']);
 Route::delete('/berita/{id}', [BeritaController::class, 'destroy']);
+
+Route::get('/prestasi', [PrestasiController::class, 'index']);
+Route::post('/prestasi', [PrestasiController::class, 'store']);
+Route::get('/prestasi/{id}', [PrestasiController::class, 'show']);
+Route::post('/prestasi/{id}', [PrestasiController::class, 'update']);
+Route::delete('/prestasi/{id}', [PrestasiController::class, 'destroy']);

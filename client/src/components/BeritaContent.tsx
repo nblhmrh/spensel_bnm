@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import API from '@/utils/api';
 import { toast } from 'react-toastify';
 
+
 interface Berita {
   id: number;
   judul: string;
@@ -14,6 +15,11 @@ interface Berita {
 }
 
 export default function AdminBerita() {
+  const resetForm = () => {
+    setForm({ judul: '', thumbnail: null, foto: null, konten: '' });
+    setEditId(null);
+    setCurrentBerita(null);
+  };
   const [berita, setBerita] = useState<Berita[]>([]);
   const [selectedBerita, setSelectedBerita] = useState<string>('berita1');
   const [form, setForm] = useState({
@@ -24,6 +30,7 @@ export default function AdminBerita() {
   });
   const [loading, setLoading] = useState(false);
   const [editId, setEditId] = useState<number | null>(null);
+  const [currentBerita, setCurrentBerita] = useState<Berita | null>(null);
 
   const fetchBerita = async () => {
     try {
@@ -71,7 +78,7 @@ export default function AdminBerita() {
     if (e.target.files && e.target.files[0]) {
       setForm({
         ...form,
-        [field]: e.target.files[0] // Simpan objek File, bukan nama file
+        [field]: e.target.files[0]
       });
     }
   };
@@ -84,9 +91,14 @@ export default function AdminBerita() {
       const formData = new FormData();
       formData.append('judul', form.judul);
       formData.append('konten', form.konten);
-
-      // Jika edit, file bisa opsional
-      if (!editId) {
+      
+      if (editId) {
+        // Jika sedang edit, hanya append file jika ada perubahan
+        if (form.thumbnail) formData.append('thumbnail', form.thumbnail);
+        if (form.foto) formData.append('foto', form.foto);
+        formData.append('_method', 'PUT'); // Untuk Laravel method spoofing
+      } else {
+        // Jika tambah baru, file wajib ada
         if (!form.thumbnail || !form.foto) {
           toast.error('Silakan pilih file thumbnail dan foto');
           setLoading(false);
@@ -94,56 +106,37 @@ export default function AdminBerita() {
         }
         formData.append('thumbnail', form.thumbnail);
         formData.append('foto', form.foto);
-      } else {
-        if (form.thumbnail) formData.append('thumbnail', form.thumbnail);
-        if (form.foto) formData.append('foto', form.foto);
       }
 
       const config = {
         headers: {
           'Accept': 'application/json',
           'Authorization': `Bearer ${localStorage.getItem('token')}`
-        },
-        maxBodyLength: Infinity,
-        maxContentLength: Infinity,
-        timeout: 60000
+        }
       };
 
       let response;
       if (editId) {
-        // Update data
-        response = await API.post(`/berita/${editId}?_method=PUT`, formData, config);
+        response = await API.post(`/berita/${editId}`, formData, config);
         toast.success('Berita berhasil diupdate');
       } else {
-        // Tambah data baru
         response = await API.post('/berita', formData, config);
         toast.success('Berita berhasil ditambahkan');
       }
 
+      // Reset form dan refresh data
       setForm({ judul: '', thumbnail: null, foto: null, konten: '' });
       setEditId(null);
+      setCurrentBerita(null);
       await fetchBerita();
-
-    } catch (error: any) {
-      console.error('Upload Error Details:', {
-        name: error.name,
-        message: error.message,
-        status: error.response?.status,
-        data: error.response?.data,
-        config: error.config
-      });
       
-      let errorMessage = 'Gagal menyimpan berita: ';
-      
-      if (error.response?.data?.message) {
-        errorMessage += error.response.data.message;
-      } else if (error.message) {
-        errorMessage += error.message;
-      } else {
-        errorMessage += 'Terjadi kesalahan pada server';
-      }
-      
-      toast.error(errorMessage);
+      // Trigger update di komponen lain
+      localStorage.setItem('berita_updated', Date.now().toString());
+      window.dispatchEvent(new Event('storage'));
+      window.dispatchEvent(new CustomEvent('berita_updated'));
+    } catch (error) {
+      console.error('Error:', error);
+      toast.error('Gagal menyimpan berita');
     } finally {
       setLoading(false);
     }
@@ -201,7 +194,7 @@ export default function AdminBerita() {
           <label className="block text-black font-medium mb-2">Thumbnail</label>
           <input
             type="file"
-            onChange={(e) => setForm({ ...form, thumbnail: e.target.files?.[0] || null })}
+            onChange={(e) => handleFileChange(e, 'thumbnail')}
             className="w-full text-black"
             accept="image/*"
             required={!editId}
@@ -212,7 +205,7 @@ export default function AdminBerita() {
           <label className="block text-black font-medium mb-2">Foto</label>
           <input
             type="file"
-            onChange={(e) => setForm({ ...form, foto: e.target.files?.[0] || null })}
+            onChange={(e) => handleFileChange(e, 'foto')}
             className="w-full text-black"
             accept="image/*"
             required={!editId}
@@ -236,17 +229,6 @@ export default function AdminBerita() {
         >
           {loading ? 'Menyimpan...' : (editId ? 'Update' : 'Tambah')} {selectedBerita}
         </button>
-        
-        <button
-          type="button"
-          onClick={() => {
-            setEditId(null);
-            setForm({ judul: '', thumbnail: null, foto: null, konten: '' });
-          }}
-          className="ml-2 bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 transition-colors"
-        >
-          Batal Edit
-        </button>
       </form>
 
       <div className="space-y-4">
@@ -260,15 +242,7 @@ export default function AdminBerita() {
               </div>
               <div className="space-x-2">
                 <button
-                  onClick={() => {
-                    setEditId(item.id);
-                    setForm({
-                      judul: item.judul,
-                      thumbnail: null, // Tidak bisa set file lama, hanya bisa upload baru jika ingin ganti
-                      foto: null,
-                      konten: item.konten
-                    });
-                  }}
+                  onClick={() => handleEdit(item)}
                   className="text-blue-600 hover:text-blue-800"
                 >
                   Edit
@@ -286,3 +260,16 @@ export default function AdminBerita() {
     </div>
   );
 }
+
+const handleEdit = (item: Berita) => {
+  setForm({
+    judul: item.judul,
+    thumbnail: null,
+    foto: null,
+    konten: item.konten
+  });
+  setEditId(item.id);
+  setCurrentBerita(item);
+};
+
+// Tambahkan resetForm di sini

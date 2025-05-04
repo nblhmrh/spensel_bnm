@@ -180,7 +180,7 @@ function Fasilitas() {
                 <h2 className="mt-2 text-gray-700 font-semibold text-lg transition-colors duration-300 hover:text-[#154472]">
                   {item.judul}
                 </h2>
-                <p className="text-gray-600 transition-colors duration-300 hover:text-gray-800">
+                <p className="text-gray-600 transition-colors duration-300 hover:text-gray-800 line-clamp-3">
                   {item.deskripsi}
                 </p>
               </div>

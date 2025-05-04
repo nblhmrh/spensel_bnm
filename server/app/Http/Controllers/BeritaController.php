@@ -36,28 +36,26 @@ class BeritaController extends Controller
         if ($request->hasFile('thumbnail')) {
             $thumbnail = $request->file('thumbnail');
             $thumbnailPath = $thumbnail->store('berita/thumbnail', 'public');
-        } else {
-            $thumbnailPath = null;
         }
 
         // Proses upload foto
         if ($request->hasFile('foto')) {
             $foto = $request->file('foto');
             $fotoPath = $foto->store('berita/foto', 'public');
-        } else {
-            $fotoPath = null;
         }
 
-        // Simpan data ke database
+        // Simpan data ke database dengan slug yang sesuai
         $berita = new Berita();
         $berita->judul = $validated['judul'];
         $berita->konten = $validated['konten'];
-        $berita->thumbnail = $thumbnailPath;
-        $berita->foto = $fotoPath;
-        $berita->slug = \Str::slug($validated['judul']) . '-' . uniqid();
-        $berita->save();
+        $berita->thumbnail = $thumbnailPath ?? null;
+        $berita->foto = $fotoPath ?? null;
 
-        return response()->json(['message' => 'Berita berhasil ditambahkan', 'data' => $berita], 201);
+        // Gunakan selectedBerita dari form untuk membuat slug
+        $selectedBerita = $request->input('selectedBerita', 'berita1');
+        $berita->slug = $selectedBerita . '-' . Str::slug($validated['judul']);
+
+        $berita->save();
     }
 
     public function update(Request $request, $id)
