@@ -145,7 +145,7 @@ interface Prestasi {
   tanggal: string;
   tahun: string;
   deskripsi: string;
-  foto: string;
+  gambar: string;
 }
 
 function Prestasi() {
@@ -328,9 +328,9 @@ function Prestasi() {
                         className="block w-full overflow-hidden rounded-xl"
                       >
                         <div className="relative group">
-                          <Image
-                            src={`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/storage/${prestasi.foto}`}
-                            alt={`Prestasi ${prestasi.id}`}
+                        <img
+                            src={`http://localhost:8000/storage/${prestasi.gambar}`}
+                            alt={`prestasi ${prestasi.judul}`}
                             width={400}
                             height={400}
                             className="w-full h-[350px] object-cover rounded-xl shadow-lg transition-transform duration-500 group-hover:scale-110"
@@ -385,10 +385,9 @@ function Prestasi() {
 
                 {/* Full Image Section */}
                 <div className="relative w-full aspect-[16/9]">
-                  <Image
-                    src={selectedPrestasi.image}
-                    alt={selectedPrestasi.title || "Prestasi Image"}
-                    fill
+                  <img
+                    src={`http://localhost:8000/storage/${selectedPrestasi.gambar}`}
+                    alt={`prestasi ${selectedPrestasi.judul}`}
                     className="object-cover"
                     priority
                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 1200px"
@@ -400,7 +399,7 @@ function Prestasi() {
                     transition={{ delay: 0.3 }}
                     className="absolute bottom-6 left-6 right-6 text-white text-3xl font-bold"
                   >
-                    {selectedPrestasi.title}
+                    {selectedPrestasi.judul}
                   </motion.h2>
                 </div>
 
@@ -456,18 +455,18 @@ function Prestasi() {
                       <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                       </svg>
-                      <span className="text-gray-700 font-medium">{selectedPrestasi.date}</span>
+                      <span className="text-gray-700 font-medium">{selectedPrestasi.tanggal}</span>
                     </div>
                     <div className="flex items-center gap-2 bg-gray-100 px-4 py-2 rounded-full">
                       <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                       </svg>
-                      <span className="text-gray-700 font-medium">Tahun {selectedPrestasi.year}</span>
+                      <span className="text-gray-700 font-medium">Tahun {selectedPrestasi.tahun}</span>
                     </div>
                   </motion.div>
 
                   {/* Description */}
-                  {selectedPrestasi.description && (
+                  {selectedPrestasi.deskripsi && (
                     <motion.div
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
@@ -475,7 +474,7 @@ function Prestasi() {
                       className="bg-gray-50 rounded-2xl p-6"
                     >
                       <p className="text-gray-700 leading-relaxed">
-                        {selectedPrestasi.description}
+                        {selectedPrestasi.deskripsi}
                       </p>
                     </motion.div>
                   )}
