@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from 'react';
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import logo from "@/assets/logo.png";
@@ -16,13 +16,17 @@ import {
   FaImage,
   FaUserTie,
   FaMedal,
-  FaUserCircle
+  FaUserCircle,
 } from "react-icons/fa";
 
 // Add this near the top of the component
-export default function Dashboard({ children }: { children?: React.ReactNode }) {
+export default function Dashboard({
+  children,
+}: {
+  children?: React.ReactNode;
+}) {
   const router = useRouter();
-  const [activePath, setActivePath] = useState('/BerandaAdmin');
+  const [activePath, setActivePath] = useState("/BerandaAdmin");
 
   // Add handleLogout function
   const handleLogout = () => {
@@ -31,53 +35,46 @@ export default function Dashboard({ children }: { children?: React.ReactNode }) 
     router.push("/Welcome");
   };
 
-
-
   const handleNavigateToDashboard = () => {
-    setActivePath('/BerandaAdmin');
+    setActivePath("/BerandaAdmin");
     router.push("/BerandaAdmin");
   };
 
   const handleNavigateToVisiMisi = () => {
-    setActivePath('/VisiMisiAdmin');
+    setActivePath("/VisiMisiAdmin");
     router.push("/VisiMisiAdmin");
   };
 
   const handleNavigateToSambutan = () => {
-    setActivePath('/SambutanAdmin');
+    setActivePath("/SambutanAdmin");
     router.push("/SambutanAdmin");
   };
 
   const handleNavigateToAkreditasiAdmin = () => {
-    setActivePath('/AkreditasiAdmin');
+    setActivePath("/AkreditasiAdmin");
     router.push("/AkreditasiAdmin");
   };
   const handleNavigateToHubungiKamiAdmin = () => {
-    setActivePath('/HubungiKamiAdmin');
+    setActivePath("/HubungiKamiAdmin");
     router.push("/HubungiKamiAdmin");
   };
   const handleNavigateToStrukturadmin = () => {
-    setActivePath('/StrukturAdmin');
+    setActivePath("/StrukturAdmin");
     router.push("/StrukturAdmin");
   };
   const handleNavigateToFotoSekolahAdmin = () => {
-    setActivePath('/FotoSekolahAdmin');
+    setActivePath("/FotoSekolahAdmin");
     router.push("/FotoSekolahAdmin");
   };
 
   const handleNavigateToFasilitasAdmin = () => {
-    setActivePath('/FasilitasAdmin');
+    setActivePath("/FasilitasAdmin");
     router.push("/FasilitasAdmin");
   };
 
   const handleNavigateToBeritaAdmin = () => {
-    setActivePath('/BeritaAdmin');
+    setActivePath("/BeritaAdmin");
     router.push("/BeritaAdmin");
-  };
-
-  const handleNavigateToProfilBKAdmin = () => {
-    setActivePath('/ProfilBKAdmin');
-    router.push("/ProfilBKAdmin");
   };
 
   // Update button classes to include active state
@@ -99,12 +96,12 @@ export default function Dashboard({ children }: { children?: React.ReactNode }) 
             {/* Main */}
             <div className="mb-4">
               <p className="text-sm text-gray-500 mb-2">MAIN</p>
-              <button 
+              <button
                 onClick={handleNavigateToDashboard}
                 className={`flex items-center text-left w-full px-4 py-2 rounded-lg font-semibold ${
-                  activePath === '/BerandaAdmin' 
-                    ? 'bg-blue-100 text-blue-800 border-2 border-[#154472]' 
-                    : 'hover:bg-gray-200'
+                  activePath === "/BerandaAdmin"
+                    ? "bg-blue-100 text-blue-800 border-2 border-[#154472]"
+                    : "hover:bg-gray-200"
                 }`}
               >
                 <FaHome className="mr-2" /> Dashboard
@@ -115,12 +112,12 @@ export default function Dashboard({ children }: { children?: React.ReactNode }) 
             <div className="mb-4">
               <p className="text-sm text-gray-500 mb-2">BERANDA</p>
               <div className="space-y-2">
-                <button 
+                <button
                   onClick={handleNavigateToFotoSekolahAdmin}
                   className={`flex items-center text-left w-full px-4 py-2 rounded-lg ${
-                    activePath === '/FotoSekolahAdmin'
-                      ? 'bg-blue-100 text-blue-800 border-2 border-[#154472]'
-                      : 'hover:bg-gray-200'
+                    activePath === "/FotoSekolahAdmin"
+                      ? "bg-blue-100 text-blue-800 border-2 border-[#154472]"
+                      : "hover:bg-gray-200"
                   }`}
                 >
                   <FaImage className="mr-2" /> Foto Sekolah
@@ -128,9 +125,9 @@ export default function Dashboard({ children }: { children?: React.ReactNode }) 
                 <button
                   onClick={handleNavigateToSambutan}
                   className={`flex items-center text-left w-full px-4 py-2 rounded-lg ${
-                    activePath === '/SambutanAdmin'
-                      ? 'bg-blue-100 text-blue-800 border-2 border-[#154472]'
-                      : 'hover:bg-gray-200'
+                    activePath === "/SambutanAdmin"
+                      ? "bg-blue-100 text-blue-800 border-2 border-[#154472]"
+                      : "hover:bg-gray-200"
                   }`}
                 >
                   <FaUserTie className="mr-2" /> Sambutan Kepala Sekolah
@@ -138,9 +135,9 @@ export default function Dashboard({ children }: { children?: React.ReactNode }) 
                 <button
                   onClick={handleNavigateToBeritaAdmin}
                   className={`flex items-center text-left w-full px-4 py-2 rounded-lg ${
-                    activePath === '/BeritaAdmin'
-                      ? 'bg-blue-100 text-blue-800 border-2 border-[#154472]'
-                      : 'hover:bg-gray-200'
+                    activePath === "/BeritaAdmin"
+                      ? "bg-blue-100 text-blue-800 border-2 border-[#154472]"
+                      : "hover:bg-gray-200"
                   }`}
                 >
                   <FaNewspaper className="mr-2" /> Berita
@@ -155,9 +152,9 @@ export default function Dashboard({ children }: { children?: React.ReactNode }) 
                 <button
                   onClick={handleNavigateToVisiMisi}
                   className={`flex items-center text-left w-full px-4 py-2 rounded-lg ${
-                    activePath === '/VisiMisiAdmin'
-                      ? 'bg-blue-100 text-blue-800 border-2 border-[#154472]'
-                      : 'hover:bg-gray-200'
+                    activePath === "/VisiMisiAdmin"
+                      ? "bg-blue-100 text-blue-800 border-2 border-[#154472]"
+                      : "hover:bg-gray-200"
                   }`}
                 >
                   <FaSchool className="mr-2" /> Visi Misi
@@ -165,9 +162,9 @@ export default function Dashboard({ children }: { children?: React.ReactNode }) 
                 <button
                   onClick={handleNavigateToFasilitasAdmin}
                   className={`flex items-center text-left w-full px-4 py-2 rounded-lg ${
-                    activePath === '/FasilitasAdmin'
-                      ? 'bg-blue-100 text-blue-800 border-2 border-[#154472]'
-                      : 'hover:bg-gray-200'
+                    activePath === "/FasilitasAdmin"
+                      ? "bg-blue-100 text-blue-800 border-2 border-[#154472]"
+                      : "hover:bg-gray-200"
                   }`}
                 >
                   <FaBuilding className="mr-2" /> Fasilitas
@@ -178,9 +175,9 @@ export default function Dashboard({ children }: { children?: React.ReactNode }) 
                 <button
                   onClick={handleNavigateToStrukturadmin}
                   className={`flex items-center text-left w-full px-4 py-2 rounded-lg ${
-                    activePath === '/StrukturAdmin'
-                      ? 'bg-blue-100 text-blue-800 border-2 border-[#154472]'
-                      : 'hover:bg-gray-200'
+                    activePath === "/StrukturAdmin"
+                      ? "bg-blue-100 text-blue-800 border-2 border-[#154472]"
+                      : "hover:bg-gray-200"
                   }`}
                 >
                   <FaSitemap className="mr-2" /> Struktur Organisasi
@@ -188,21 +185,13 @@ export default function Dashboard({ children }: { children?: React.ReactNode }) 
                 <button
                   onClick={handleNavigateToAkreditasiAdmin}
                   className={`flex items-center text-left w-full px-4 py-2 rounded-lg ${
-                    activePath === '/AkreditasiAdmin'
-                      ? 'bg-blue-100 text-blue-800 border-2 border-[#154472]'
-                      : 'hover:bg-gray-200'
+                    activePath === "/AkreditasiAdmin"
+                      ? "bg-blue-100 text-blue-800 border-2 border-[#154472]"
+                      : "hover:bg-gray-200"
                   }`}
                 >
                   <FaMedal className="mr-2" /> Akreditasi
                 </button>
-
-                <button
-  onClick={handleNavigateToProfilBKAdmin}
-  className="flex items-center space-x-2 w-full p-2 rounded hover:bg-blue-600 transition-colors"
->
-  <FaUserCircle className="text-xl" />
-  <span>Profil BK</span>
-</button>
               </div>
             </div>
 
@@ -210,15 +199,15 @@ export default function Dashboard({ children }: { children?: React.ReactNode }) 
             <div>
               <p className="text-sm text-gray-500 mb-2">FOOTER</p>
               <button
-                  onClick={handleNavigateToHubungiKamiAdmin}
-                  className={`flex items-center text-left w-full px-4 py-2 rounded-lg ${
-                    activePath === '/HubungiKamiAdmin'
-                      ? 'bg-blue-100 text-blue-800 border-2 border-[#154472]'
-                      : 'hover:bg-gray-200'
-                  }`}
-                >
-                  <FaPhone className="mr-2" /> Hubungi Kami
-                </button>
+                onClick={handleNavigateToHubungiKamiAdmin}
+                className={`flex items-center text-left w-full px-4 py-2 rounded-lg ${
+                  activePath === "/HubungiKamiAdmin"
+                    ? "bg-blue-100 text-blue-800 border-2 border-[#154472]"
+                    : "hover:bg-gray-200"
+                }`}
+              >
+                <FaPhone className="mr-2" /> Hubungi Kami
+              </button>
             </div>
           </nav>
         </div>
