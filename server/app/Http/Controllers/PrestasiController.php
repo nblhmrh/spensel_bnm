@@ -15,42 +15,38 @@ class PrestasiController extends Controller
 
     public function store(Request $request)
     {
-        try {
-            $validated = $request->validate([
-                'judul' => 'required|string|max:255',
-                'deskripsi' => 'required|string',
-                'tanggal' => 'required|date',
-                'gambar' => 'required|file|mimes:jpg,jpeg,png,webp|max:5120'
-            ]);
+        // Validasi request
+        $validated = $request->validate([
+            'judul' => 'required|string',
+            'tingkat' => 'required|string',
+            'siswa' => 'required|json',  // Pastikan data siswa dalam format JSON
+            'deskripsi' => 'required|string',
+            'tanggal' => 'required|date',
+            'tahun' => 'required|date',
+            'gambar' => 'required|image|mimes:jpg,jpeg,png,webp|max:5120',
+        ]);
 
-            $gambarPath = $request->file('gambar')->store('prestasi', 'public');
+        // Decode JSON siswa menjadi array
+        $siswaArray = json_decode($validated['siswa'], true);
 
-            $prestasi = Prestasi::create([
-                'judul' => $validated['judul'],
-                'deskripsi' => $validated['deskripsi'],
-                'tanggal' => $validated['tanggal'],
-                'gambar' => $gambarPath,
-            ]);
-
-            return response()->json([
-                'success' => true,
-                'message' => 'Data prestasi berhasil disimpan',
-                'data' => $prestasi
-            ], 201);
-
-        } catch (\Illuminate\Validation\ValidationException $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Validasi error',
-                'errors' => $e->errors()
-            ], 422);
-        } catch (\Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Server error',
-                'error' => $e->getMessage()
-            ], 500);
+        // Proses upload gambar
+        if ($request->hasFile('gambar')) {
+            $gambar = $request->file('gambar')->store('prestasi', 'public');
+            $validated['gambar'] = $gambar;
         }
+
+        // Simpan ke database dengan data siswa dalam format JSON
+        $prestasi = Prestasi::create([
+            'judul' => $validated['judul'],
+            'tingkat' => $validated['tingkat'],
+            'siswa' => json_encode($siswaArray),  // Simpan kembali sebagai JSON
+            'deskripsi' => $validated['deskripsi'],
+            'tanggal' => $validated['tanggal'],
+            'tahun' => $validated['tahun'],
+            'gambar' => $validated['gambar'],
+        ]);
+
+        return response()->json($prestasi, 201);
     }
 
     public function show($id)
@@ -69,8 +65,11 @@ class PrestasiController extends Controller
 
             $validated = $request->validate([
                 'judul' => 'required|string|max:255',
+                'tingkat' => 'required|string',
+                'siswa' => 'required|array',
                 'deskripsi' => 'required|string',
                 'tanggal' => 'required|date',
+                'tahun' => 'required|date',
                 'gambar' => 'nullable|file|mimes:jpg,jpeg,png,webp|max:5120'
             ]);
 
@@ -81,8 +80,11 @@ class PrestasiController extends Controller
             }
 
             $prestasi->judul = $validated['judul'];
+            $prestasi->tingkat = $validated['tingkat'];
+            $prestasi->siswa = $validated['siswa'];
             $prestasi->deskripsi = $validated['deskripsi'];
             $prestasi->tanggal = $validated['tanggal'];
+            $prestasi->tahun = $validated['tahun'];
             $prestasi->save();
 
             return response()->json([

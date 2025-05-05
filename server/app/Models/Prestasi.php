@@ -12,8 +12,19 @@ class Prestasi extends Model
     protected $table = 'prestasi';
     protected $fillable = [
         'judul',
+        'tingkat',
+        'siswa',
         'deskripsi',
         'tanggal',
-        'gambar'
+        'tahun',
+        'gambar',
+    ];
+
+    protected $casts = [
+        'siswa' => 'array',
+        'tanggal' => 'date',
+        'tahun' => 'date'
     ];
 }
+
+

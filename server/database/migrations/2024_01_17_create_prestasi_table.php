@@ -11,8 +11,11 @@ return new class extends Migration
         Schema::create('prestasi', function (Blueprint $table) {
             $table->id();
             $table->string('judul');
+            $table->string('tingkat');
+            $table->json('siswa');
             $table->text('deskripsi');
             $table->date('tanggal');
+            $table->date('tahun');
             $table->string('gambar');
             $table->timestamps();
         });

@@ -389,7 +389,7 @@ function Prestasi() {
                     src={`http://localhost:8000/storage/${selectedPrestasi.gambar}`}
                     alt={`prestasi ${selectedPrestasi.judul}`}
                     className="object-cover"
-                    priority
+                    
                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 1200px"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent"></div>
@@ -412,7 +412,7 @@ function Prestasi() {
                     transition={{ delay: 0.4 }}
                     className="inline-flex items-center px-4 py-2 bg-yellow-100 text-yellow-800 rounded-full font-semibold text-sm"
                   >
-                    {selectedPrestasi.level}
+                    {selectedPrestasi.tingkat}
                   </motion.div>
 
                   {/* Students Section */}
@@ -429,7 +429,10 @@ function Prestasi() {
                       Siswa Berprestasi
                     </h4>
                     <ul className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      {selectedPrestasi.students?.map((student, index) => (
+                      {(Array.isArray(selectedPrestasi.siswa) 
+                        ? selectedPrestasi.siswa 
+                        : JSON.parse(selectedPrestasi.siswa || '[]')
+                      ).map((siswa, index) => (
                         <motion.li
                           key={index}
                           initial={{ opacity: 0, x: -20 }}
@@ -438,7 +441,7 @@ function Prestasi() {
                           className="flex items-center gap-3 text-gray-700"
                         >
                           <span className="w-2 h-2 bg-blue-400 rounded-full"></span>
-                          <span className="font-medium">{student}</span>
+                          <span className="font-medium">{siswa}</span>
                         </motion.li>
                       ))}
                     </ul>
