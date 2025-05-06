@@ -8,7 +8,7 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('profil_b_k_s', function (Blueprint $table) {
+        Schema::create('profilbk', function (Blueprint $table) {
             $table->id();
             $table->text('visi');
             $table->text('misi');
@@ -24,6 +24,6 @@ return new class extends Migration
 
     public function down(): void
     {
-        Schema::dropIfExists('profil_b_k_s');
+        Schema::dropIfExists('profilbk');
     }
 };

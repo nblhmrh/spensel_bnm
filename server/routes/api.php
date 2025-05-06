@@ -97,9 +97,10 @@ Route::delete('/fasilitas/{id}', [FasilitasController::class, 'destroy']);
 Route::get('/fasilitas/{id}', [FasilitasController::class, 'show']);
 
 // Add these routes with the existing routes
-Route::get('/profil-bk', [ProfilBKController::class, 'index']);
-Route::post('/profil-bk', [ProfilBKController::class, 'store']);
-Route::post('/profil-bk/update', [ProfilBKController::class, 'update']);
+Route::get('/profilbk', [ProfilBKController::class, 'index']);
+Route::post('/profilbk', [ProfilBKController::class, 'store']);
+Route::post('/profilbk/update', [ProfilBKController::class, 'update']);
+
 Route::get('/berita', [BeritaController::class, 'index']);
 Route::post('/berita', [BeritaController::class, 'store']);
 Route::get('/berita/{id}', [BeritaController::class, 'show']);

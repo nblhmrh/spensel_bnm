@@ -10,7 +10,14 @@ class ProfilBKController extends Controller
 {
     public function index()
     {
-        return ProfilBK::first();
+        $profilBK = ProfilBK::first();
+        if (!$profilBK) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Profil BK belum tersedia'
+            ], 404);
+        }
+        return response()->json($profilBK);
     }
 
     public function store(Request $request)
@@ -27,8 +34,14 @@ class ProfilBKController extends Controller
                 'teacher_photo' => 'required|image|mimes:jpg,jpeg,png|max:2048'
             ]);
 
+            $profilBK = ProfilBK::first();
+            if ($profilBK) {
+                // Jika sudah ada, update saja
+                return $this->update($request);
+            }
+
             if ($request->hasFile('teacher_photo')) {
-                $photoPath = $request->file('teacher_photo')->store('profil-bk', 'public');
+                $photoPath = $request->file('teacher_photo')->store('profilbk', 'public');
                 $validated['teacher_photo'] = $photoPath;
             }
 
@@ -76,8 +89,11 @@ class ProfilBKController extends Controller
                 if ($profilBK->teacher_photo) {
                     Storage::disk('public')->delete($profilBK->teacher_photo);
                 }
-                $photoPath = $request->file('teacher_photo')->store('profil-bk', 'public');
+                $photoPath = $request->file('teacher_photo')->store('profilbk', 'public');
                 $validated['teacher_photo'] = $photoPath;
+            } else {
+                // Jangan update kolom teacher_photo jika tidak ada file baru
+                unset($validated['teacher_photo']);
             }
 
             $profilBK->update($validated);
@@ -97,3 +113,5 @@ class ProfilBKController extends Controller
         }
     }
 }
+
+

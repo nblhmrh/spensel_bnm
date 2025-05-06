@@ -29,7 +29,7 @@ export default function BProfil() {
 
   const fetchProfilBK = async () => {
     try {
-      const response = await API.get('/profil-bk');
+      const response = await API.get('/profilbk');
       if (response.data) {
         setProfilBK(response.data);
         setError('');
@@ -159,7 +159,7 @@ export default function BProfil() {
             transition={{ duration: 0.3 }}
           >
             <img 
-              src={`${process.env.NEXT_PUBLIC_API_URL}/storage/${profilBK.teacher_photo}`}
+               src={`http://localhost:8000/storage/${profilBK.teacher_photo}`}
               alt="Foto Guru BK"
               className="w-48 h-48 mx-auto rounded-full object-cover mb-4"
             />
