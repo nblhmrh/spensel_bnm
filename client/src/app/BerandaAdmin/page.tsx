@@ -16,7 +16,6 @@ import {
   FaImage,
   FaUserTie,
   FaMedal,
-  FaUserCircle,
 } from "react-icons/fa";
 
 // Add this near the top of the component
@@ -75,6 +74,10 @@ export default function Dashboard({
   const handleNavigateToBeritaAdmin = () => {
     setActivePath("/BeritaAdmin");
     router.push("/BeritaAdmin");
+  };
+  const handleNavigateToPrestasiAdmin = () => {
+    setActivePath("/PrestasiAdmin");
+    router.push("/PrestasiAdmin");
   };
 
   // Update button classes to include active state
@@ -169,7 +172,14 @@ export default function Dashboard({
                 >
                   <FaBuilding className="mr-2" /> Fasilitas
                 </button>
-                <button className="flex items-center text-left w-full px-4 py-2 hover:bg-gray-200 rounded-lg">
+                <button
+                  onClick={handleNavigateToPrestasiAdmin}
+                  className={`flex items-center text-left w-full px-4 py-2 rounded-lg ${
+                    activePath === "/PrestasiAdmin"
+                      ? "bg-blue-100 text-blue-800 border-2 border-[#154472]"
+                      : "hover:bg-gray-200"
+                  }`}
+                >
                   <FaTrophy className="mr-2" /> Prestasi
                 </button>
                 <button

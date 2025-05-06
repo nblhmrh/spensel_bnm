@@ -92,7 +92,7 @@ export default function BerandaBK({
             {sidebarTerbuka && "Profil BK"}
           </button>
           <button
-            onClick={() => router.push("/DokumentasiBK")}
+            onClick={() => router.push("/DokumentasiBKAdmin")}
             className="flex items-center text-left w-full px-3 py-2 rounded-lg hover:bg-gray-100 transition-all"
           >
             <FaBook className="text-xl mr-2" />

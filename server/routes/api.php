@@ -18,6 +18,7 @@ use App\Http\Controllers\FasilitasController;
 use App\Http\Controllers\ProfilBKController;
 use App\Http\Controllers\BeritaController;
 use App\Http\Controllers\PrestasiController;
+use App\Http\Controllers\DokumentasiBKController;
 
 
 
@@ -112,3 +113,8 @@ Route::post('/prestasi', [PrestasiController::class, 'store']);
 Route::get('/prestasi/{id}', [PrestasiController::class, 'show']);
 Route::post('/prestasi/{id}', [PrestasiController::class, 'update']);
 Route::delete('/prestasi/{id}', [PrestasiController::class, 'destroy']);
+
+Route::get('/dokumentasibk', [DokumentasiBKController::class, 'index']);
+Route::post('/dokumentasibk', [DokumentasiBKController::class, 'store']);
+Route::post('/dokumentasibk/{id}', [DokumentasiBKController::class, 'update']);
+Route::delete('/dokumentasibk/{id}', [DokumentasiBKController::class, 'destroy']);
