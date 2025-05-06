@@ -5,7 +5,6 @@ import API from "../utils/api"; // Pastikan path ini sesuai dengan lokasi file A
 export default function DokumentasiBKAdmin() {
   const [data, setData] = useState([]);
   const [judul, setJudul] = useState("");
-  const [deskripsi, setDeskripsi] = useState("");
   const [foto, setFoto] = useState<File | null>(null);
   const [loading, setLoading] = useState(false);
   const [editId, setEditId] = useState<number | null>(null);
@@ -27,13 +26,12 @@ export default function DokumentasiBKAdmin() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!judul || !deskripsi || (!foto && !editId)) {
+    if (!judul ||  (!foto && !editId)) {
       alert("Semua field wajib diisi!");
       return;
     }
     const formData = new FormData();
     formData.append("judul", judul);
-    formData.append("deskripsi", deskripsi);
     if (foto) formData.append("foto", foto);
 
     try {
@@ -49,13 +47,25 @@ export default function DokumentasiBKAdmin() {
         alert("Dokumentasi berhasil ditambah!");
       }
       setJudul("");
-      setDeskripsi("");
       setFoto(null);
       setEditId(null);
       fetchData();
     } catch (err) {
       alert(editId ? "Gagal mengupdate dokumentasi" : "Gagal menambah dokumentasi");
     }
+  };
+
+  const handleEdit = (item: any) => {
+    setEditId(item.id);
+    setJudul(item.judul);
+    setFoto(null); // Foto hanya diubah jika user upload baru
+  };
+
+  // Add this function to handle cancel edit
+  const handleCancelEdit = () => {
+    setEditId(null);
+    setJudul("");
+    setFoto(null);
   };
 
   const handleDelete = async (id: number) => {
@@ -77,13 +87,6 @@ export default function DokumentasiBKAdmin() {
           placeholder="Judul"
           value={judul}
           onChange={(e) => setJudul(e.target.value)}
-          className="border p-2 rounded w-full text-black"
-          required
-        />
-        <textarea
-          placeholder="Deskripsi"
-          value={deskripsi}
-          onChange={(e) => setDeskripsi(e.target.value)}
           className="border p-2 rounded w-full text-black"
           required
         />
@@ -126,8 +129,7 @@ export default function DokumentasiBKAdmin() {
               alt={`dokumentasibk ${item.judul}`}
               className="w-full h-48 object-cover rounded mb-2"
             />
-            <h3 className="font-bold ">{item.judul}</h3>
-            <p className="text-sm ">{item.deskripsi}</p>
+            <h3 className="font-bold text-black">{item.judul}</h3>
             <div className="flex gap-2 mt-2">
               <button
                 onClick={() => handleEdit(item)}
