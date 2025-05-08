@@ -19,6 +19,7 @@ use App\Http\Controllers\ProfilBKController;
 use App\Http\Controllers\BeritaController;
 use App\Http\Controllers\PrestasiController;
 use App\Http\Controllers\DokumentasiBKController;
+use App\Http\Controllers\LayananBKController;
 
 
 
@@ -118,3 +119,8 @@ Route::get('/dokumentasibk', [DokumentasiBKController::class, 'index']);
 Route::post('/dokumentasibk', [DokumentasiBKController::class, 'store']);
 Route::post('/dokumentasibk/{id}', [DokumentasiBKController::class, 'update']);
 Route::delete('/dokumentasibk/{id}', [DokumentasiBKController::class, 'destroy']);
+
+Route::get('/layananbk', [LayananBKController::class, 'index']);
+Route::post('/layananbk', [LayananBKController::class, 'store']);
+Route::post('/layananbk/{id}', [LayananBKController::class, 'update']);
+Route::delete('/layananbk/{id}', [LayananBKController::class, 'destroy']);

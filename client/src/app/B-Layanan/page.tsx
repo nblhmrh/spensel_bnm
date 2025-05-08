@@ -1,30 +1,34 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Navbar from "../Navbar/page";
 import Image from "next/image";
 import Link from "next/link";
 import { StaticImageData } from "next/image";
 import News from "@/pages/News";
-// Import gambar dari folder assets
-import lynan1 from "@/assets/lynan1.png";
-import lynan2 from "@/assets/lynan2.png";
-import lynan3 from "@/assets/lynan3.png";
-import lynan4 from "@/assets/lynan4.png";
-import lynan5 from "@/assets/lynan5.png";
-
-const layananData = [
-  { src: lynan1, label: "Jenis Layanan BK" },
-  { src: lynan2, label: "Layanan langsung" },
-  { src: lynan3, label: "Layanan melalui media" },
-  { src: lynan4, label: "Penanganan siswa" },
-];
+import API from "@/utils/api"; // Tambahkan ini
+import lynan5 from "@/assets/lynan5.png"; // Pastikan path dan nama file sesuai dengan gambar Anda
 
 function Layanan() {
   const [modalOpen, setModalOpen] = useState(false);
-  const [selectedImage, setSelectedImage] = useState<StaticImageData | null>(null);
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  const [layananData, setLayananData] = useState<any[]>([]);
 
-  const openModal = (image: StaticImageData) => {
+  useEffect(() => {
+    fetchLayananBK();
+  }, []);
+
+  const fetchLayananBK = async () => {
+    try {
+      const res = await API.get("/layananbk");
+      setLayananData(res.data);
+    } catch (err) {
+      console.error("Error fetchLayananBK:", err); // Tambahkan log ini
+      alert("Gagal memuat data layanan BK");
+    }
+  };
+
+  const openModal = (image: string) => {
     setSelectedImage(image);
     setModalOpen(true);
   };
@@ -76,10 +80,16 @@ function Layanan() {
         {layananData.map((item, index) => (
           <div key={index} className="flex flex-col items-center">
             <div className="bg-gray-200 px-4 py-2 rounded-md mb-2 text-gray-700 font-semibold">
-              {item.label}
+              {item.judul}
             </div>
-            <div className="cursor-pointer" onClick={() => openModal(item.src)}>
-              <Image src={item.src} alt={item.label} width={370} height={280} className="rounded-lg shadow-lg" />
+            <div className="cursor-pointer" onClick={() => openModal(item.foto)}>
+              <img
+                src={`http://localhost:8000/storage/${item.foto}`}
+                alt={item.judul}
+                width={370}
+                height={280}
+                className="rounded-lg shadow-lg"
+              />
             </div>
           </div>
         ))}
@@ -102,7 +112,13 @@ function Layanan() {
             <button className="absolute top-2 right-2 bg-white text-black px-3 py-1 rounded-full" onClick={closeModal}>
               X
             </button>
-            <Image src={selectedImage} alt="Selected" width={600} height={400} className="rounded-lg" />
+            <img
+              src={`http://localhost:8000/storage/${selectedImage}`}
+              alt="Selected"
+              width={600}
+              height={400}
+              className="rounded-lg"
+            />
           </div>
         </div>
       )}
