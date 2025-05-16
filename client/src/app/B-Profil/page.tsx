@@ -25,6 +25,26 @@ export default function BProfil() {
 
   useEffect(() => {
     fetchProfilBK();
+
+    // Fungsi untuk menangani perubahan storage
+    const handleStorageChange = () => {
+      const lastUpdate = localStorage.getItem('profilbk_updated');
+      if (lastUpdate) {
+        fetchProfilBK();
+        // Hapus flag setelah digunakan
+        localStorage.removeItem('profilbk_updated');
+      }
+    };
+
+    // Tambahkan event listener untuk storage dan custom event
+    window.addEventListener('storage', handleStorageChange);
+    window.addEventListener('profilbk_updated', handleStorageChange);
+
+    // Cleanup function
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+      window.removeEventListener('profilbk_updated', handleStorageChange);
+    };
   }, []);
 
   const fetchProfilBK = async () => {

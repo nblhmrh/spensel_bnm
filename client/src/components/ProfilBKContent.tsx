@@ -71,7 +71,7 @@ export default function ProfilBKContent() {
       !formData.teacher_birth ||
       !formData.teacher_education ||
       !formData.teacher_instagram
-      // HAPUS validasi teacher_photo di sini agar bisa nullable
+      // Tidak ada validasi teacher_photo di sini, jadi sudah nullable
     ) {
       setMessage({ type: 'error', content: 'Semua field wajib diisi.' });
       setLoading(false);
@@ -90,7 +90,6 @@ export default function ProfilBKContent() {
         }
       });
 
-      
       await API.post('/profilbk', formDataToSend, {
         headers: {
           'Content-Type': 'multipart/form-data'
