@@ -8,7 +8,6 @@ import { toast } from 'react-toastify';
 interface Berita {
   id: number;
   judul: string;
-  thumbnail: string;
   foto: string;
   konten: string;
   slug: string;
@@ -16,7 +15,7 @@ interface Berita {
 
 export default function AdminBerita() {
   const resetForm = () => {
-    setForm({ judul: '', thumbnail: null, foto: null, konten: '' });
+    setForm({ judul: '', foto: null, konten: '' });
     setEditId(null);
     setCurrentBerita(null);
   };
@@ -24,7 +23,6 @@ export default function AdminBerita() {
   const [selectedBerita, setSelectedBerita] = useState<string>('berita1');
   const [form, setForm] = useState({
     judul: '',
-    thumbnail: null as File | null,
     foto: null as File | null,
     konten: ''
   });
@@ -65,24 +63,26 @@ export default function AdminBerita() {
     };
   }, []);
 
-  // Pastikan state form memiliki tipe yang benar
-  interface FormState {
-    judul: string;
-    thumbnail: File | null;
-    foto: File | null;
-    konten: string;
-  }
-  
   // Pastikan fungsi handleFileChange menyimpan objek File, bukan string
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>, field: 'thumbnail' | 'foto') => {
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       setForm({
         ...form,
-        [field]: e.target.files[0]
+        foto: e.target.files[0]
       });
     }
   };
-  
+
+  const handleEdit = (item: Berita) => {
+    setForm({
+      judul: item.judul,
+      foto: null,
+      konten: item.konten
+    });
+    setEditId(item.id);
+    setCurrentBerita(item);
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
@@ -91,27 +91,25 @@ export default function AdminBerita() {
       const formData = new FormData();
       formData.append('judul', form.judul);
       formData.append('konten', form.konten);
-      
+      formData.append('tipe', selectedBerita);
+
       if (editId) {
-        // Jika sedang edit, hanya append file jika ada perubahan
-        if (form.thumbnail) formData.append('thumbnail', form.thumbnail);
         if (form.foto) formData.append('foto', form.foto);
-        formData.append('_method', 'PUT'); // Untuk Laravel method spoofing
+        formData.append('_method', 'PUT');
       } else {
-        // Jika tambah baru, file wajib ada
-        if (!form.thumbnail || !form.foto) {
-          toast.error('Silakan pilih file thumbnail dan foto');
+        if (!form.foto) {
+          toast.error('Silakan pilih file foto');
           setLoading(false);
           return;
         }
-        formData.append('thumbnail', form.thumbnail);
         formData.append('foto', form.foto);
       }
 
       const config = {
         headers: {
           'Accept': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
+          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+          'Content-Type': 'multipart/form-data' // Tambahkan ini!
         }
       };
 
@@ -124,13 +122,11 @@ export default function AdminBerita() {
         toast.success('Berita berhasil ditambahkan');
       }
 
-      // Reset form dan refresh data
-      setForm({ judul: '', thumbnail: null, foto: null, konten: '' });
+      setForm({ judul: '', foto: null, konten: '' });
       setEditId(null);
       setCurrentBerita(null);
       await fetchBerita();
-      
-      // Trigger update di komponen lain
+
       localStorage.setItem('berita_updated', Date.now().toString());
       window.dispatchEvent(new Event('storage'));
       window.dispatchEvent(new CustomEvent('berita_updated'));
@@ -140,14 +136,14 @@ export default function AdminBerita() {
     } finally {
       setLoading(false);
     }
-};
+  };
 
-  const handleDelete = async (id: number) => {
+const handleDelete = async (id: number) => {
     if (window.confirm('Apakah Anda yakin ingin menghapus berita ini?')) {
       try {
         await API.delete(`/berita/${id}`);
         toast.success('Berita berhasil dihapus');
-        fetchBerita();
+        await fetchBerita(); // Pastikan pakai await agar data benar-benar di-refresh
       } catch (error) {
         toast.error('Gagal menghapus berita');
       }
@@ -191,21 +187,10 @@ export default function AdminBerita() {
         </div>
 
         <div className="mb-4">
-          <label className="block text-black font-medium mb-2">Thumbnail</label>
-          <input
-            type="file"
-            onChange={(e) => handleFileChange(e, 'thumbnail')}
-            className="w-full text-black"
-            accept="image/*"
-            required={!editId}
-          />
-        </div>
-
-        <div className="mb-4">
           <label className="block text-black font-medium mb-2">Foto</label>
           <input
             type="file"
-            onChange={(e) => handleFileChange(e, 'foto')}
+            onChange={handleFileChange}
             className="w-full text-black"
             accept="image/*"
             required={!editId}
@@ -260,16 +245,3 @@ export default function AdminBerita() {
     </div>
   );
 }
-
-const handleEdit = (item: Berita) => {
-  setForm({
-    judul: item.judul,
-    thumbnail: null,
-    foto: null,
-    konten: item.konten
-  });
-  setEditId(item.id);
-  setCurrentBerita(item);
-};
-
-// Tambahkan resetForm di sini

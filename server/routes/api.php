@@ -105,7 +105,7 @@ Route::post('/profilbk/update', [ProfilBKController::class, 'update']);
 Route::get('/berita', [BeritaController::class, 'index']);
 Route::post('/berita', [BeritaController::class, 'store']);
 Route::get('/berita/{id}', [BeritaController::class, 'show']);
-Route::post('/berita/{id}', [BeritaController::class, 'update']);
+Route::put('/berita/{id}', [BeritaController::class, 'update']);
 Route::delete('/berita/{id}', [BeritaController::class, 'destroy']);
 
 Route::get('/prestasi', [PrestasiController::class, 'index']);

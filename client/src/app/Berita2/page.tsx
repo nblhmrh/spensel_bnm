@@ -10,7 +10,6 @@ interface Berita {
   id: number;
   judul: string;
   konten: string;
-  thumbnail: string;
   foto: string;
   slug: string;
 }
@@ -23,9 +22,9 @@ function Berita2() {
     const fetchBerita = async () => {
       try {
         const response = await API.get('/berita');
-        const berita2Data = response.data.find((item: Berita) => 
-          item.slug.includes('berita2') || 
-          item.slug.includes('Berita2')
+        // Cari berita dengan slug yang mengandung 'berita2' (case-insensitive)
+        const berita2Data = response.data.find((item: Berita) =>
+          item.slug && item.slug.toLowerCase().includes('berita2')
         );
         setBerita(berita2Data || null);
       } catch (error) {
@@ -36,6 +35,23 @@ function Berita2() {
     };
 
     fetchBerita();
+
+    // Sinkronisasi jika ada update dari admin
+    const handleStorageChange = () => {
+      const lastUpdate = localStorage.getItem('berita_updated');
+      if (lastUpdate) {
+        fetchBerita();
+        localStorage.removeItem('berita_updated');
+      }
+    };
+
+    window.addEventListener('storage', handleStorageChange);
+    window.addEventListener('berita_updated', handleStorageChange);
+
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+      window.removeEventListener('berita_updated', handleStorageChange);
+    };
   }, []);
 
   return (

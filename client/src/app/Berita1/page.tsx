@@ -8,9 +8,8 @@ import API from '@/utils/api';
 interface Berita {
   id: number;
   judul: string;
-  konten: string;
-  thumbnail: string;
   foto: string;
+  konten: string;
   slug: string;
 }
 
@@ -22,35 +21,36 @@ function Berita1() {
     const fetchBerita = async () => {
       try {
         const response = await API.get('/berita');
-        console.log('Semua data berita:', response.data); // Log untuk debugging
-        
-        // Coba beberapa cara pencarian yang berbeda
-        let berita1Data = response.data.find((item: Berita) => item.slug === 'berita1');
-        
-        // Jika tidak ditemukan, coba dengan includes
-        if (!berita1Data) {
-          berita1Data = response.data.find((item: Berita) => 
-            item.slug.includes('berita1') || 
-            item.slug.includes('Berita1')
-          );
-        }
-        
-        // Jika masih tidak ditemukan, ambil data pertama (jika ada)
-        if (!berita1Data && response.data.length > 0) {
-          berita1Data = response.data[0];
-          console.log('Menggunakan data pertama sebagai fallback:', berita1Data);
-        }
-        
-        console.log('Data berita1 yang ditemukan:', berita1Data); // Log untuk debugging
+        // Ambil berita dengan slug yang mengandung 'berita1' (case-insensitive)
+        const berita1Data = response.data.find((item: Berita) =>
+          item.slug && (item.slug.toLowerCase().includes('berita1'))
+        );
         setBerita(berita1Data || null);
       } catch (error) {
-        console.error('Error fetching berita:', error);
+        console.error('Gagal memuat berita:', error);
       } finally {
         setLoading(false);
       }
     };
 
     fetchBerita();
+
+    // Sinkronisasi jika ada update dari admin
+    const handleStorageChange = () => {
+      const lastUpdate = localStorage.getItem('berita_updated');
+      if (lastUpdate) {
+        fetchBerita();
+        localStorage.removeItem('berita_updated');
+      }
+    };
+
+    window.addEventListener('storage', handleStorageChange);
+    window.addEventListener('berita_updated', handleStorageChange);
+
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+      window.removeEventListener('berita_updated', handleStorageChange);
+    };
   }, []);
 
   return (
@@ -85,17 +85,17 @@ function Berita1() {
         ) : berita ? (
           <div className="max-w-4xl mx-auto">
             {berita.foto && (
-             <img
-             src={`http://localhost:8000/storage/${berita.foto}`}
-             alt={berita.judul}
-             className="w-full h-[400px] object-cover rounded-lg mb-8"
-             onError={(e) => {
-               const target = e.target as HTMLImageElement;
-               console.error('Error loading image:', target.src);
-               target.onerror = null;
-               target.style.display = 'none';
-             }}
-           />
+              <img
+                src={`http://localhost:8000/storage/${berita.foto}`}
+                alt={berita.judul}
+                className="w-full h-[400px] object-cover rounded-lg mb-8"
+                onError={(e) => {
+                  const target = e.target as HTMLImageElement;
+                  console.error('Error loading image:', target.src);
+                  target.onerror = null;
+                  target.style.display = 'none';
+                }}
+              />
             )}
             <h2 className="text-3xl font-bold text-[#154472] mb-4">{berita.judul}</h2>
             <div className="prose max-w-none">
