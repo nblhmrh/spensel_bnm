@@ -12,11 +12,14 @@ class AuthController extends Controller
         $request->validate([
             'email' => 'required|email|unique:users,email',
             'password' => 'required|min:6',
+            'role' => 'in:admin,bk,user' // validasi role jika dikirim dari frontend
         ]);
 
         $user = User::create([
+            'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            'role' => $request->role ?? 'user', // default ke 'user' jika tidak dikirim
         ]);
 
         return response()->json([
@@ -24,6 +27,7 @@ class AuthController extends Controller
             'user' => [
                 'id' => $user->id,
                 'email' => $user->email,
+                'role' => $user->role,
             ],
         ], 201);
     }
@@ -47,17 +51,9 @@ class AuthController extends Controller
             'user' => [
                 'id' => $user->id,
                 'email' => $user->email,
+                'role' => $user->role,
             ],
         ]);
-    }
-
-    public function logout(Request $request) {
-        if (!$request->user()) {
-            return response()->json(['error' => 'Unauthorized'], 401);
-        }
-
-        $request->user()->tokens()->delete();
-        return response()->json(['message' => 'Logged out successfully'], 200);
     }
 
     public function user(Request $request) {
@@ -65,6 +61,27 @@ class AuthController extends Controller
         return response()->json([
             'id' => $user->id,
             'email' => $user->email,
+            'role' => $user->role,
         ]);
+    }
+
+    public function listUsers(Request $request) {
+        $roles = $request->query('roles');
+        $query = \App\Models\User::query();
+        if ($roles) {
+            $roleArr = explode(',', $roles);
+            $query->whereIn('role', $roleArr);
+        }
+        $users = $query->get(['id', 'name', 'email', 'role']);
+        return response()->json($users);
+    }
+    
+    public function logout(Request $request) {
+        if (!$request->user()) {
+            return response()->json(['error' => 'Unauthorized'], 401);
+        }
+
+        $request->user()->tokens()->delete();
+        return response()->json(['message' => 'Logged out successfully'], 200);
     }
 }

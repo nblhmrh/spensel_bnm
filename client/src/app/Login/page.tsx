@@ -36,8 +36,15 @@ export default function Login() {
       const response = await axios.post("http://localhost:8000/api/login", formData);
       console.log(response.data);
 
-      // 🔹 Redirect ke halaman dashboard setelah login
-      router.push("/Berandappdb");
+      // 🔹 Redirect ke halaman dashboard sesuai role
+      const userRole = response.data.user?.role;
+      if (userRole === "admin") {
+        router.push("/BerandaAdmin");
+      } else if (userRole === "bk") {
+        router.push("/BerandaBK");
+      } else {
+        router.push("/Berandappdb");
+      }
     } catch (err) {
       if (axios.isAxiosError(err)) {
         setError(err.response?.data?.message || "Email atau kata sandi salah");

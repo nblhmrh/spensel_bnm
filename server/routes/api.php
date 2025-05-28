@@ -46,6 +46,8 @@ Route::get('/csrf-cookie', function (Request $request) {
     return response()->json(['message' => 'CSRF Cookie Set']);
 });
 
+Route::get('/users', [authController::class, 'listUsers']);
+
 Route::post('/daftar2', [Daftar2Controller::class, 'store']);
 Route::post('/datasiswa', [DatasiswaController::class, 'store']);
 Route::post('/dataortu', [DataortuController::class, 'store']);
