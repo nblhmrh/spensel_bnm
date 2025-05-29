@@ -7,6 +7,8 @@ export default function VisiMisiAdmin() {
   const [misi, setMisi] = useState("");
   const [editing, setEditing] = useState(false);
   const [isNew, setIsNew] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     fetchData();
@@ -75,6 +77,9 @@ export default function VisiMisiAdmin() {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setLoading(true);
+    setError(null);
+
     try {
       const method = isNew ? "post" : "put";
       const formattedVisi = formatContent(visi.trim());
@@ -104,6 +109,8 @@ export default function VisiMisiAdmin() {
         console.error("An error occurred:", err);
         alert("Gagal memperbarui data");
       }
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -128,6 +135,12 @@ export default function VisiMisiAdmin() {
         <h1 className="text-3xl font-bold text-center text-blue-900 mb-8">
           Edit Visi & Misi
         </h1>
+
+        {error && (
+          <div className="mb-4 p-4 bg-red-100 text-red-700 rounded-lg">
+            {error}
+          </div>
+        )}
 
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="space-y-2">

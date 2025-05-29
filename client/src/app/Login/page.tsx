@@ -34,9 +34,11 @@ export default function Login() {
 
     try {
       const response = await axios.post("http://localhost:8000/api/login", formData);
-      console.log(response.data);
+      // Simpan token dan user ke localStorage
+      localStorage.setItem("token", response.data.token);
+      localStorage.setItem("user", JSON.stringify(response.data.user));
 
-      // 🔹 Redirect ke halaman dashboard sesuai role
+      // Redirect ke halaman dashboard sesuai role
       const userRole = response.data.user?.role;
       if (userRole === "admin") {
         router.push("/BerandaAdmin");

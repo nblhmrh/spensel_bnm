@@ -3,8 +3,30 @@
 import { useState, useEffect } from "react";
 import API from "@/utils/api";
 import { toast } from "react-hot-toast";
+import { useRouter } from "next/navigation";
 
 export default function StrukturContent() {
+  const router = useRouter();
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    const user = localStorage.getItem("user");
+    if (!token || !user) {
+      router.replace("/Welcome");
+      return;
+    }
+    let userObj;
+    try {
+      userObj = JSON.parse(user);
+    } catch {
+      router.replace("/Welcome");
+      return;
+    }
+    if (!userObj.role || userObj.role !== "admin") {
+      router.replace("/Welcome");
+    }
+  }, [router]);
+
   const [data, setData] = useState<{ id: number; file: string }[]>([]);
   const [form, setForm] = useState<{
     file: File | null;

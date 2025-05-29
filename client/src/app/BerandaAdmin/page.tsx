@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import logo from "@/assets/logo.png";
@@ -27,8 +27,35 @@ export default function Dashboard({
   const router = useRouter();
   const [activePath, setActivePath] = useState("/BerandaAdmin");
 
-  // Add handleLogout function
-  const handleLogout = () => {
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    const user = localStorage.getItem("user");
+    if (!token || !user) {
+      router.replace("/Welcome");
+      return;
+    }
+    let userObj;
+    try {
+      userObj = JSON.parse(user);
+    } catch {
+      router.replace("/Welcome");
+      return;
+    }
+    if (!userObj.role || userObj.role !== "admin") {
+      router.replace("/Welcome");
+    }
+  }, [router]);
+
+  const handleLogout = async () => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      await fetch("/api/logout", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+    }
     localStorage.removeItem("token");
     window.history.replaceState(null, "", "/PPDB");
     router.push("/Welcome");

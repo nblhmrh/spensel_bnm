@@ -4,8 +4,10 @@ import { useState, useEffect } from "react";
 import API from "@/utils/api";
 import { toast } from "react-hot-toast";
 import { AxiosError } from "axios";
+import { useRouter } from "next/navigation";
 
 export default function FasilitasContent() {
+  const router = useRouter();
   const [data, setData] = useState<{ id: number; judul: string; deskripsi: string; foto: string }[]>([]);
   const [form, setForm] = useState<{
     judul: string;
@@ -35,6 +37,25 @@ export default function FasilitasContent() {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    const user = localStorage.getItem("user");
+    if (!token || !user) {
+      router.replace("/Welcome");
+      return;
+    }
+    let userObj;
+    try {
+      userObj = JSON.parse(user);
+    } catch {
+      router.replace("/Welcome");
+      return;
+    }
+    if (!userObj.role || userObj.role !== "admin") {
+      router.replace("/Welcome");
+    }
+  }, [router]);
 
   useEffect(() => {
     fetchData();
