@@ -18,6 +18,7 @@ export default function FotoSekolahContent() {
     try {
       const res = await API.get("/foto-sekolah");
       setData(res.data);
+      console.log (res.data);
     } catch {
       toast.error("Gagal memuat data");
     }

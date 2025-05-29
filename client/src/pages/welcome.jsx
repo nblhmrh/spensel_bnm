@@ -20,7 +20,7 @@ import {
 
 export default function Home() {
   const [sambutanData, setSambutanData] = useState(null);
-  const [fotoSekolah, setFotoSekolah] = useState(null);
+  const [fotoSekolah, setFotoSekolah] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
@@ -56,6 +56,7 @@ export default function Home() {
       const response = await axios.get("http://localhost:8000/api/foto-sekolah");
       if (response.data && response.data.length > 0) {
         setFotoSekolah(response.data[0]);
+        console.log (response.data)
       }
     } catch (err) {
       console.error("Error fetching foto sekolah:", err);

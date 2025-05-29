@@ -37,7 +37,7 @@ const prestasiData = [
   { 
     id: 2, 
     image: lynan2, 
-    title: "Default Title", 
+    title: "Judul", 
     level: "Default Level", 
     students: [], 
     date: "Default Date", 
@@ -48,7 +48,7 @@ const prestasiData = [
   { 
     id: 3, 
     image: lynan3, 
-    title: "Default Title", 
+    title: "Judul", 
     level: "Default Level", 
     students: [], 
     date: "Default Date", 
@@ -59,7 +59,7 @@ const prestasiData = [
   { 
     id: 4, 
     image: lynan4, 
-    title: "Default Title", 
+    title: "Judul", 
     level: "Default Level", 
     students: [], 
     date: "Default Date", 
@@ -70,7 +70,7 @@ const prestasiData = [
   { 
     id: 5, 
     image: lynan5, 
-    title: "Default Title", 
+    title: "Judul", 
     level: "Default Level", 
     students: [], 
     date: "Default Date", 
@@ -81,7 +81,7 @@ const prestasiData = [
   { 
     id: 6, 
     image: klasik1, 
-    title: "Default Title", 
+    title: "Judul", 
     level: "Default Level", 
     students: [], 
     date: "Default Date", 
@@ -92,7 +92,7 @@ const prestasiData = [
   { 
     id: 7, 
     image: klasik2, 
-    title: "Default Title", 
+    title: "Judul", 
     level: "Default Level", 
     students: [], 
     date: "Default Date", 
@@ -103,7 +103,7 @@ const prestasiData = [
   { 
     id: 8, 
     image: klasik3, 
-    title: "Default Title", 
+    title: "Judul", 
     level: "Default Level", 
     students: [], 
     date: "Default Date", 
@@ -114,7 +114,7 @@ const prestasiData = [
   { 
     id: 9, 
     image: konseling, 
-    title: "Default Title", 
+    title: "Judul", 
     level: "Default Level", 
     students: [], 
     date: "Default Date", 
@@ -125,7 +125,7 @@ const prestasiData = [
   { 
     id: 10, 
     image: videdu, 
-    title: "Default Title", 
+    title: "Judul", 
     level: "Default Level", 
     students: [], 
     date: "Default Date", 
