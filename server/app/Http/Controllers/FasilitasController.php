@@ -107,14 +107,14 @@ class FasilitasController extends Controller
     {
         try {
             $fasilitas = Fasilitas::findOrFail($id);
-
+    
             // Hapus foto dari storage
             if ($fasilitas->foto) {
                 Storage::disk('public')->delete($fasilitas->foto);
             }
-
+    
             $fasilitas->delete();
-
+    
             return response()->json([
                 'success' => true,
                 'message' => 'Data fasilitas berhasil dihapus'

@@ -4,8 +4,10 @@ import { useState, useEffect } from "react";
 import API from "@/utils/api";
 import { toast } from "react-hot-toast";
 import { AxiosError } from "axios";
+import { useRouter } from "next/navigation";
 
 export default function FasilitasContent() {
+  const router = useRouter();
   const [data, setData] = useState<{ id: number; judul: string; deskripsi: string; foto: string }[]>([]);
   const [form, setForm] = useState<{
     judul: string;
@@ -19,6 +21,7 @@ export default function FasilitasContent() {
   const [loading, setLoading] = useState(false);
   const [editMode, setEditMode] = useState(false);
   const [editId, setEditId] = useState<number | null>(null);
+  const [modalData, setModalData] = useState<{ judul: string; deskripsi: string; foto: string } | null>(null);
 
   const fetchData = async () => {
     try {
@@ -34,6 +37,25 @@ export default function FasilitasContent() {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    const user = localStorage.getItem("user");
+    if (!token || !user) {
+      router.replace("/Welcome");
+      return;
+    }
+    let userObj;
+    try {
+      userObj = JSON.parse(user);
+    } catch {
+      router.replace("/Welcome");
+      return;
+    }
+    if (!userObj.role || userObj.role !== "admin") {
+      router.replace("/Welcome");
+    }
+  }, [router]);
 
   useEffect(() => {
     fetchData();
@@ -251,8 +273,9 @@ export default function FasilitasContent() {
         {data.map((item, index) => (
           <div
             key={item.id}
-            className="bg-white p-4 rounded-lg shadow transform transition-all duration-300 hover:shadow-xl hover:-translate-y-2 opacity-0 animate-fadeInUp"
+            className="bg-white p-4 rounded-lg shadow transform transition-all duration-300 hover:shadow-xl hover:-translate-y-2 opacity-0 animate-fadeInUp cursor-pointer"
             style={{ animationDelay: `${index * 0.1}s` }}
+            onClick={() => setModalData(item)}
           >
             <div className="mb-4 overflow-hidden rounded-lg">
               <img
@@ -264,18 +287,18 @@ export default function FasilitasContent() {
             <h3 className="text-xl font-semibold text-[#154472] transition-all duration-300 hover:text-[#1a5a99]">
               {item.judul}
             </h3>
-            <p className="text-gray-600 mt-2 mb-4 transition-all duration-300 hover:text-gray-800">
+            <p className="text-gray-600 mt-2 mb-4 transition-all duration-300 hover:text-gray-800 overflow-hidden text-ellipsis line-clamp-3">
               {item.deskripsi}
             </p>
             <div className="flex justify-end gap-2">
               <button
-                onClick={() => handleEdit(item)}
+                onClick={(e) => { e.stopPropagation(); handleEdit(item); }}
                 className="bg-yellow-500 hover:bg-yellow-600 text-white py-1 px-3 rounded transition-all duration-300 transform hover:scale-105 hover:shadow-md"
               >
                 Edit
               </button>
               <button
-                onClick={() => handleDelete(item.id)}
+                onClick={(e) => { e.stopPropagation(); handleDelete(item.id); }}
                 className="bg-red-500 hover:bg-red-600 text-white py-1 px-3 rounded transition-all duration-300 transform hover:scale-105 hover:shadow-md"
               >
                 Hapus
@@ -284,6 +307,30 @@ export default function FasilitasContent() {
           </div>
         ))}
       </div>
+      {/* Modal Pop Up */}
+      {modalData && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60" onClick={() => setModalData(null)}>
+          <div
+            className="bg-white rounded-2xl shadow-2xl p-6 max-w-lg w-full mx-4 relative animate-fadeIn flex flex-col items-center"
+            onClick={e => e.stopPropagation()}
+          >
+            <button
+              className="absolute top-3 right-4 text-gray-400 hover:text-red-600 text-2xl font-bold"
+              onClick={() => setModalData(null)}
+              aria-label="Tutup"
+            >
+              ×
+            </button>
+            <img
+              src={`http://localhost:8000/storage/${modalData.foto}`}
+              alt={modalData.judul}
+              className="w-full max-h-60 object-cover rounded-xl mb-4 shadow"
+            />
+            <h2 className="text-2xl font-bold text-[#154472] mb-2 text-center">{modalData.judul}</h2>
+            <p className="text-gray-700 whitespace-pre-line text-center max-h-48 overflow-auto px-2">{modalData.deskripsi}</p>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

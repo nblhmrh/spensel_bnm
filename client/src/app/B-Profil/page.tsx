@@ -25,11 +25,31 @@ export default function BProfil() {
 
   useEffect(() => {
     fetchProfilBK();
+
+    // Fungsi untuk menangani perubahan storage
+    const handleStorageChange = () => {
+      const lastUpdate = localStorage.getItem('profilbk_updated');
+      if (lastUpdate) {
+        fetchProfilBK();
+        // Hapus flag setelah digunakan
+        localStorage.removeItem('profilbk_updated');
+      }
+    };
+
+    // Tambahkan event listener untuk storage dan custom event
+    window.addEventListener('storage', handleStorageChange);
+    window.addEventListener('profilbk_updated', handleStorageChange);
+
+    // Cleanup function
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+      window.removeEventListener('profilbk_updated', handleStorageChange);
+    };
   }, []);
 
   const fetchProfilBK = async () => {
     try {
-      const response = await API.get('/profil-bk');
+      const response = await API.get('/profilbk');
       if (response.data) {
         setProfilBK(response.data);
         setError('');
@@ -159,7 +179,7 @@ export default function BProfil() {
             transition={{ duration: 0.3 }}
           >
             <img 
-              src={`${process.env.NEXT_PUBLIC_API_URL}/storage/${profilBK.teacher_photo}`}
+               src={`http://localhost:8000/storage/${profilBK.teacher_photo}`}
               alt="Foto Guru BK"
               className="w-48 h-48 mx-auto rounded-full object-cover mb-4"
             />

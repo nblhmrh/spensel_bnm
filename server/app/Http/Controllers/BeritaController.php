@@ -28,17 +28,9 @@ class BeritaController extends Controller
         $validated = $request->validate([
             'judul' => 'required|string|max:255',
             'konten' => 'required|string',
-            'thumbnail' => 'required|image|mimes:jpeg,png,jpg,webp|max:2048',
             'foto' => 'required|image|mimes:jpeg,png,jpg,webp|max:2048',
+            'tipe' => 'required|string', // Tambahkan validasi tipe
         ]);
-
-        // Proses upload thumbnail
-        if ($request->hasFile('thumbnail')) {
-            $thumbnail = $request->file('thumbnail');
-            $thumbnailPath = $thumbnail->store('berita/thumbnail', 'public');
-        } else {
-            $thumbnailPath = null;
-        }
 
         // Proses upload foto
         if ($request->hasFile('foto')) {
@@ -48,17 +40,30 @@ class BeritaController extends Controller
             $fotoPath = null;
         }
 
-        // Simpan data ke database
+        // Simpan data ke database dengan slug yang sesuai
         $berita = new Berita();
         $berita->judul = $validated['judul'];
         $berita->konten = $validated['konten'];
-        $berita->thumbnail = $thumbnailPath;
         $berita->foto = $fotoPath;
-        $berita->slug = \Str::slug($validated['judul']) . '-' . uniqid();
+        $berita->slug = $validated['tipe'] . '-' . \Illuminate\Support\Str::slug($validated['judul']); // Slug sesuai tipe
         $berita->save();
 
-        return response()->json(['message' => 'Berita berhasil ditambahkan', 'data' => $berita], 201);
+        return response()->json([
+            'message' => 'Berita berhasil ditambahkan',
+            'data' => $berita
+        ]);
     }
+
+    public function destroy($id)
+{
+    $berita = Berita::findOrFail($id);
+    // Optionally delete the photo file
+    if ($berita->foto) {
+        \Illuminate\Support\Facades\Storage::disk('public')->delete($berita->foto);
+    }
+    $berita->delete();
+    return response()->json(['message' => 'Berita berhasil dihapus']);
+}
 
     public function update(Request $request, $id)
     {
@@ -66,44 +71,23 @@ class BeritaController extends Controller
 
         $validated = $request->validate([
             'judul' => 'required|string|max:255',
-            'thumbnail' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
-            'foto' => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
-            'konten' => 'required|string'
+            'foto' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
+            'konten' => 'required|string',
+            'tipe' => 'required|string', // Tambahkan validasi tipe
         ]);
 
-        if ($request->hasFile('thumbnail')) {
-            Storage::disk('public')->delete($berita->thumbnail);
-
-            $thumbnail = $request->file('thumbnail');
-            $thumbnailName = time() . '_thumb.' . 'webp';
-            $thumbnailPath = 'berita/thumbnail/' . $thumbnailName;
-
-            $thumbnailImage = Image::make($thumbnail)
-                ->encode('webp', 80);
-            Storage::disk('public')->put($thumbnailPath, $thumbnailImage);
-
-            $berita->thumbnail = $thumbnailPath;
-        }
-
         if ($request->hasFile('foto')) {
-            Storage::disk('public')->delete($berita->foto);
+            \Illuminate\Support\Facades\Storage::disk('public')->delete($berita->foto);
 
             $foto = $request->file('foto');
-            $fotoName = time() . '_foto.' . 'webp';
-            $fotoPath = 'berita/foto/' . $fotoName;
-
-            $fotoImage = Image::make($foto)
-                ->encode('webp', 80);
-            Storage::disk('public')->put($fotoPath, $fotoImage);
-
+            $fotoPath = $foto->store('berita/foto', 'public');
             $berita->foto = $fotoPath;
         }
 
-        $berita->update([
-            'judul' => $validated['judul'],
-            'konten' => $validated['konten'],
-            'slug' => Str::slug($validated['judul'])
-        ]);
+        $berita->judul = $validated['judul'];
+        $berita->konten = $validated['konten'];
+        $berita->slug = $validated['tipe'] . '-' . \Illuminate\Support\Str::slug($validated['judul']); // Slug sesuai tipe
+        $berita->save();
 
         return response()->json([
             'message' => 'Berita berhasil diperbarui',

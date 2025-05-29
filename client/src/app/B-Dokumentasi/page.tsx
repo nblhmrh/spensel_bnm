@@ -1,70 +1,48 @@
 "use client";
 
-import React, { useState } from "react";
-import Image from "next/image";
+import React, { useState, useEffect } from "react";
 import Navbar from "../Navbar/page";
-import { StaticImageData } from "next/image";
 import Link from "next/link";
 import News from "@/pages/News";
-import videdu from "@/assets/videdu.png";
-import klasik1 from "@/assets/klasik1.png";
-import klasik2 from "@/assets/klasik2.png";
-import klasik3 from "@/assets/klasik3.png";
-import papan from "@/assets/papan.png";
-import konseling from "@/assets/konseling.png";
-import bk from "@/assets/bk.png";
-import assesmen from "@/assets/assesmen.png";
+import API from "@/utils/api";
 
-const images = [
-  { src: [videdu], title: "Video Edukasi" },
-  { src: [klasik1, klasik2, klasik3], title: "Bimbingan Klasikal" },
-  { src: [papan], title: "Papan Bimbingan" },
-  { src: [konseling], title: "Konseling" },
-  { src: [bk], title: "Bimbingan & Konseling" },
-  { src: [assesmen], title: "Assesmen" },
-];
 
-type ImageType = {
-  src: StaticImageData[];
-  title: string;
-};
 
 const DokumentasiBK = () => {
-  const [selectedImage, setSelectedImage] = useState<ImageType | null>(null);
+  const [data, setData] = useState<any[]>([]);
+  const [selectedImage, setSelectedImage] = useState<any | null>(null);
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [currentSubIndex, setCurrentSubIndex] = useState(0);
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const fetchData = async () => {
+    try {
+      const res = await API.get("/dokumentasibk");
+      setData(res.data);
+    } catch (err) {
+      alert("Gagal memuat data dokumentasi");
+    }
+  };
 
   const openModal = (index: number) => {
-    setSelectedImage(images[index]);
+    setSelectedImage(data[index]);
     setCurrentIndex(index);
-    setCurrentSubIndex(0);
   };
 
   const closeModal = () => setSelectedImage(null);
 
   const nextImage = () => {
-    if (selectedImage && selectedImage.src.length > 1) {
-      setCurrentSubIndex((prev) => (prev + 1) % selectedImage.src.length);
-    } else {
-      const newIndex = (currentIndex + 1) % images.length;
-      setSelectedImage(images[newIndex]);
-      setCurrentIndex(newIndex);
-      setCurrentSubIndex(0);
-    }
+    const newIndex = (currentIndex + 1) % data.length;
+    setSelectedImage(data[newIndex]);
+    setCurrentIndex(newIndex);
   };
 
   const prevImage = () => {
-    if (selectedImage && selectedImage.src.length > 1) {
-      setCurrentSubIndex(
-        (prev) =>
-          (prev - 1 + selectedImage.src.length) % selectedImage.src.length
-      );
-    } else {
-      const newIndex = (currentIndex - 1 + images.length) % images.length;
-      setSelectedImage(images[newIndex]);
-      setCurrentIndex(newIndex);
-      setCurrentSubIndex(0);
-    }
+    const newIndex = (currentIndex - 1 + data.length) % data.length;
+    setSelectedImage(data[newIndex]);
+    setCurrentIndex(newIndex);
   };
 
   return (
@@ -114,28 +92,26 @@ const DokumentasiBK = () => {
         </div>
         <div className="container mx-auto py-8">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
-            {images.map((img, index) => (
+            {data.map((item, index) => (
               <div
-                key={index}
+                key={item.id}
                 className="relative cursor-pointer group perspective-1000"
                 onClick={() => openModal(index)}
                 style={{
                   opacity: 0,
-                  animation: `fadeSlideUp 0.6s ease-out ${
-                    index * 0.2
-                  }s forwards`,
+                  animation: `fadeSlideUp 0.6s ease-out ${index * 0.2}s forwards`,
                 }}
               >
                 <div className="transform transition-transform duration-500 group-hover:scale-105">
-                  <Image
-                    src={img.src[0]}
-                    alt={img.title}
+                  <img
+                    src={`http://localhost:8000/storage/${item.foto}`}
+                    alt={item.judul}
                     width={400}
                     height={300}
-                    className="rounded-lg shadow-lg transition-all duration-500 group-hover:shadow-2xl"
+                    className="rounded-lg shadow-lg transition-all duration-500 group-hover:shadow-2xl object-cover"
                   />
                   <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent text-white text-center py-4 rounded-b-lg opacity-0 transform translate-y-4 transition-all duration-300 group-hover:opacity-100 group-hover:translate-y-0">
-                    <span className="font-medium text-lg">{img.title}</span>
+                    <span className="font-medium text-lg">{item.judul}</span>
                   </div>
                 </div>
                 <div className="absolute inset-0 bg-blue-500/20 rounded-lg opacity-0 transition-opacity duration-300 group-hover:opacity-100"></div>
@@ -158,12 +134,12 @@ const DokumentasiBK = () => {
             >
               &lt;
             </button>
-            <Image
-              src={selectedImage.src[currentSubIndex]}
-              alt={selectedImage.title}
+            <img
+              src={`http://localhost:8000/storage/${selectedImage.foto}`}
+              alt={selectedImage.judul}
               width={600}
               height={450}
-              className="rounded-lg transform transition-all duration-500 animate-scaleIn"
+              className="rounded-lg transform transition-all duration-500 animate-scaleIn object-cover"
             />
             <button
               className="absolute right-4 text-white text-2xl transition-transform duration-300 hover:scale-125"

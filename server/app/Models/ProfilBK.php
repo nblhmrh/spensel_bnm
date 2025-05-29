@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class ProfilBK extends Model
 {
+    protected $table = 'profilbk';
     protected $fillable = [
         'visi',
         'misi',

@@ -19,11 +19,25 @@ function LayPengaduan() {
     });
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log('Data yang dikirim:', formData);
-    alert('Pengaduan berhasil dikirim!');
-    setFormData({ name: '', kelas: '', email: '', pesan: '' });
+    try {
+      const response = await fetch("http://localhost:8000/api/pengaduan", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(formData)
+      });
+      if (!response.ok) {
+        throw new Error("Gagal mengirim pengaduan");
+      }
+      alert("Pengaduan berhasil dikirim!");
+      setFormData({ name: '', kelas: '', email: '', pesan: '' });
+    } catch (error) {
+      alert("Terjadi kesalahan saat mengirim pengaduan");
+      console.error(error);
+    }
   };
 
   return (

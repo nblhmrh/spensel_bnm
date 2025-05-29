@@ -21,6 +21,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'role', // tambahkan ini agar mass assignment kolom role bisa dilakukan
     ];
 
     /**

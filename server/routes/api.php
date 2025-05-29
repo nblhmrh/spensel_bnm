@@ -17,6 +17,9 @@ use App\Http\Controllers\FotoSekolahController;
 use App\Http\Controllers\FasilitasController;
 use App\Http\Controllers\ProfilBKController;
 use App\Http\Controllers\BeritaController;
+use App\Http\Controllers\PrestasiController;
+use App\Http\Controllers\DokumentasiBKController;
+use App\Http\Controllers\LayananBKController;
 
 
 
@@ -43,10 +46,11 @@ Route::get('/csrf-cookie', function (Request $request) {
     return response()->json(['message' => 'CSRF Cookie Set']);
 });
 
+Route::get('/users', [authController::class, 'listUsers']);
+
 Route::post('/daftar2', [Daftar2Controller::class, 'store']);
 Route::post('/datasiswa', [DatasiswaController::class, 'store']);
 Route::post('/dataortu', [DataortuController::class, 'store']);
-Route::post('/pengaduan', [PengaduanController::class, 'store']);
 Route::get('/sambutan', [SambutanController::class, 'getSambutan']);
 
 // update visi misi routes
@@ -96,11 +100,33 @@ Route::delete('/fasilitas/{id}', [FasilitasController::class, 'destroy']);
 Route::get('/fasilitas/{id}', [FasilitasController::class, 'show']);
 
 // Add these routes with the existing routes
-Route::get('/profil-bk', [ProfilBKController::class, 'index']);
-Route::post('/profil-bk', [ProfilBKController::class, 'store']);
-Route::post('/profil-bk/update', [ProfilBKController::class, 'update']);
+Route::get('/profilbk', [ProfilBKController::class, 'index']);
+Route::post('/profilbk', [ProfilBKController::class, 'store']);
+Route::post('/profilbk/update', [ProfilBKController::class, 'update']);
+
 Route::get('/berita', [BeritaController::class, 'index']);
 Route::post('/berita', [BeritaController::class, 'store']);
 Route::get('/berita/{id}', [BeritaController::class, 'show']);
-Route::post('/berita/{id}', [BeritaController::class, 'update']);
+Route::put('/berita/{id}', [BeritaController::class, 'update']);
 Route::delete('/berita/{id}', [BeritaController::class, 'destroy']);
+
+Route::get('/prestasi', [PrestasiController::class, 'index']);
+Route::post('/prestasi', [PrestasiController::class, 'store']);
+Route::get('/prestasi/{id}', [PrestasiController::class, 'show']);
+Route::post('/prestasi/{id}', [PrestasiController::class, 'update']);
+Route::delete('/prestasi/{id}', [PrestasiController::class, 'destroy']);
+
+Route::get('/dokumentasibk', [DokumentasiBKController::class, 'index']);
+Route::post('/dokumentasibk', [DokumentasiBKController::class, 'store']);
+Route::post('/dokumentasibk/{id}', [DokumentasiBKController::class, 'update']);
+Route::delete('/dokumentasibk/{id}', [DokumentasiBKController::class, 'destroy']);
+
+Route::get('/layananbk', [LayananBKController::class, 'index']);
+Route::post('/layananbk', [LayananBKController::class, 'store']);
+Route::post('/layananbk/{id}', [LayananBKController::class, 'update']);
+Route::delete('/layananbk/{id}', [LayananBKController::class, 'destroy']);
+
+Route::get('/pengaduan', [PengaduanController::class, 'index']);
+Route::post('/pengaduan', [PengaduanController::class, 'store']);
+Route::put('/pengaduan/{id}', [PengaduanController::class, 'update']);
+Route::delete('/pengaduan/{id}', [PengaduanController::class, 'destroy']);

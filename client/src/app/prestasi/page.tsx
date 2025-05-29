@@ -2,7 +2,7 @@
 
 import { motion, AnimatePresence } from "framer-motion";
 import "../style.css"
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Navbar from "../Navbar/page";
 import Link from "next/link";
 import Image, { StaticImageData } from "next/image";
@@ -12,6 +12,7 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import News from "@/pages/News";
+import API from "@/utils/api";
 import lynan1 from "@/assets/lynan1.png";
 import lynan2 from "@/assets/lynan2.png";
 import lynan3 from "@/assets/lynan3.png";
@@ -135,20 +136,55 @@ const prestasiData = [
   },
 ];
 
+// Definisikan interface untuk data prestasi
+interface Prestasi {
+  id: number;
+  judul: string;
+  tingkat: string;
+  siswa: string[];
+  tanggal: string;
+  tahun: string;
+  deskripsi: string;
+  gambar: string;
+}
+
 function Prestasi() {
-  type Prestasi = {
-    id: number;
-    image: StaticImageData;
-    title: string;
-    level: string;
-    students: string[];
-    date: string;
-    year: string;
-    description?: string;
-    link?: string;
-  };
-  
+  const [prestasiData, setPrestasiData] = useState<Prestasi[]>([]);
   const [selectedPrestasi, setSelectedPrestasi] = useState<Prestasi | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    fetchPrestasi();
+    
+    const handleStorageChange = () => {
+      const lastUpdate = localStorage.getItem('prestasi_updated');
+      if (lastUpdate) {
+        fetchPrestasi();
+        localStorage.removeItem('prestasi_updated');
+      }
+    };
+
+    window.addEventListener('storage', handleStorageChange);
+    window.addEventListener('prestasi_updated', handleStorageChange);
+
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+      window.removeEventListener('prestasi_updated', handleStorageChange);
+    };
+  }, []);
+
+  const fetchPrestasi = async () => {
+    try {
+      const response = await API.get('/prestasi');
+      setPrestasiData(response.data);
+      setLoading(false);
+    } catch (error) {
+      console.error('Error fetching prestasi:', error);
+      setError('Gagal memuat data prestasi');
+      setLoading(false);
+    }
+  };
 
   return (
     <>
@@ -271,33 +307,43 @@ function Prestasi() {
               }}
               className="pb-12"
             >
-              {prestasiData.map((prestasi) => (
-                <SwiperSlide key={prestasi.id}>
-                  <motion.div
-                    whileHover={{ scale: 1.03 }}
-                    whileTap={{ scale: 0.98 }}
-                    className="p-2"
-                  >
-                    <button 
-                      onClick={() => setSelectedPrestasi(prestasi)}
-                      className="block w-full overflow-hidden rounded-xl"
+              {loading ? (
+                <div className="flex justify-center items-center min-h-[300px]">
+                  <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#154472]"></div>
+                </div>
+              ) : error ? (
+                <div className="text-center text-red-500 py-8">
+                  {error}
+                </div>
+              ) : (
+                prestasiData.map((prestasi) => (
+                  <SwiperSlide key={prestasi.id}>
+                    <motion.div
+                      whileHover={{ scale: 1.03 }}
+                      whileTap={{ scale: 0.98 }}
+                      className="p-2"
                     >
-                      <div className="relative group">
-                        <Image
-                          src={prestasi.image}
-                          alt={`Prestasi ${prestasi.id}`}
-                          width={400}
-                          height={400}
-                          className="w-full h-[350px] object-cover rounded-xl shadow-lg transition-transform duration-500 group-hover:scale-110"
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-center pb-6">
-                          <span className="text-white text-lg font-semibold">Lihat Detail</span>
+                      <button 
+                        onClick={() => setSelectedPrestasi(prestasi)}
+                        className="block w-full overflow-hidden rounded-xl"
+                      >
+                        <div className="relative group">
+                        <img
+                            src={`http://localhost:8000/storage/${prestasi.gambar}`}
+                            alt={`prestasi ${prestasi.judul}`}
+                            width={400}
+                            height={400}
+                            className="w-full h-[350px] object-cover rounded-xl shadow-lg transition-transform duration-500 group-hover:scale-110"
+                          />
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-center pb-6">
+                            <span className="text-white text-lg font-semibold">Lihat Detail</span>
+                          </div>
                         </div>
-                      </div>
-                    </button>
-                  </motion.div>
-                </SwiperSlide>
-              ))}
+                      </button>
+                    </motion.div>
+                  </SwiperSlide>
+                ))
+              )}
             </Swiper>
           </div>
         </motion.div>
@@ -339,12 +385,11 @@ function Prestasi() {
 
                 {/* Full Image Section */}
                 <div className="relative w-full aspect-[16/9]">
-                  <Image
-                    src={selectedPrestasi.image}
-                    alt={selectedPrestasi.title || "Prestasi Image"}
-                    fill
+                  <img
+                    src={`http://localhost:8000/storage/${selectedPrestasi.gambar}`}
+                    alt={`prestasi ${selectedPrestasi.judul}`}
                     className="object-cover"
-                    priority
+                    
                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 1200px"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent"></div>
@@ -354,7 +399,7 @@ function Prestasi() {
                     transition={{ delay: 0.3 }}
                     className="absolute bottom-6 left-6 right-6 text-white text-3xl font-bold"
                   >
-                    {selectedPrestasi.title}
+                    {selectedPrestasi.judul}
                   </motion.h2>
                 </div>
 
@@ -367,7 +412,7 @@ function Prestasi() {
                     transition={{ delay: 0.4 }}
                     className="inline-flex items-center px-4 py-2 bg-yellow-100 text-yellow-800 rounded-full font-semibold text-sm"
                   >
-                    {selectedPrestasi.level}
+                    {selectedPrestasi.tingkat}
                   </motion.div>
 
                   {/* Students Section */}
@@ -384,7 +429,10 @@ function Prestasi() {
                       Siswa Berprestasi
                     </h4>
                     <ul className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      {selectedPrestasi.students?.map((student, index) => (
+                      {(Array.isArray(selectedPrestasi.siswa) 
+                        ? selectedPrestasi.siswa 
+                        : JSON.parse(selectedPrestasi.siswa || '[]')
+                      ).map((siswa, index) => (
                         <motion.li
                           key={index}
                           initial={{ opacity: 0, x: -20 }}
@@ -393,7 +441,7 @@ function Prestasi() {
                           className="flex items-center gap-3 text-gray-700"
                         >
                           <span className="w-2 h-2 bg-blue-400 rounded-full"></span>
-                          <span className="font-medium">{student}</span>
+                          <span className="font-medium">{siswa}</span>
                         </motion.li>
                       ))}
                     </ul>
@@ -410,18 +458,18 @@ function Prestasi() {
                       <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                       </svg>
-                      <span className="text-gray-700 font-medium">{selectedPrestasi.date}</span>
+                      <span className="text-gray-700 font-medium">{selectedPrestasi.tanggal}</span>
                     </div>
                     <div className="flex items-center gap-2 bg-gray-100 px-4 py-2 rounded-full">
                       <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                       </svg>
-                      <span className="text-gray-700 font-medium">Tahun {selectedPrestasi.year}</span>
+                      <span className="text-gray-700 font-medium">Tahun {selectedPrestasi.tahun}</span>
                     </div>
                   </motion.div>
 
                   {/* Description */}
-                  {selectedPrestasi.description && (
+                  {selectedPrestasi.deskripsi && (
                     <motion.div
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
@@ -429,7 +477,7 @@ function Prestasi() {
                       className="bg-gray-50 rounded-2xl p-6"
                     >
                       <p className="text-gray-700 leading-relaxed">
-                        {selectedPrestasi.description}
+                        {selectedPrestasi.deskripsi}
                       </p>
                     </motion.div>
                   )}

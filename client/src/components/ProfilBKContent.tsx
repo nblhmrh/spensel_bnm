@@ -26,7 +26,7 @@ export default function ProfilBKContent() {
 
   const fetchProfilBK = async () => {
     try {
-      const response = await API.get('/profil-bk');
+      const response = await API.get('/profilbk');
       if (response.data) {
         setFormData({
           ...response.data,
@@ -61,15 +61,36 @@ export default function ProfilBKContent() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
+
+    // Validasi sederhana di frontend
+    if (
+      !formData.visi ||
+      !formData.misi ||
+      !formData.intro_text ||
+      !formData.teacher_name ||
+      !formData.teacher_birth ||
+      !formData.teacher_education ||
+      !formData.teacher_instagram
+      // Tidak ada validasi teacher_photo di sini, jadi sudah nullable
+    ) {
+      setMessage({ type: 'error', content: 'Semua field wajib diisi.' });
+      setLoading(false);
+      return;
+    }
+
     try {
       const formDataToSend = new FormData();
       Object.entries(formData).forEach(([key, value]) => {
-        if (value !== null) {
-          formDataToSend.append(key, value);
+        if (key === "teacher_photo") {
+          if (value) {
+            formDataToSend.append(key, value);
+          }
+        } else {
+          formDataToSend.append(key, value as string);
         }
       });
 
-      await API.post('/profil-bk/update', formDataToSend, {
+      await API.post('/profilbk', formDataToSend, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }
@@ -77,9 +98,14 @@ export default function ProfilBKContent() {
 
       setMessage({ type: 'success', content: 'Profil BK berhasil diupdate!' });
       setTimeout(() => setMessage({ type: '', content: '' }), 3000);
-    } catch (error) {
+    } catch (error: any) {
+      // Ambil pesan error dari backend jika ada
+      let errorMsg = 'Gagal mengupdate Profil BK.';
+      if (error.response && error.response.data && error.response.data.message) {
+        errorMsg = error.response.data.message;
+      }
+      setMessage({ type: 'error', content: errorMsg });
       console.error('Error updating profil BK:', error);
-      setMessage({ type: 'error', content: 'Gagal mengupdate Profil BK.' });
     } finally {
       setLoading(false);
     }

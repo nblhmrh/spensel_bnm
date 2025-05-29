@@ -16,3 +16,25 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+
+
+Route::middleware(['auth', 'role:admin'])->group(function () {
+    Route::get('/BerandaAdmin', function () {
+        return view('admin');
+    });
+    Route::get('/AkreditasiAdmin', function () {
+        return view('admin');
+    });
+    Route::get('/StrukturAdmin', function () {
+        return view('admin');
+    });
+    Route::get('/PrestasiAdmin', function () {
+        return view('admin');
+    });
+    Route::get('/FasilitasAdmin', function () {
+        return view('admin');
+    });
+    Route::get('/VisiMisiAdmin', function () {
+        return view('admin');
+    });
+});

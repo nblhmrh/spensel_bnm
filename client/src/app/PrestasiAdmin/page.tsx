@@ -1,11 +1,11 @@
 'use client'
 import BerandaAdmin from '../BerandaAdmin/page'
-import ProfilBKContent from '@/components/ProfilBKContent'
+import PrestasiContent from '@/components/PrestasiContent'
 
 export default function ProfilBKAdmin() {
   return (
     <BerandaAdmin>
-      <ProfilBKContent />
+      <PrestasiContent />
     </BerandaAdmin>
   )
 }

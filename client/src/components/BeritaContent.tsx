@@ -4,26 +4,31 @@ import React, { useState, useEffect } from 'react';
 import API from '@/utils/api';
 import { toast } from 'react-toastify';
 
+
 interface Berita {
   id: number;
   judul: string;
-  thumbnail: string;
   foto: string;
   konten: string;
   slug: string;
 }
 
 export default function AdminBerita() {
+  const resetForm = () => {
+    setForm({ judul: '', foto: null, konten: '' });
+    setEditId(null);
+    setCurrentBerita(null);
+  };
   const [berita, setBerita] = useState<Berita[]>([]);
   const [selectedBerita, setSelectedBerita] = useState<string>('berita1');
   const [form, setForm] = useState({
     judul: '',
-    thumbnail: null as File | null,
     foto: null as File | null,
     konten: ''
   });
   const [loading, setLoading] = useState(false);
   const [editId, setEditId] = useState<number | null>(null);
+  const [currentBerita, setCurrentBerita] = useState<Berita | null>(null);
 
   const fetchBerita = async () => {
     try {
@@ -58,24 +63,26 @@ export default function AdminBerita() {
     };
   }, []);
 
-  // Pastikan state form memiliki tipe yang benar
-  interface FormState {
-    judul: string;
-    thumbnail: File | null;
-    foto: File | null;
-    konten: string;
-  }
-  
   // Pastikan fungsi handleFileChange menyimpan objek File, bukan string
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>, field: 'thumbnail' | 'foto') => {
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       setForm({
         ...form,
-        [field]: e.target.files[0] // Simpan objek File, bukan nama file
+        foto: e.target.files[0]
       });
     }
   };
-  
+
+  const handleEdit = (item: Berita) => {
+    setForm({
+      judul: item.judul,
+      foto: null,
+      konten: item.konten
+    });
+    setEditId(item.id);
+    setCurrentBerita(item);
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
@@ -84,77 +91,59 @@ export default function AdminBerita() {
       const formData = new FormData();
       formData.append('judul', form.judul);
       formData.append('konten', form.konten);
+      formData.append('tipe', selectedBerita);
 
-      // Jika edit, file bisa opsional
-      if (!editId) {
-        if (!form.thumbnail || !form.foto) {
-          toast.error('Silakan pilih file thumbnail dan foto');
+      if (editId) {
+        if (form.foto) formData.append('foto', form.foto);
+        formData.append('_method', 'PUT');
+      } else {
+        if (!form.foto) {
+          toast.error('Silakan pilih file foto');
           setLoading(false);
           return;
         }
-        formData.append('thumbnail', form.thumbnail);
         formData.append('foto', form.foto);
-      } else {
-        if (form.thumbnail) formData.append('thumbnail', form.thumbnail);
-        if (form.foto) formData.append('foto', form.foto);
       }
 
       const config = {
         headers: {
           'Accept': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('token')}`
-        },
-        maxBodyLength: Infinity,
-        maxContentLength: Infinity,
-        timeout: 60000
+          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+          'Content-Type': 'multipart/form-data' // Tambahkan ini!
+        }
       };
 
       let response;
       if (editId) {
-        // Update data
-        response = await API.post(`/berita/${editId}?_method=PUT`, formData, config);
+        response = await API.post(`/berita/${editId}`, formData, config);
         toast.success('Berita berhasil diupdate');
       } else {
-        // Tambah data baru
         response = await API.post('/berita', formData, config);
         toast.success('Berita berhasil ditambahkan');
       }
 
-      setForm({ judul: '', thumbnail: null, foto: null, konten: '' });
+      setForm({ judul: '', foto: null, konten: '' });
       setEditId(null);
+      setCurrentBerita(null);
       await fetchBerita();
 
-    } catch (error: any) {
-      console.error('Upload Error Details:', {
-        name: error.name,
-        message: error.message,
-        status: error.response?.status,
-        data: error.response?.data,
-        config: error.config
-      });
-      
-      let errorMessage = 'Gagal menyimpan berita: ';
-      
-      if (error.response?.data?.message) {
-        errorMessage += error.response.data.message;
-      } else if (error.message) {
-        errorMessage += error.message;
-      } else {
-        errorMessage += 'Terjadi kesalahan pada server';
-      }
-      
-      toast.error(errorMessage);
+      localStorage.setItem('berita_updated', Date.now().toString());
+      window.dispatchEvent(new Event('storage'));
+      window.dispatchEvent(new CustomEvent('berita_updated'));
+    } catch (error) {
+      console.error('Error:', error);
+      toast.error('Gagal menyimpan berita');
     } finally {
       setLoading(false);
     }
-};
+  };
 
-  const handleDelete = async (id: number) => {
+const handleDelete = async (id: number) => {
     if (window.confirm('Apakah Anda yakin ingin menghapus berita ini?')) {
       try {
         await API.delete(`/berita/${id}`);
         toast.success('Berita berhasil dihapus');
-        fetchBerita();
+        await fetchBerita(); // Pastikan pakai await agar data benar-benar di-refresh
       } catch (error) {
         toast.error('Gagal menghapus berita');
       }
@@ -198,21 +187,10 @@ export default function AdminBerita() {
         </div>
 
         <div className="mb-4">
-          <label className="block text-black font-medium mb-2">Thumbnail</label>
-          <input
-            type="file"
-            onChange={(e) => setForm({ ...form, thumbnail: e.target.files?.[0] || null })}
-            className="w-full text-black"
-            accept="image/*"
-            required={!editId}
-          />
-        </div>
-
-        <div className="mb-4">
           <label className="block text-black font-medium mb-2">Foto</label>
           <input
             type="file"
-            onChange={(e) => setForm({ ...form, foto: e.target.files?.[0] || null })}
+            onChange={handleFileChange}
             className="w-full text-black"
             accept="image/*"
             required={!editId}
@@ -236,17 +214,6 @@ export default function AdminBerita() {
         >
           {loading ? 'Menyimpan...' : (editId ? 'Update' : 'Tambah')} {selectedBerita}
         </button>
-        
-        <button
-          type="button"
-          onClick={() => {
-            setEditId(null);
-            setForm({ judul: '', thumbnail: null, foto: null, konten: '' });
-          }}
-          className="ml-2 bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 transition-colors"
-        >
-          Batal Edit
-        </button>
       </form>
 
       <div className="space-y-4">
@@ -260,15 +227,7 @@ export default function AdminBerita() {
               </div>
               <div className="space-x-2">
                 <button
-                  onClick={() => {
-                    setEditId(item.id);
-                    setForm({
-                      judul: item.judul,
-                      thumbnail: null, // Tidak bisa set file lama, hanya bisa upload baru jika ingin ganti
-                      foto: null,
-                      konten: item.konten
-                    });
-                  }}
+                  onClick={() => handleEdit(item)}
                   className="text-blue-600 hover:text-blue-800"
                 >
                   Edit
