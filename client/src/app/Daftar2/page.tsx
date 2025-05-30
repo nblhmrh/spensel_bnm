@@ -48,6 +48,26 @@ export default function RegistrationForm() {
       );
   
       if (response.status === 201) {
+        // Ambil data user lama dari localStorage
+        const userStr = localStorage.getItem("user");
+        let userObj = {};
+        if (userStr) {
+          try {
+            userObj = JSON.parse(userStr);
+          } catch {
+            userObj = {};
+          }
+        }
+
+        // Update data user dengan nama & whatsapp dari response (atau form)
+        const updatedUser = {
+          ...userObj,
+          name: response.data.full_name || formData.name,
+          whatsapp: response.data.whatsapp_number || formData.whatsapp,
+        };
+        localStorage.setItem("user", JSON.stringify(updatedUser));
+
+        // Tidak perlu login ulang!
         router.push("/Berandappdb");
       }
     } catch (error: any) {

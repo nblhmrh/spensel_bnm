@@ -75,7 +75,7 @@ class AuthController extends Controller
         $users = $query->get(['id', 'name', 'email', 'role']);
         return response()->json($users);
     }
-    
+
     public function logout(Request $request) {
         if (!$request->user()) {
             return response()->json(['error' => 'Unauthorized'], 401);
@@ -83,5 +83,24 @@ class AuthController extends Controller
 
         $request->user()->tokens()->delete();
         return response()->json(['message' => 'Logged out successfully'], 200);
+    }
+
+    public function updateUser(Request $request, $id)
+    {
+        $user = User::findOrFail($id);
+        $user->name = $request->name;
+        $user->email = $request->email;
+        $user->role = $request->role;
+        $user->save();
+
+        return response()->json(['message' => 'User updated successfully', 'user' => $user]);
+    }
+
+    public function deleteUser($id)
+    {
+        $user = User::findOrFail($id);
+        $user->delete();
+
+        return response()->json(['message' => 'User deleted successfully']);
     }
 }

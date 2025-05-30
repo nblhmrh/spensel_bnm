@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import API from '@/utils/api';
 import { toast } from 'react-toastify';
-
+import { useRouter } from 'next/navigation';
 
 interface Berita {
   id: number;
@@ -14,6 +14,8 @@ interface Berita {
 }
 
 export default function AdminBerita() {
+  const router = useRouter();
+
   const resetForm = () => {
     setForm({ judul: '', foto: null, konten: '' });
     setEditId(null);
@@ -38,6 +40,25 @@ export default function AdminBerita() {
       toast.error('Gagal memuat data berita');
     }
   };
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    const user = localStorage.getItem("user");
+    if (!token || !user) {
+      router.replace("/Welcome");
+      return;
+    }
+    let userObj;
+    try {
+      userObj = JSON.parse(user);
+    } catch {
+      router.replace("/Welcome");
+      return;
+    }
+    if (!userObj.role || userObj.role !== "admin") {
+      router.replace("/Welcome");
+    }
+  }, [router]);
 
   useEffect(() => {
     fetchBerita();

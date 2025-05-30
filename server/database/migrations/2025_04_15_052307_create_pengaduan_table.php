@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('kelas');
             $table->string('email')->unique();
-            $table->string('pesan');
+            $table->text('pesan');
             $table->timestamps();
         });
     }

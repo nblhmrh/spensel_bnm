@@ -13,13 +13,30 @@ import {
 import Image from "next/image";
 import logo from "@/assets/logo.png";
 import { useRouter } from "next/navigation";
-// import { FaArrowLeft } from "react-icons/fa";
-
-// import axios from "axios";
 
 export default function Bantuan() {
   const router = useRouter();
   const [sidebarTerbuka, setSidebarTerbuka] = useState(true);
+
+  // Proteksi role user
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    const user = localStorage.getItem("user");
+    if (!token || !user) {
+      router.replace("/Welcome");
+      return;
+    }
+    let userObj;
+    try {
+      userObj = JSON.parse(user);
+    } catch {
+      router.replace("/Welcome");
+      return;
+    }
+    if (!userObj.role || userObj.role !== "user") {
+      router.replace("/Welcome");
+    }
+  }, [router]);
 
   // Ambil dari localStorage saat pertama kali load
   useEffect(() => {
@@ -33,6 +50,12 @@ export default function Bantuan() {
   useEffect(() => {
     localStorage.setItem("sidebarTerbuka", sidebarTerbuka.toString());
   }, [sidebarTerbuka]);
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    router.replace("/Welcome");
+  };
 
   return (
     <div className="flex">
@@ -102,7 +125,7 @@ export default function Bantuan() {
 
       {/* Tombol Keluar */}
       <button
-        onClick={() => router.push("/Welcome")}
+        onClick={handleLogout}
         className="mt-auto bg-[#154472] text-white py-2 flex items-center justify-center rounded-lg hover:bg-red-800 transition-all"
       >
         <FaSignOutAlt className="text-lg mr-2" />

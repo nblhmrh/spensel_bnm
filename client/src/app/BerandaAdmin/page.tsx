@@ -136,6 +136,20 @@ export default function Dashboard({
               >
                 <FaHome className="mr-2" /> Dashboard
               </button>
+              {/* Tombol Tambah Akun di bawah Dashboard */}
+              <button
+                onClick={() => {
+                  setActivePath("/BuatAkun");
+                  router.push("/BuatAkun");
+                }}
+                className={`flex items-center text-left w-full px-4 py-2 mt-2 rounded-lg font-semibold ${
+                  activePath === "/BuatAkun"
+                    ? "bg-blue-100 text-blue-800 border-2 border-[#154472]"
+                    : "hover:bg-gray-200"
+                }`}
+              >
+                <FaUserTie className="mr-2" /> Tambah Akun
+              </button>
             </div>
 
             {/* Beranda */}

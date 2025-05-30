@@ -23,6 +23,26 @@ export default function BerandaBK({
   const router = useRouter();
   const [sidebarTerbuka, setSidebarTerbuka] = useState(true);
 
+  // Proteksi role BK
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    const user = localStorage.getItem("user");
+    if (!token || !user) {
+      router.replace("/Welcome");
+      return;
+    }
+    let userObj;
+    try {
+      userObj = JSON.parse(user);
+    } catch {
+      router.replace("/Welcome");
+      return;
+    }
+    if (!userObj.role || userObj.role !== "bk") {
+      router.replace("/Welcome");
+    }
+  }, [router]);
+
   // Ambil dari localStorage saat pertama kali load
   useEffect(() => {
     const saved = localStorage.getItem("sidebarTerbuka");
@@ -38,7 +58,8 @@ export default function BerandaBK({
 
   const handleLogout = () => {
     localStorage.removeItem("token");
-    router.push("/");
+    localStorage.removeItem("user");
+    router.replace("/Welcome");
   };
 
   return (
