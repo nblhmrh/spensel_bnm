@@ -30,6 +30,15 @@ export default function DetailBerita() {
   return (
     <div className="min-h-screen bg-gray-50 py-10">
       <div className="max-w-3xl mx-auto bg-white rounded-xl shadow p-6">
+        {/* Tombol kembali */}
+        <div className="mb-4">
+          <Link
+            href="/Berita"
+            className="inline-block px-4 py-2 bg-[#154472] text-white rounded hover:bg-[#11345a] transition"
+          >
+            &larr; Kembali ke Halaman Berita
+          </Link>
+        </div>
         <h2 className="text-3xl font-bold text-[#154472] mb-6 text-center">
           {berita.judul}
         </h2>
