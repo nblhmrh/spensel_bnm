@@ -1,65 +1,38 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import Navbar from "../Navbar/page";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import Card from "@/pages/Card";
+import API from "@/utils/api"; // axios instance, baseURL pointing to backend
 import Image from "next/image";
-import lynan1 from "@/assets/lynan1.png";
-import lynan2 from "@/assets/lynan2.png";
-import lynan3 from "@/assets/lynan3.png";
-import lynan4 from "@/assets/lynan4.png";
-import lynan5 from "@/assets/lynan5.png";
-import klasik1 from "@/assets/klasik1.png";
 
-// Update the newsData array to use imported images
-const newsData = [
-  { 
-    id: 1, 
-    image: lynan1, 
-    link: "/Berita1",
-    title: "Pertemuan Orang Tua Siswa Kelas IX",
-    date: "15 Agustus 2023"
-  },
-  { 
-    id: 2, 
-    image: lynan2, 
-    link: "/Berita2",
-    title: "Kegiatan Literasi Digital",
-    date: "20 Agustus 2023"
-  },
-  { 
-    id: 3, 
-    image: lynan3, 
-    link: "/Berita3",
-    title: "Pelatihan Guru dan Staff",
-    date: "25 Agustus 2023"
-  },
-  { 
-    id: 4, 
-    image: lynan4, 
-    link: "/Berita4",
-    title: "Program Pengembangan Karakter",
-    date: "30 Agustus 2023"
-  },
-  { 
-    id: 5, 
-    image: lynan5, 
-    link: "/Berita5",
-    title: "Prestasi Siswa dalam Olimpiade",
-    date: "5 September 2023"
-  },
-  { 
-    id: 6, 
-    image: klasik1, 
-    link: "/Berita6",
-    title: "Kegiatan Ekstrakurikuler",
-    date: "10 September 2023"
-  }
-];
+interface Berita {
+  id: number;
+  judul: string;
+  foto: string;
+  slug: string;
+  tanggal: string;
+}
 
 function Berita() {
-  
+  const [newsData, setNewsData] = useState<Berita[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchBerita = async () => {
+      try {
+        const response = await API.get("/berita");
+        setNewsData(response.data);
+      } catch (err) {
+        setNewsData([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchBerita();
+  }, []);
+
   return (
     <>
       <motion.div 
@@ -155,44 +128,47 @@ function Berita() {
             </motion.p>
           </motion.div>
 
-          <motion.div 
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 px-4 pb-8"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-          >
-            {newsData.map((news, index) => (
-              <motion.div
-                key={news.id}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.2 + index * 0.1 }}
-                whileHover={{ scale: 1.03 }}
-                className="bg-white rounded-xl shadow-lg overflow-hidden transform transition-all duration-300"
-              >
-                <Link href={news.link}>
-                  <div className="relative group">
-                    <Image
-                      src={news.image}
-                      alt={news.title}
-                      width={400}
-                      height={250}
-                      className="w-full h-48 object-cover transition-transform duration-500 group-hover:scale-110"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                  </div>
-                  <div className="p-6">
-                    <h3 className="text-xl font-semibold text-[#154472] mb-2 group-hover:text-blue-700 transition-colors duration-300">
-                      {news.title}
-                    </h3>
-                    <p className="text-gray-600 text-sm">
-                      {news.date}
-                    </p>
-                  </div>
-                </Link>
-              </motion.div>
-            ))}
-          </motion.div>
+          {loading ? (
+            <div className="text-center py-10">Memuat berita...</div>
+          ) : (
+            <motion.div 
+              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 px-4 pb-8"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+            >
+              {newsData.map((news) => (
+                <motion.div
+                  key={news.id}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.2 }}
+                  whileHover={{ scale: 1.03 }}
+                  className="bg-white rounded-xl shadow-lg overflow-hidden transform transition-all duration-300"
+                >
+                  {/* Perbaiki Link agar langsung ke halaman detail berita sesuai slug */}
+                  <Link href={`/Berita/${news.slug}`}>
+                    <div className="relative group">
+                      <img
+                        src={`http://localhost:8000/storage/${news.foto}`}
+                        alt={news.judul}
+                        className="w-full h-48 object-cover transition-transform duration-500 group-hover:scale-110"
+                        onError={(e) => (e.currentTarget.style.display = "none")}
+                      />
+                    </div>
+                    <div className="p-6">
+                      <h3 className="text-xl font-semibold text-[#154472] mb-2 group-hover:text-blue-700 transition-colors duration-300">
+                        {news.judul}
+                      </h3>
+                      <p className="text-gray-600 text-sm">
+                        {news.tanggal}
+                      </p>
+                    </div>
+                  </Link>
+                </motion.div>
+              ))}
+            </motion.div>
+          )}
         </div>
       </div>
       {/* Bottom Wave with Animation */}
@@ -222,10 +198,6 @@ function Berita() {
             }}
           />
         </motion.svg>
-      </div>
-
-      <div className="relative bg-[#154472]">
-        <Card />
       </div>
     </>
   );

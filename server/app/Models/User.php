@@ -20,8 +20,9 @@ class User extends Authenticatable
     protected $fillable = [
         'name',
         'email',
+        'whatsapp',
         'password',
-        'role', // tambahkan ini agar mass assignment kolom role bisa dilakukan
+        'role',
     ];
 
     /**
@@ -42,10 +43,6 @@ class User extends Authenticatable
     protected $casts = [
       'password' => 'hashed'
     ];
-
-    public function daftar2() {
-        return $this->hasMany(Daftar2::class);
-    }
 
     public function datasiswa()
     {

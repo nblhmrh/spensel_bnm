@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('name')->nullable();
             $table->string('email')->unique();
+            $table->string('whatsapp')->unique();
             $table->string('password');
             $table->string('role')->default('user');
             $table->rememberToken();

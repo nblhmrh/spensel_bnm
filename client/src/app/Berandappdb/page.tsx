@@ -72,7 +72,7 @@ export default function Dashboard() {
         const userObj = JSON.parse(userStr);
         setUser({
           id: userObj.id || "",
-          name: userObj.name || "",
+          name: userObj.name ||  "",
           email: userObj.email || "",
           whatsapp: userObj.whatsapp || "",
         });
