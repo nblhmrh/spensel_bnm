@@ -17,14 +17,14 @@ export default function Pendaftaran() {
     tempat_lahir: "",
     tanggal_lahir: "",
     asal_sekolah: "",
-    alamat: "",
+         // Field ini required di backend
     desa: "",
     rt: "",
     rw: "",
     kecamatan: "",
     kabupaten: "",
     provinsi: "",
-    alamatlengkap: "",
+    alamatlengkap: "",   // Ini mungkin duplikat dengan alamat?
     jarakrumah: "",
   });
   const [isLoading, setIsLoading] = useState(false); // State untuk loading
@@ -55,18 +55,25 @@ export default function Pendaftaran() {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setIsLoading(true); // Mulai loading
+    
+  
+
+    setIsLoading(true);
 
     try {
-      const response = await axios.post("http://127.0.0.1:8000/api/datasiswa", formData);
-      alert("Data berhasil dikirim!");
-      console.log(response.data);
-      router.push("/Berandappdb"); // Redirect ke halaman beranda setelah berhasil
+      const response = await axios.post("http://localhost:8000/api/datasiswa", formData);
+      alert("Data berhasil disimpan!");
+      router.push("/Berandappdb");
     } catch (error) {
-      console.error("Error mengirim data:", error);
-      alert("Gagal mengirim data. Silakan coba lagi.");
+      if (axios.isAxiosError(error) && error.response) {
+        // Tampilkan error detail dari backend
+        const errorMessage = error.response.data.message || "Terjadi kesalahan";
+        alert(errorMessage);
+      } else {
+        alert("Gagal mengirim data. Silakan coba lagi.");
+      }
     } finally {
-      setIsLoading(false); // Berhenti loading
+      setIsLoading(false);
     }
   };
 
