@@ -1,3 +1,5 @@
+import { FaTimes, FaChevronLeft, FaChevronRight } from "react-icons/fa";
+
 export default function Modal({ onConfirm, onCancel }) {
   return (
     <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
@@ -10,12 +12,14 @@ export default function Modal({ onConfirm, onCancel }) {
             onClick={onConfirm}
             className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
           >
+            <FaTimes className="inline-block mr-2" />
             Hapus
           </button>
           <button
             onClick={onCancel}
             className="bg-gray-300 px-4 py-2 rounded hover:bg-gray-400"
           >
+            <FaChevronLeft className="inline-block mr-2" />
             Batal
           </button>
         </div>

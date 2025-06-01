@@ -5,8 +5,7 @@ import Navbar from "../Navbar/page";
 import Link from "next/link";
 import News from "@/pages/News";
 import API from "@/utils/api";
-
-
+import { FaTimes, FaChevronLeft, FaChevronRight } from "react-icons/fa";
 
 const DokumentasiBK = () => {
   const [data, setData] = useState<any[]>([]);
@@ -99,7 +98,9 @@ const DokumentasiBK = () => {
                 onClick={() => openModal(index)}
                 style={{
                   opacity: 0,
-                  animation: `fadeSlideUp 0.6s ease-out ${index * 0.2}s forwards`,
+                  animation: `fadeSlideUp 0.6s ease-out ${
+                    index * 0.2
+                  }s forwards`,
                 }}
               >
                 <div className="transform transition-transform duration-500 group-hover:scale-105">
@@ -122,18 +123,23 @@ const DokumentasiBK = () => {
 
         {selectedImage && (
           <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 animate-modalFadeIn">
+            {/* Close Button */}
             <button
-              className="absolute top-4 right-4 text-white text-2xl transition-transform duration-300 hover:scale-125 hover:rotate-90"
+              className="absolute top-6 right-8 text-white text-3xl p-2 rounded-full bg-black/40 hover:bg-black/70 transition"
               onClick={closeModal}
+              aria-label="Tutup"
             >
-              &times;
+              <FaTimes />
             </button>
+            {/* Previous Button */}
             <button
-              className="absolute left-4 text-white text-2xl transition-transform duration-300 hover:scale-125"
+              className="absolute left-8 top-1/2 -translate-y-1/2 text-white text-4xl p-2 rounded-full bg-black/40 hover:bg-black/70 transition"
               onClick={prevImage}
+              aria-label="Sebelumnya"
             >
-              &lt;
+              <FaChevronLeft />
             </button>
+            {/* Image */}
             <img
               src={`http://localhost:8000/storage/${selectedImage.foto}`}
               alt={selectedImage.judul}
@@ -141,11 +147,13 @@ const DokumentasiBK = () => {
               height={450}
               className="rounded-lg transform transition-all duration-500 animate-scaleIn object-cover"
             />
+            {/* Next Button */}
             <button
-              className="absolute right-4 text-white text-2xl transition-transform duration-300 hover:scale-125"
+              className="absolute right-8 top-1/2 -translate-y-1/2 text-white text-4xl p-2 rounded-full bg-black/40 hover:bg-black/70 transition"
               onClick={nextImage}
+              aria-label="Selanjutnya"
             >
-              &gt;
+              <FaChevronRight />
             </button>
           </div>
         )}

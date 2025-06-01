@@ -9,121 +9,88 @@ function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const router = useRouter();
 
+  const navItems = [
+    { path: "/", label: "Beranda" },
+    { path: "/TentangKami", label: "Tentang Kami" },
+    { path: "/BK", label: "BK" },
+    { path: "/Program", label: "Program" },
+    { path: "/PPDB", label: "PPDB" },
+  ];
+
   return (
-    <div>
-      <nav className="fixed top-0 left-0 w-full z-50 flex justify-end items-center px-6 text-white bg-[#154472] shadow-md transition-all duration-300 ease-in-out">
-        <div className="flex items-center mr-auto transform hover:scale-105 transition-transform duration-300">
-          <Image src={logo} alt="Logo Sekolah" width={100} height={100} />
-        </div>
+    <div className="relative">
+      <nav className="fixed top-0 left-0 w-full z-50 bg-[#154472] shadow-md transition-all duration-300 ease-in-out">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center h-16 md:h-20">
+            {/* Logo */}
+            <div className="flex-shrink-0 transform hover:scale-105 transition-transform duration-300">
+              <Image src={logo} alt="Logo Sekolah" width={80} height={80} className="w-auto h-12 md:h-16" />
+            </div>
 
-        {/* Menu Desktop */}
-        <ul className="hidden md:flex space-x-7">
-          <li className="transform hover:scale-105 transition-all duration-300">
-            <button 
-              onClick={() => router.push("/")} 
-              className="hover:text-gray-300 font-medium relative after:content-[''] after:absolute after:w-full after:h-0.5 after:bg-white after:left-0 after:-bottom-1 after:scale-x-0 hover:after:scale-x-100 after:transition-transform after:duration-300 transition-colors duration-300"
-              type="button">
-              Beranda
-            </button>
-          </li>
-          <li className="transform hover:scale-105 transition-all duration-300">
-            <button 
-              onClick={() => router.push("/TentangKami")} 
-              className="hover:text-gray-300 font-medium relative after:content-[''] after:absolute after:w-full after:h-0.5 after:bg-white after:left-0 after:-bottom-1 after:scale-x-0 hover:after:scale-x-100 after:transition-transform after:duration-300"
-              type="button">
-              Tentang Kami
-            </button>
-          </li>
-          <li className="transform hover:scale-105 transition-all duration-300">
-            <button 
-              onClick={() => router.push("/BK")} 
-              className="hover:text-gray-300 font-medium relative after:content-[''] after:absolute after:w-full after:h-0.5 after:bg-white after:left-0 after:-bottom-1 after:scale-x-0 hover:after:scale-x-100 after:transition-transform after:duration-300">
-              BK
-            </button>
-          </li>
-          <li className="transform hover:scale-105 transition-all duration-300">
-            <button 
-              onClick={() => router.push("/Program")} 
-              className="hover:text-gray-300 font-medium relative after:content-[''] after:absolute after:w-full after:h-0.5 after:bg-white after:left-0 after:-bottom-1 after:scale-x-0 hover:after:scale-x-100 after:transition-transform after:duration-300">
-              Program
-            </button>
-          </li>
-          <li className="transform hover:scale-105 transition-all duration-300">
-            <button 
-              onClick={() => router.push("/PPDB")} 
-              className="hover:text-gray-300 font-medium relative after:content-[''] after:absolute after:w-full after:h-0.5 after:bg-white after:left-0 after:-bottom-1 after:scale-x-0 hover:after:scale-x-100 after:transition-transform after:duration-300">
-              PPDB
-            </button>
-          </li>
-        </ul>
-
-        {/* Hubungi Kami Button */}
-        <div className="hidden md:block">
-          <button
-            onClick={() => router.push("/HubungiKami")}
-            className="ml-9 mr-11 px-4 py-2 bg-white text-[#154472] font-semibold border-2 border-white rounded-full transition-all duration-500 ease-in-out relative overflow-hidden group hover:scale-110"
-          >
-            <span className="relative z-10 transition-colors duration-500 group-hover:text-white">
-              Hubungi Kami
-            </span>
-            <div className="absolute inset-0 bg-[#154472] transform rotate-180 scale-0 transition-transform duration-500 ease-in-out group-hover:rotate-0 group-hover:scale-100"></div>
-          </button>
-        </div>
-
-        {/* Mobile Menu Button */}
-        <button
-          className="md:hidden text-yellow-300 transform transition-all duration-300 ease-in-out hover:scale-110 hover:text-yellow-400"
-          onClick={() => setIsOpen(!isOpen)}
-        >
-          <div className={`transition-all duration-300 ${isOpen ? 'rotate-90 text-yellow-400' : ''}`}>
-            ☰
-          </div>
-        </button>
-
-        {/* Mobile Menu Dropdown */}
-        <div className={`absolute top-16 left-0 w-full md:hidden transition-all duration-300 ease-in-out transform ${isOpen ? 'translate-y-0 opacity-100' : '-translate-y-full opacity-0'}`}>
-          <ul className="bg-blue-800 text-yellow-300 flex flex-col items-center space-y-4 py-4 shadow-lg">
-            <li className="w-full text-center transform hover:scale-105 transition-all duration-300">
-              <button onClick={() => router.push("/")} className="w-full py-2 transition-all duration-300 hover:text-white hover:bg-blue-900">
-                Beranda
-              </button>
-            </li>
-            <li className="w-full text-center transform hover:scale-105 transition-all duration-300">
-              <button onClick={() => router.push("/tentang")} className="w-full py-2 hover:text-white hover:bg-blue-900 transition-colors duration-300">
-                Tentang Kami
-              </button>
-            </li>
-            <li className="w-full text-center transform hover:scale-105 transition-all duration-300">
-              <button onClick={() => router.push("/bk")} className="w-full py-2 hover:text-white hover:bg-blue-900 transition-colors duration-300">
-                BK
-              </button>
-            </li>
-            <li className="w-full text-center transform hover:scale-105 transition-all duration-300">
-              <button onClick={() => router.push("/program")} className="w-full py-2 hover:text-white hover:bg-blue-900 transition-colors duration-300">
-                Program
-              </button>
-            </li>
-            <li className="w-full text-center transform hover:scale-105 transition-all duration-300">
-              <button onClick={() => router.push("/ppdb")} className="w-full py-2 hover:text-white hover:bg-blue-900 transition-colors duration-300">
-                PPDB
-              </button>
-            </li>
-            <li className="w-full text-center px-4">
+            {/* Desktop Menu */}
+            <div className="hidden md:flex items-center space-x-4 lg:space-x-8">
+              {navItems.map((item) => (
+                <button
+                  key={item.path}
+                  onClick={() => router.push(item.path)}
+                  className="text-white hover:text-gray-300 font-medium relative after:content-[''] after:absolute after:w-full after:h-0.5 after:bg-white after:left-0 after:-bottom-1 after:scale-x-0 hover:after:scale-x-100 after:transition-transform after:duration-300 transition-colors duration-300"
+                >
+                  {item.label}
+                </button>
+              ))}
               <button
                 onClick={() => router.push("/HubungiKami")}
-                className="px-4 py-2 bg-white text-[#154472] font-semibold border-2 border-white rounded-lg w-64 transition-all duration-500 ease-in-out relative overflow-hidden group hover:scale-110"
+                className="ml-4 px-6 py-2 bg-white text-[#154472] font-semibold rounded-full transition-all duration-500 relative overflow-hidden group hover:scale-105"
               >
                 <span className="relative z-10 transition-colors duration-500 group-hover:text-white">
                   Hubungi Kami
                 </span>
-                <div className="absolute inset-0 bg-[#154472] transform rotate-180 scale-0 transition-transform duration-500 ease-in-out group-hover:rotate-0 group-hover:scale-100"></div>
+                <div className="absolute inset-0 bg-[#154472] transform scale-x-0 transition-transform duration-500 group-hover:scale-x-100" />
               </button>
-            </li>
-          </ul>
+            </div>
+
+            {/* Mobile Menu Button */}
+            <button
+              className="md:hidden text-yellow-300 text-2xl p-2"
+              onClick={() => setIsOpen(!isOpen)}
+            >
+              ☰
+            </button>
+          </div>
+        </div>
+
+        {/* Mobile Menu */}
+        <div
+          className={`md:hidden transition-all duration-300 ${
+            isOpen ? "max-h-96" : "max-h-0"
+          } overflow-hidden bg-[#154472]`}
+        >
+          <div className="px-4 py-2 space-y-2">
+            {navItems.map((item) => (
+              <button
+                key={item.path}
+                onClick={() => {
+                  router.push(item.path);
+                  setIsOpen(false);
+                }}
+                className="w-full text-left py-3 px-4 text-white hover:text-yellow-400 hover:bg-[#1a5288] rounded-lg transition-colors duration-300"
+              >
+                {item.label}
+              </button>
+            ))}
+            <button
+              onClick={() => {
+                router.push("/HubungiKami");
+                setIsOpen(false);
+              }}
+              className="w-full py-3 px-4 mt-2 bg-white text-[#154472] font-semibold rounded-lg transition-all duration-300 hover:bg-gray-100"
+            >
+              Hubungi Kami
+            </button>
+          </div>
         </div>
       </nav>
-      <div className="py-16">
-      </div>
+      <div className="h-16 md:h-20" />
     </div>
   );
 }
