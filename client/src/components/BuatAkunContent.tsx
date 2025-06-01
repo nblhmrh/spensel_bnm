@@ -3,6 +3,8 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { FaEdit, FaTrashAlt, FaUserPlus } from "react-icons/fa";
+import React from "react";
+import { useRouter } from "next/navigation";
 
 // Komponen untuk Form (dipisah agar lebih rapi)
 const UserForm = ({ onSuccess, onCancel }) => {
@@ -55,7 +57,7 @@ const UserForm = ({ onSuccess, onCancel }) => {
             <label className="block mb-1 font-semibold text-gray-700">Access Status</label>
             <select name="role" value={formData.role} onChange={handleChange} className="w-full border rounded-lg px-3 py-2 bg-gray-50 text-black">
               <option value="admin">Admin</option>
-              <option value="employee">Employee</option>
+              <option value="bk">Bk</option>
                {/* Sesuaikan role lain jika ada */}
             </select>
           </div>
@@ -81,6 +83,9 @@ export default function UserManagementPage() {
   const [error, setError] = useState("");
   const [showForm, setShowForm] = useState(false);
   const [filterRole, setFilterRole] = useState<"all" | "admin" | "bk">("all");
+  const [editUser, setEditUser] = useState(null);
+  const [search, setSearch] = useState("");
+  const router = useRouter();
 
   const fetchUsers = async () => {
     setLoading(true);
@@ -97,6 +102,25 @@ export default function UserManagementPage() {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    const user = localStorage.getItem("user");
+    if (!token || !user) {
+      router.replace("/Welcome");
+      return;
+    }
+    let userObj;
+    try {
+      userObj = JSON.parse(user);
+    } catch {
+      router.replace("/Welcome");
+      return;
+    }
+    if (!userObj.role || userObj.role !== "admin") {
+      router.replace("/Welcome");
+    }
+  }, [router]);
 
   useEffect(() => {
     fetchUsers();
@@ -118,22 +142,100 @@ export default function UserManagementPage() {
     }
   };
 
+  // Edit: tampilkan form edit
   const handleEdit = (user) => {
-    alert(`Editing user: ${user.name}`);
+    setEditUser(user);
   };
 
-  // Filter users sesuai filterRole
-  const filteredUsers = filterRole === "all"
-    ? users
-    : users.filter(user => user.role === filterRole);
+  // Submit edit
+  const handleEditSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      await axios.put(`http://localhost:8000/api/users/${editUser.id}`, editUser);
+      setEditUser(null);
+      fetchUsers();
+    } catch (err) {
+      alert("Failed to update user.");
+    }
+  };
+
+  // Filter users sesuai filterRole dan search
+  const filteredUsers =
+  (filterRole === "all"
+    ? users.filter(user => user.role === "admin" || user.role === "bk")
+    : users.filter(user => user.role === filterRole)
+  ).filter(user =>
+    user.name.toLowerCase().includes(search.toLowerCase()) ||
+    user.email.toLowerCase().includes(search.toLowerCase())
+  );
 
   return (
     <div className="p-8 bg-gray-50 min-h-screen">
       {showForm && <UserForm onSuccess={handleFormSuccess} onCancel={() => setShowForm(false)} />}
-      
+
+      {/* Form Edit User */}
+      {editUser && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+          <div className="bg-white p-8 rounded-lg shadow-xl w-full max-w-md">
+            <h2 className="text-2xl font-bold mb-6 text-gray-800">Edit User</h2>
+            <form onSubmit={handleEditSubmit} className="space-y-4">
+              <div>
+                <label className="block mb-1 font-semibold text-gray-700">Name</label>
+                <input
+                  type="text"
+                  name="name"
+                  value={editUser.name}
+                  onChange={e => setEditUser({ ...editUser, name: e.target.value })}
+                  required
+                  className="w-full border rounded-lg px-3 py-2 bg-gray-50 outline-none text-black"
+                />
+              </div>
+              <div>
+                <label className="block mb-1 font-semibold text-gray-700">Email</label>
+                <input
+                  type="email"
+                  name="email"
+                  value={editUser.email}
+                  onChange={e => setEditUser({ ...editUser, email: e.target.value })}
+                  required
+                  className="w-full border rounded-lg px-3 py-2 bg-gray-50 outline-none text-black"
+                />
+              </div>
+              <div>
+                <label className="block mb-1 font-semibold text-gray-700">Role</label>
+                <select
+                  name="role"
+                  value={editUser.role}
+                  onChange={e => setEditUser({ ...editUser, role: e.target.value })}
+                  className="w-full border rounded-lg px-3 py-2 bg-gray-50 text-black"
+                >
+                  <option value="admin">Admin</option>
+                  <option value="bk">BK</option>
+                </select>
+              </div>
+              <div className="flex justify-end gap-4 pt-4">
+                <button type="button" onClick={() => setEditUser(null)} className="py-2 px-4 rounded-lg font-semibold text-gray-600 bg-gray-200 hover:bg-gray-300 transition">
+                  Cancel
+                </button>
+                <button type="submit" className="py-2 px-4 rounded-lg font-bold text-white bg-blue-600 hover:bg-blue-700 transition">
+                  Save
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-bold text-gray-800">All User</h1>
-        <div className="flex gap-2">
+        <div className="flex gap-2 items-center">
+          <input
+            type="text"
+            placeholder="Search by name or email"
+            value={search}
+            onChange={e => setSearch(e.target.value)}
+            className="px-3 py-2 border rounded-lg bg-gray-50 outline-none text-black"
+          />
           <button
             onClick={() => setFilterRole("all")}
             className={`py-2 px-4 rounded-lg font-semibold ${filterRole === "all" ? "bg-blue-600 text-white" : "bg-gray-200 text-gray-700"} transition`}

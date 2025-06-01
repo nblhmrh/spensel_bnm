@@ -1,11 +1,32 @@
 "use client";
 import React, { useState, useEffect } from 'react';
+import { useRouter } from "next/navigation";
 import API from '@/utils/api';
-
 import { motion } from 'framer-motion';
 
+// Proteksi role bk
 export default function ProfilBKContent() {
-  // Removed unused router variable
+  const router = useRouter();
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    const user = localStorage.getItem("user");
+    if (!token || !user) {
+      router.replace("/Welcome");
+      return;
+    }
+    let userObj;
+    try {
+      userObj = JSON.parse(user);
+    } catch {
+      router.replace("/Welcome");
+      return;
+    }
+    if (!userObj.role || userObj.role !== "bk") {
+      router.replace("/Welcome");
+    }
+  }, [router]);
+
   const [formData, setFormData] = useState({
     visi: '',
     misi: '',

@@ -1,6 +1,7 @@
 'use client'
 import { useState, useEffect, ChangeEvent, FormEvent } from 'react';
 import axios from 'axios';
+import { useRouter } from 'next/navigation';
 
 interface FormData {
   nama: string;
@@ -17,6 +18,7 @@ interface SambutanData {
 
 
 export default function SambutanContent() {
+  const router = useRouter();
   const [formData, setFormData] = useState<FormData>({
     nama: '',
     isi: '',
@@ -44,6 +46,25 @@ export default function SambutanContent() {
       console.error('Error fetching sambutan:', error);
     }
   };
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    const user = localStorage.getItem("user");
+    if (!token || !user) {
+      router.replace("/Welcome");
+      return;
+    }
+    let userObj;
+    try {
+      userObj = JSON.parse(user);
+    } catch {
+      router.replace("/Welcome");
+      return;
+    }
+    if (!userObj.role || userObj.role !== "admin") {
+      router.replace("/Welcome");
+    }
+  }, [router]);
 
   useEffect(() => {
     fetchSambutan();

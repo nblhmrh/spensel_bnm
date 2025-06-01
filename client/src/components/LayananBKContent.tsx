@@ -1,13 +1,35 @@
 "use client";
 import React, { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import API from "../utils/api";
 
 export default function LayananBKAdmin() {
+  const router = useRouter();
   const [data, setData] = useState([]);
   const [judul, setJudul] = useState("");
   const [foto, setFoto] = useState<File | null>(null);
   const [loading, setLoading] = useState(false);
   const [editId, setEditId] = useState<number | null>(null);
+
+  // Proteksi role bk
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    const user = localStorage.getItem("user");
+    if (!token || !user) {
+      router.replace("/Welcome");
+      return;
+    }
+    let userObj;
+    try {
+      userObj = JSON.parse(user);
+    } catch {
+      router.replace("/Welcome");
+      return;
+    }
+    if (!userObj.role || userObj.role !== "bk") {
+      router.replace("/Welcome");
+    }
+  }, [router]);
 
   useEffect(() => {
     fetchData();

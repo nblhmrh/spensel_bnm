@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 type Pesan = {
   id: number;
@@ -13,6 +14,7 @@ type Pesan = {
 };
 
 export default function HubungiKamiContent() {
+  const router = useRouter();
   const [data, setData] = useState<Pesan[]>([]);
   const [editId, setEditId] = useState<number | null>(null);
   const [form, setForm] = useState({ nama: "", email: "", pesan: "" });
@@ -37,6 +39,25 @@ export default function HubungiKamiContent() {
       setIsLoading(false);
     }
   };
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    const user = localStorage.getItem("user");
+    if (!token || !user) {
+      router.replace("/Welcome");
+      return;
+    }
+    let userObj;
+    try {
+      userObj = JSON.parse(user);
+    } catch {
+      router.replace("/Welcome");
+      return;
+    }
+    if (!userObj.role || userObj.role !== "admin") {
+      router.replace("/Welcome");
+    }
+  }, [router]);
 
   useEffect(() => {
     fetchData();

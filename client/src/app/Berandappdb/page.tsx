@@ -1,6 +1,5 @@
 "use client";
 
-import { useState, useEffect } from "react";
 import {
   FaSignOutAlt,
   FaHome,
@@ -14,6 +13,7 @@ import {
 import Image from "next/image";
 import logo from "@/assets/logo.png";
 import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 // import { FaArrowLeft } from "react-icons/fa";
 import akun from "@/assets/akun.png";
 import datadiri from "@/assets/datadiri.png";
@@ -24,6 +24,33 @@ import Modal from "@/pages/Modal";
 export default function Dashboard() {
   const router = useRouter();
   const [sidebarTerbuka, setSidebarTerbuka] = useState(true);
+  const [showInfo, setShowInfo] = useState(false);
+  const [user, setUser] = useState({
+    id: "",
+    name: "",
+    email: "",
+    whatsapp: "",
+  });
+
+  // Proteksi role user
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    const user = localStorage.getItem("user");
+    if (!token || !user) {
+      router.replace("/Welcome");
+      return;
+    }
+    let userObj;
+    try {
+      userObj = JSON.parse(user);
+    } catch {
+      router.replace("/Welcome");
+      return;
+    }
+    if (!userObj.role || userObj.role !== "user") {
+      router.replace("/Welcome");
+    }
+  }, [router]);
 
   // Ambil dari localStorage saat pertama kali load
   useEffect(() => {
@@ -37,98 +64,108 @@ export default function Dashboard() {
   useEffect(() => {
     localStorage.setItem("sidebarTerbuka", sidebarTerbuka.toString());
   }, [sidebarTerbuka]);
-  const [showInfo, setShowInfo] = useState(false);
 
-  // Data Pengguna
-  const user = {
-    id: "",
-    name: "",
-    email: "",
-    whatsapp: "",
+  useEffect(() => {
+    const userStr = localStorage.getItem("user");
+    if (userStr) {
+      try {
+        const userObj = JSON.parse(userStr);
+        setUser({
+          id: userObj.id || "",
+          name: userObj.name ||  "",
+          email: userObj.email || "",
+          whatsapp: userObj.whatsapp || "",
+        });
+      } catch {
+        // Jika gagal parse, biarkan kosong
+      }
+    }
+  }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    window.history.replaceState(null, "", "/PPDB");
+    router.push("/Welcome");
   };
 
-
-  const handleLogout = () => { 
-    localStorage.removeItem('token'); 
-    window.history.replaceState(null, '', '/PPDB'); 
-    router.push("/Welcome");
-  }; 
+  
 
   return (
     <div className="flex min-h-screen bg-gray-100">
       {/* Sidebar */}
       <aside
-      className={`${
-        sidebarTerbuka ? "w-64" : "w-20"
-      } bg-white shadow-lg p-4 flex flex-col transition-all duration-300 relative`}
-    >
-      {/* Tombol Collapse */}
-      <button
-        onClick={() => setSidebarTerbuka(!sidebarTerbuka)}
-        className="absolute -right-3 top-5 bg-white border border-gray-300 rounded-full p-1 shadow-md z-10"
+        className={`${
+          sidebarTerbuka ? "w-64" : "w-20"
+        } bg-white shadow-lg p-4 flex flex-col transition-all duration-300 relative`}
       >
-        {sidebarTerbuka ? <FaChevronLeft /> : <FaChevronRight />}
-      </button>
+        {/* Tombol Collapse */}
+        <button
+          onClick={() => setSidebarTerbuka(!sidebarTerbuka)}
+          className="absolute -right-3 top-5 bg-white border border-gray-300 rounded-full p-1 shadow-md z-10"
+        >
+          {sidebarTerbuka ? <FaChevronLeft /> : <FaChevronRight />}
+        </button>
 
-      {/* Logo */}
-      <div className="flex flex-col items-center">
-        <Image
-          src={logo}
-          width={sidebarTerbuka ? 80 : 40}
-          height={sidebarTerbuka ? 80 : 40}
-          alt="Logo Sekolah"
-          className="transition-all duration-300"
-        />
-        {sidebarTerbuka && (
-          <h2 className="text-center font-bold text-lg text-gray-800 mt-2 leading-tight">
-            UPT SMP 9 Binamu
-            <br />
-            <span className="text-sm font-medium">Jeneponto</span>
-          </h2>
-        )}
-      </div>
+        {/* Logo */}
+        <div className="flex flex-col items-center">
+          <Image
+            src={logo}
+            width={sidebarTerbuka ? 80 : 40}
+            height={sidebarTerbuka ? 80 : 40}
+            alt="Logo Sekolah"
+            className="transition-all duration-300"
+          />
+          {sidebarTerbuka && (
+            <h2 className="text-center font-bold text-lg text-gray-800 mt-2 leading-tight">
+              UPT SMP 9 Binamu
+              <br />
+              <span className="text-sm font-medium">Jeneponto</span>
+            </h2>
+          )}
+        </div>
 
-      {/* Navigasi */}
-      <nav className="text-[#154472] space-y-4 mt-6">
-        <button
-          onClick={() => router.push("/Berandappdb")}
-          className="flex items-center text-left w-full px-3 py-2 rounded-lg  bg-blue-100 font-semibold text-blue-800  hover:bg-gray-100 transition-all"
-        >
-          <FaHome className="text-xl mr-2" />
-          {sidebarTerbuka && "Beranda"}
-        </button>
-        <button
-          onClick={() => router.push("/Pendaftaran")}
-          className="flex items-center text-left w-full px-3 py-2 rounded-lg hover:bg-gray-100 transition-all"
-        >
-          <FaUserPlus className="text-xl mr-2" />
-          {sidebarTerbuka && "Pendaftaran"}
-        </button>
-        <button
-          onClick={() => router.push("/Pengumuman")}
-          className="flex items-center text-left w-full px-3 py-2 rounded-lg hover:bg-gray-100 transition-all"
-        >
-          <FaBullhorn className="text-xl mr-2" />
-          {sidebarTerbuka && "Pengumuman"}
-        </button>
-        <button
-          onClick={() => router.push("/Bantuan")}
-          className="flex items-center text-left w-full px-3 py-2 rounded-lghover:bg-gray-100 transition-all"
-        >
-          <FaQuestionCircle className="text-xl mr-2" />
-          {sidebarTerbuka && "Bantuan"}
-        </button>
-      </nav>
+        {/* Navigasi */}
+        <nav className="text-[#154472] space-y-4 mt-6">
+          <button
+            onClick={() => router.push("/Berandappdb")}
+            className="flex items-center text-left w-full px-3 py-2 rounded-lg  bg-blue-100 font-semibold text-blue-800  hover:bg-gray-100 transition-all"
+          >
+            <FaHome className="text-xl mr-2" />
+            {sidebarTerbuka && "Beranda"}
+          </button>
+          <button
+            onClick={() => router.push("/Pendaftaran")}
+            className="flex items-center text-left w-full px-3 py-2 rounded-lg hover:bg-gray-100 transition-all"
+          >
+            <FaUserPlus className="text-xl mr-2" />
+            {sidebarTerbuka && "Pendaftaran"}
+          </button>
+          <button
+            onClick={() => router.push("/Pengumuman")}
+            className="flex items-center text-left w-full px-3 py-2 rounded-lg hover:bg-gray-100 transition-all"
+          >
+            <FaBullhorn className="text-xl mr-2" />
+            {sidebarTerbuka && "Pengumuman"}
+          </button>
+          <button
+            onClick={() => router.push("/Bantuan")}
+            className="flex items-center text-left w-full px-3 py-2 rounded-lghover:bg-gray-100 transition-all"
+          >
+            <FaQuestionCircle className="text-xl mr-2" />
+            {sidebarTerbuka && "Bantuan"}
+          </button>
+        </nav>
 
-      {/* Tombol Keluar */}
-      <button
-        onClick={handleLogout}
-        className="mt-auto bg-[#154472] text-white py-2 flex items-center justify-center rounded-lg hover:bg-red-800 transition-all"
-      >
-        <FaSignOutAlt className="text-lg mr-2" />
-        {sidebarTerbuka && "Keluar"}
-      </button>
-    </aside>
+        {/* Tombol Keluar */}
+        <button
+          onClick={handleLogout}
+          className="mt-auto bg-[#154472] text-white py-2 flex items-center justify-center rounded-lg hover:bg-red-800 transition-all"
+        >
+          <FaSignOutAlt className="text-lg mr-2" />
+          {sidebarTerbuka && "Keluar"}
+        </button>
+      </aside>
 
       {/* Konten */}
       <main className="flex-1 p-8">

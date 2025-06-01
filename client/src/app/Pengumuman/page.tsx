@@ -55,6 +55,11 @@ export default function Pengumuman() {
     }
   };
 
+  const handleLogout = () => {
+    // Implement your logout logic here
+    router.push("/Welcome");
+  };
+
   return (
     <div className="flex">
       {/* Sidebar */}
@@ -123,7 +128,7 @@ export default function Pengumuman() {
 
       {/* Tombol Keluar */}
       <button
-        onClick={() => router.push("/Welcome")}
+        onClick={handleLogout}
         className="mt-auto bg-[#154472] text-white py-2 flex items-center justify-center rounded-lg hover:bg-red-800 transition-all"
       >
         <FaSignOutAlt className="text-lg mr-2" />

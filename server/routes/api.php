@@ -48,6 +48,12 @@ Route::get('/csrf-cookie', function (Request $request) {
 
 Route::get('/users', [authController::class, 'listUsers']);
 
+// Endpoint untuk update user (edit user)
+Route::put('/users/{id}', [authController::class, 'updateUser']);
+
+// Endpoint untuk hapus user
+Route::delete('/users/{id}', [authController::class, 'deleteUser']);
+
 Route::post('/daftar2', [Daftar2Controller::class, 'store']);
 Route::post('/datasiswa', [DatasiswaController::class, 'store']);
 Route::post('/dataortu', [DataortuController::class, 'store']);

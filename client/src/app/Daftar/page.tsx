@@ -21,7 +21,9 @@ export default function Register() {
   const router = useRouter();
 
   const [formData, setFormData] = useState({
+    name: "",
     email: "",
+    whatsapp: "",
     password: "",
     confirmPassword: "",
   });
@@ -43,33 +45,33 @@ export default function Register() {
     e.preventDefault();
     setLoading(true);
     setError(null);
-  
+
     if (formData.password !== formData.confirmPassword) {
       setError("Konfirmasi kata sandi tidak cocok.");
       setLoading(false);
       return;
     }
-  
+
     try {
-      // Ambil CSRF token terlebih dahulu
       await axios.get("/sanctum/csrf-cookie");
-  
-      // Kirim request register
       const response = await axios.post(
         "http://localhost:8000/api/register",
         {
+          name: formData.name,
           email: formData.email,
+          whatsapp: formData.whatsapp,
           password: formData.password,
-        },
-        {
-          withCredentials: true,
+          role: "user",
         }
       );
-  
-      
-      console.log(response.data);
-  
-      router.push("/Daftar2");
+
+      // Jika backend mengembalikan user & token, simpan ke localStorage
+      if (response.data.user && response.data.token) {
+        localStorage.setItem("user", JSON.stringify(response.data.user));
+        localStorage.setItem("token", response.data.token);
+      }
+
+      router.push("/Berandappdb");
     } catch (err) {
       if (axios.isAxiosError(err)) {
         setError(err.response?.data?.message || "Terjadi kesalahan");
@@ -108,6 +110,24 @@ export default function Register() {
           {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
 
           <form onSubmit={handleSubmit}>
+            {/* Nama */}
+            <div className="mb-4 relative">
+              <label className="block text-gray-700 text-sm font-medium mb-1">
+                Nama Lengkap
+              </label>
+              <div className="flex items-center border rounded-lg px-3 py-2 focus-within:ring-2 focus-within:ring-blue-500">
+                <input
+                  type="text"
+                  name="name"
+                  className="w-full focus:outline-none text-black"
+                  value={formData.name}
+                  onChange={handleChange}
+                  required
+                  placeholder="Masukkan nama lengkap"
+                />
+              </div>
+            </div>
+
             {/* Email */}
             <div className="mb-4 relative">
               <label className="block text-gray-700 text-sm font-medium mb-1">
@@ -123,6 +143,24 @@ export default function Register() {
                   onChange={handleChange}
                   required
                   placeholder="Masukkan email"
+                />
+              </div>
+            </div>
+
+            {/* WhatsApp */}
+            <div className="mb-4 relative">
+              <label className="block text-gray-700 text-sm font-medium mb-1">
+                Nomor WhatsApp
+              </label>
+              <div className="flex items-center border rounded-lg px-3 py-2 focus-within:ring-2 focus-within:ring-blue-500">
+                <input
+                  type="text"
+                  name="whatsapp"
+                  className="w-full focus:outline-none text-black"
+                  value={formData.whatsapp}
+                  onChange={handleChange}
+                  required
+                  placeholder="Masukkan nomor WhatsApp"
                 />
               </div>
             </div>

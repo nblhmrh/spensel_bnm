@@ -1,14 +1,35 @@
 "use client";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { useRouter } from "next/navigation";
 
 export default function VisiMisiAdmin() {
+  const router = useRouter();
   const [visi, setVisi] = useState("");
   const [misi, setMisi] = useState("");
   const [editing, setEditing] = useState(false);
   const [isNew, setIsNew] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    const user = localStorage.getItem("user");
+    if (!token || !user) {
+      router.replace("/Welcome");
+      return;
+    }
+    let userObj;
+    try {
+      userObj = JSON.parse(user);
+    } catch {
+      router.replace("/Welcome");
+      return;
+    }
+    if (!userObj.role || userObj.role !== "admin") {
+      router.replace("/Welcome");
+    }
+  }, [router]);
 
   useEffect(() => {
     fetchData();

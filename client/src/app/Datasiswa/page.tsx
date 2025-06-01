@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { FaArrowLeft, FaSignOutAlt, FaHome, FaUserPlus, FaBullhorn, FaQuestionCircle } from "react-icons/fa";
 import Image from "next/image";
@@ -28,6 +28,26 @@ export default function Pendaftaran() {
     jarakrumah: "",
   });
   const [isLoading, setIsLoading] = useState(false); // State untuk loading
+
+  // Proteksi role user
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    const user = localStorage.getItem("user");
+    if (!token || !user) {
+      router.replace("/Welcome");
+      return;
+    }
+    let userObj;
+    try {
+      userObj = JSON.parse(user);
+    } catch {
+      router.replace("/Welcome");
+      return;
+    }
+    if (!userObj.role || userObj.role !== "user") {
+      router.replace("/Welcome");
+    }
+  }, [router]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
