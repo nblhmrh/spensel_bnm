@@ -20,6 +20,7 @@ use App\Http\Controllers\BeritaController;
 use App\Http\Controllers\PrestasiController;
 use App\Http\Controllers\DokumentasiBKController;
 use App\Http\Controllers\LayananBKController;
+use App\Http\Controllers\BerkasController;
 
 
 
@@ -136,3 +137,9 @@ Route::get('/pengaduan', [PengaduanController::class, 'index']);
 Route::post('/pengaduan', [PengaduanController::class, 'store']);
 Route::put('/pengaduan/{id}', [PengaduanController::class, 'update']);
 Route::delete('/pengaduan/{id}', [PengaduanController::class, 'destroy']);
+
+Route::post('/berkas', [BerkasController::class, 'store']);
+Route::get('/berkas', [BerkasController::class, 'index']);
+Route::get('/berkas/{id}', [BerkasController::class, 'show']);
+Route::delete('/berkas/{id}', [BerkasController::class, 'show']);
+

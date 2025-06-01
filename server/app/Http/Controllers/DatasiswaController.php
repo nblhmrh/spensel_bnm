@@ -18,7 +18,6 @@ class DatasiswaController extends Controller
             'tempat_lahir' => 'required|string',
             'tanggal_lahir' => 'required|date',
             'asal_sekolah' => 'required|string',
-            'alamat' => 'required|string',
             'desa' => 'required|string',
             'rt' => 'required|string',
             'rw' => 'required|string',

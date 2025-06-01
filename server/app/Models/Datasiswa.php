@@ -20,7 +20,6 @@ class Datasiswa extends Model
         'tempat_lahir',
         'tanggal_lahir',
         'asal_sekolah',
-        'alamat',
         'desa',
         'rt',
         'rw',
