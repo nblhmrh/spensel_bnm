@@ -189,12 +189,7 @@ export default function Pendaftaran() {
           {/* Unggah Berkas */}
           <div
             className="bg-[#154472] text-white p-6 rounded-xl text-center cursor-pointer shadow-lg hover:bg-[#123A60] transition-all"
-            onClick={() =>
-              window.open(
-                "https://forms.gle/MCTMeZpqukH4DUhq9",
-                "_blank"
-              )
-            }
+            onClick={() => router.push("/Berkas")}
           >
             <Image
               src={upload}

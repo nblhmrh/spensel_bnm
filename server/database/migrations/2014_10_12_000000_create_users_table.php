@@ -6,9 +6,7 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
+
     public function up(): void
     {
         Schema::create('users', function (Blueprint $table) {
@@ -17,17 +15,18 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->string('whatsapp')->unique();
             $table->string('password');
-            $table->string('role')->default('user');
+            $table->enum('role', ['admin', 'user', 'bk'])->default('user');
             $table->rememberToken();
             $table->timestamps();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
+
     public function down(): void
     {
+        Schema::table('users', function (Blueprint $table) {
+            $table->dropColumn('role');
+        });
         Schema::dropIfExists('users');
     }
 };

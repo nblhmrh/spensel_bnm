@@ -13,6 +13,7 @@ class Datasiswa extends Model
     use HasFactory;
 
     protected $fillable = [
+        'user_id',
         'nisn',
         'nik',
         'nama',
