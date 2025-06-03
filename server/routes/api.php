@@ -33,7 +33,10 @@ Route::get('/health-check', function () {
     return response()->json(['status' => 'ok']);
 });
 
-Route::post('/register', [authController::class, 'register']);
+// Public routes
+Route::post('/login', [AuthController::class, 'login'])->name('login');
+Route::post('/register', [AuthController::class, 'register']);
+
 Route::middleware([EnsureFrontendRequestsAreStateful::class])->group(function () {
     Route::post('/login', [authController::class, 'login']);
 });
@@ -138,8 +141,19 @@ Route::post('/pengaduan', [PengaduanController::class, 'store']);
 Route::put('/pengaduan/{id}', [PengaduanController::class, 'update']);
 Route::delete('/pengaduan/{id}', [PengaduanController::class, 'destroy']);
 
-Route::post('/berkas', [BerkasController::class, 'store']);
-Route::get('/berkas', [BerkasController::class, 'index']);
-Route::get('/berkas/{id}', [BerkasController::class, 'show']);
-Route::delete('/berkas/{id}', [BerkasController::class, 'show']);
+// Protected routes
+Route::middleware(['auth:sanctum', 'role:user'])->group(function () {
+    Route::post('/berkas', [BerkasController::class, 'store']);
+    Route::get('/berkas', [BerkasController::class, 'index']);
+    Route::post('/data-siswa', [DataSiswaController::class, 'store']);
+    Route::get('/data-siswa', [DataSiswaController::class, 'show']);
+    Route::post('/data-ortu', [DataOrtuController::class, 'store']);
+    Route::get('/data-ortu', [DataOrtuController::class, 'show']);
+});
+
+Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
+    Route::get('/admin/berkas', [BerkasController::class, 'index']);
+    Route::get('/admin/data-siswa', [DataSiswaController::class, 'index']);
+    Route::get('/admin/data-ortu', [DataOrtuController::class, 'index']);
+});
 

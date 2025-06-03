@@ -57,5 +57,17 @@ Route::middleware(['auth', 'role:bk'])->group(function () {
     Route::get('/BerandaBK', function () {
         return view('bk');
     });
+    Route::get('/LayananBK', function () {
+        return view('bk');
+    });
+    Route::get('/ProfilBK', function () {
+        return view('bk');
+    });
+    Route::get('/DokumentasiBKAdmin', function () {
+        return view('bk');
+    });
+    Route::get('/PengaduanBK', function () {
+        return view('bk');
+    });
 
 });
