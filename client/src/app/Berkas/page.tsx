@@ -1,194 +1,169 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { toast } from "react-toastify";
+import { useRouter } from "next/navigation";
 
-export default function BerkasUpload() {
+interface Berkas {
+  id: number;
+  surat_lulus_url: string;
+  surat_baik_url: string;
+  kartu_keluarga_url: string;
+  akta_lahir_url: string;
+  foto_url: string;
+}
+
+const initialFiles = {
+  surat_lulus: null as File | null,
+  surat_baik: null as File | null,
+  kartu_keluarga: null as File | null,
+  akta_lahir: null as File | null,
+  foto: null as File | null,
+};
+
+export default function BerkasPage() {
   const router = useRouter();
-  const [isLoading, setIsLoading] = useState(false);
-  const [hasUploaded, setHasUploaded] = useState(false);
-  const [files, setFiles] = useState({
-    surat_lulus: null,
-    surat_baik: null,
-    kartu_keluarga: null,
-    akta_lahir: null,
-    foto: null,
-  });
-  const [preview, setPreview] = useState({
-    surat_lulus: "",
-    surat_baik: "",
-    kartu_keluarga: "",
-    akta_lahir: "",
-    foto: "",
-  });
+  const [berkas, setBerkas] = useState<Berkas | null>(null);
+  const [files, setFiles] = useState(initialFiles);
+  const [loading, setLoading] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
+
+  // Fetch berkas user
+  const fetchBerkas = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      // Ganti endpoint agar hanya ambil berkas user login
+      const res = await axios.get("http://localhost:8000/api/berkas/me", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setBerkas(res.data.data || null);
+    } catch {
+      setBerkas(null);
+    }
+  };
 
   useEffect(() => {
-    const checkExistingBerkas = async () => {
-      try {
-        const token = localStorage.getItem('token');
-        if (!token) {
-          router.push('/login');
-          return;
-        }
+    fetchBerkas();
+  }, []);
 
-        const response = await axios.get('http://localhost:8000/api/berkas/check', {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        });
-
-        if (response.data.exists) {
-          alert('Anda sudah mengupload berkas sebelumnya');
-          router.push('/Berandappdb');
-        }
-      } catch (error) {
-        console.error('Error checking berkas:', error);
-      }
-    };
-
-    checkExistingBerkas();
-  }, [router]);
-
-  const handleFileChange = (e) => {
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, files: uploadedFiles } = e.target;
     if (uploadedFiles && uploadedFiles[0]) {
       setFiles((prev) => ({
         ...prev,
         [name]: uploadedFiles[0],
       }));
-
-      // Create preview URL
-      const previewUrl = URL.createObjectURL(uploadedFiles[0]);
-      setPreview((prev) => ({
-        ...prev,
-        [name]: previewUrl,
-      }));
     }
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (hasUploaded) {
-      alert('Anda sudah mengupload berkas');
-      return;
-    }
-    setIsLoading(true);
-
+    setLoading(true);
     const formData = new FormData();
     Object.keys(files).forEach((key) => {
-      if (files[key]) {
-        formData.append(key, files[key]);
+      if (files[key as keyof typeof files]) {
+        formData.append(key, files[key as keyof typeof files] as File);
       }
     });
-
     try {
-      const token = localStorage.getItem('token');
-      if (!token) {
-        throw new Error('No authentication token found');
-      }
-
-      const response = await axios.post(
-        "http://localhost:8000/api/berkas", 
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-            "Authorization": `Bearer ${token}`,
-          },
-          withCredentials: true
-        }
-      );
-
-      console.log('Upload response:', response.data);
-      setHasUploaded(true);
-      alert("Berkas berhasil diunggah!");
-      router.push("/Berandappdb");
-    } catch (error) {
-      console.error('Upload error:', error);
-      if (axios.isAxiosError(error)) {
-        const errorMessage = error.response?.data?.message || "Gagal mengunggah berkas";
-        alert(errorMessage);
-        // Log detailed error for debugging
-        console.log('Error details:', error.response?.data);
-        
-        if (error.response?.status === 401) {
-          alert("Silakan login terlebih dahulu");
-          router.push("/login");
-          return;
-        }
-      } else {
-        alert("Gagal mengunggah berkas");
-      }
+      const token = localStorage.getItem("token");
+      await axios.post("http://localhost:8000/api/berkas", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      toast.success("Berkas berhasil diunggah!");
+      setFiles(initialFiles);
+      setSubmitted(true); // <-- hanya tampilkan pesan
+      fetchBerkas();
+    } catch {
+      toast.error("Gagal mengunggah berkas");
     } finally {
-      setIsLoading(false);
+      setLoading(false);
     }
   };
 
-  const handleBack = () => {
-    router.push("/Pendaftaran");
+  const handleDelete = async () => {
+    if (!berkas) return;
+    if (!window.confirm("Yakin ingin menghapus berkas ini?")) return;
+    try {
+      const token = localStorage.getItem("token");
+      await axios.delete(`http://localhost:8000/api/berkas/${berkas.id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      toast.success("Berkas berhasil dihapus!");
+      setFiles(initialFiles);
+      await fetchBerkas(); // refresh data agar form upload muncul
+    } catch {
+      toast.error("Gagal menghapus berkas");
+    }
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 py-8">
-      <div className="max-w-2xl mx-auto bg-white p-8 rounded-lg shadow">
-        {/* Add back button */}
-        <button
-          onClick={handleBack}
-          className="mb-4 px-4 py-2 text-sm font-medium text-gray-600 hover:text-gray-800 
-            flex items-center"
-        >
-          <svg 
-            xmlns="http://www.w3.org/2000/svg" 
-            className="h-5 w-5 mr-1" 
-            viewBox="0 0 20 20" 
-            fill="currentColor"
+    <div className="max-w-xl mx-auto px-4 py-8">
+      <h1 className="text-2xl font-bold text-center mb-6 text-black">
+        Unggah Berkas
+      </h1>
+
+      <button
+        onClick={() => router.push("/Pendaftaran")}
+        className="mb-4 bg-gray-200 text-black px-4 py-2 rounded hover:bg-gray-300 transition"
+        disabled={loading}
+      >
+        Kembali
+      </button>
+
+      {submitted && berkas ? (
+        <div className="bg-white p-6 rounded-lg shadow-lg text-center text-black">
+          <h2 className="text-xl font-semibold mb-4">Data berhasil dikirim</h2>
+          <button
+            onClick={handleDelete}
+            className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 transition mr-2"
+            disabled={loading}
           >
-            <path 
-              fillRule="evenodd" 
-              d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" 
-              clipRule="evenodd" 
-            />
-          </svg>
-          Kembali
-        </button>
-
-        <h1 className="text-2xl font-bold text-black text-center mb-6">Unggah Berkas</h1>
-
-        <form onSubmit={handleSubmit} className="space-y-6">
-          {/* Modified input fields */}
+            Hapus Berkas
+          </button>
+          <button
+            onClick={() => router.push("/Pendaftaran")}
+            className="bg-gray-200 text-black px-4 py-2 rounded hover:bg-gray-300 transition ml-2"
+            disabled={loading}
+          >
+            Kembali
+          </button>
+        </div>
+      ) : (
+        <form
+          onSubmit={handleSubmit}
+          className="bg-white p-6 rounded-lg shadow-lg space-y-4 text-black"
+        >
           {Object.keys(files).map((key) => (
             <div key={key}>
-              <label className="block text-sm font-medium text-black mb-2">
-                {key.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}
+              <label className="block font-medium mb-1 capitalize text-black">
+                {key.replace("_", " ")}
               </label>
               <input
                 type="file"
                 name={key}
-                accept={key === 'foto' ? ".jpg,.jpeg,.png" : ".pdf,.jpg,.jpeg,.png"}
+                accept={
+                  key === "foto" ? ".jpg,.jpeg,.png" : ".pdf,.jpg,.jpeg,.png"
+                }
                 onChange={handleFileChange}
-                className="w-full border rounded p-2"
+                className="w-full border rounded p-2 text-black"
                 required
-                disabled={hasUploaded || isLoading}
               />
-              {preview[key] && (
-                <div className="mt-2">
-                  <img src={preview[key]} alt="Preview" className="h-20 object-contain" />
-                </div>
-              )}
             </div>
           ))}
-
           <button
             type="submit"
-            disabled={isLoading || hasUploaded}
-            className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 
-              transition duration-200 disabled:bg-gray-400"
+            disabled={loading}
+            className="w-full bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700 transition"
           >
-            {isLoading ? "Mengunggah..." : hasUploaded ? "Berkas Sudah Diupload" : "Unggah Berkas"}
+            {loading ? "Menyimpan..." : "Unggah Berkas"}
           </button>
         </form>
-      </div>
+      )}
     </div>
   );
 }

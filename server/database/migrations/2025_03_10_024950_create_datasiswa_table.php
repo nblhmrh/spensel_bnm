@@ -10,6 +10,7 @@ return new class extends Migration
     {
         Schema::create('datasiswa', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->string('nisn')->unique();
             $table->string('nik');
             $table->string('nama');

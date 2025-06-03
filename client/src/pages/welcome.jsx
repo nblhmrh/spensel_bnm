@@ -17,7 +17,6 @@ import {
   FaHandshake,
 } from "react-icons/fa";
 
-
 // Constants
 const FEATURES = [
   {
@@ -171,8 +170,9 @@ export default function Home() {
                 alt="Gedung Sekolah"
                 className="rounded-lg shadow-lg w-full h-auto transition-transform duration-500 hover:scale-[1.02]"
                 onError={(e) => {
-                  console.error("Error loading image");
-                  e.target.src = smp9.src;
+                  e.target.onerror = null;
+                  e.target.src = smp9.src; // fallback
+                  console.error("Error loading school image, fallback to default image");
                 }}
               />
             ) : (
@@ -269,11 +269,10 @@ export default function Home() {
                 className="object-cover h-full w-full"
                 onError={(e) => {
                   const target = e.target;
-                  target.onerror = null; // Mencegah infinite loop
-                  target.src = ayah.src;
+                  target.onerror = null; // Hindari infinite loop
+                  target.src = ayah.src; // Fallback ke gambar default jika error tampilkan ayah.png
                   console.error("Error loading image from:", `http://localhost:8000/storage/${sambutanData.foto}`);
                 }}
-                // Tambahkan key yang unik untuk memaksa re-render
                 key={`sambutan-${sambutanData.foto}`}
               />
             </div>
@@ -317,12 +316,11 @@ export default function Home() {
       {/* Double Wave Effect */}
       <div className="relative -mt-16 sm:-mt-24 md:-mt-32">
         {/* Top wave - Solid color matching background */}
-        <div className="absolute w-full" style={{ top: '-40px', '@media (min-width: 640px)': { top: '-80px' }, '@media (min-width: 768px)': { top: '-140px' } }}>
+        <div className="absolute w-full -top-10 sm:-top-20 md:-top-36">
           <svg
-            className="w-full h-auto"
+            className="w-full h-auto min-h-[140px]"
             viewBox="0 0 1300 180"
             preserveAspectRatio="none"
-            style={{ minHeight: '140px' }}
           >
             <path
               fill="#154472"
@@ -333,21 +331,20 @@ export default function Home() {
         
         {/* Bottom wave - Main blue color */}
         <svg
-          className="w-full h-auto relative z-10"
+          className="w-full h-auto relative z-10 min-h-[120px]"
           viewBox="0 30 1410 90"
           preserveAspectRatio="none"
-          style={{ minHeight: '120px' }}
         >
           <path
             fill="#154472"
             d="M0,32L48,37.3C96,43,192,53,288,58.7C384,64,480,64,576,58.7C672,53,768,43,864,37.3C960,32,1056,32,1152,37.3C1248,43,1344,53,1392,58.7L1440,64L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"
           />
         </svg>
-      </div>
-
-      <div className="-mt-1 sm:mt-0">
+         <div className="-mt-1 sm:mt-0">
         <News />
       </div>
+      </div>
+     
     </>
   );
 }

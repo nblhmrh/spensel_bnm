@@ -17,15 +17,13 @@ import {
   FaUserTie,
   FaMedal,
 } from "react-icons/fa";
+import axios from "axios";
 
-// Add this near the top of the component
-export default function Dashboard({
-  children,
-}: {
-  children?: React.ReactNode;
-}) {
+export default function Dashboard({ children }: { children?: React.ReactNode }) {
   const router = useRouter();
   const [activePath, setActivePath] = useState("/BerandaAdmin");
+  const [pendaftar, setPendaftar] = useState<any[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -45,6 +43,43 @@ export default function Dashboard({
       router.replace("/Welcome");
     }
   }, [router]);
+
+  // Ambil data pendaftar dari backend
+  useEffect(() => {
+    const fetchPendaftar = async () => {
+      setIsLoading(true);
+      try {
+        const token = localStorage.getItem("token");
+        const res = await axios.get("http://127.0.0.1:8000/api/admin/pendaftar", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        setPendaftar(res.data.data || []);
+      } catch (err) {
+        setPendaftar([]);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchPendaftar();
+  }, []);
+
+  const handleStatus = async (userId: number, status: "lulus" | "gagal") => {
+    const token = localStorage.getItem("token");
+    try {
+      await axios.post(
+        `http://127.0.0.1:8000/api/admin/pendaftar/${userId}/status`,
+        { status },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      setPendaftar((prev) =>
+        prev.map((p) =>
+          p.id === userId ? { ...p, status } : p
+        )
+      );
+    } catch {
+      alert("Gagal mengubah status.");
+    }
+  };
 
   const handleLogout = async () => {
     const token = localStorage.getItem("token");
@@ -281,97 +316,80 @@ export default function Dashboard({
               Berikut informasi yang kamu butuhkan ada di sini
             </p>
 
-            {/* Sistem Pendaftaran */}
             <div className="mt-6 bg-[#154472] text-white rounded-lg p-5 flex justify-between items-center">
               <h2 className="text-xl font-semibold">
-                List Para peserta yang mendaftar{" "}
+                List Para peserta yang mendaftar
               </h2>
             </div>
-            {/* Data Pengguna */}
-            <div className="bg-white shadow-md mt-4">
+            <div className="bg-white shadow-md mt-4 overflow-x-auto">
               <table className="w-full border-collapse border border-gray-200">
                 <thead>
                   <tr className="bg-[#154472] text-white text-center">
-                    <th className="p-2 border">Email</th>
-                    <th className="p-2 border">Data Peserta didik</th>
+                    <th className="p-2 border">Nama Peserta</th>
+                    <th className="p-2 border">Data Peserta Didik</th>
                     <th className="p-2 border">Data Orang Tua/Wali</th>
-                    <th className="p-2 border">Lulus/Tidak</th>
+                    <th className="p-2 border">Berkas</th>
+                    <th className="p-2 border">Status</th>
                   </tr>
                 </thead>
                 <tbody>
-                  <tr className="border text-gray-800 text-center">
-                    <td className="p-5 border">dikiji288@gmail.com</td>
-                    <td className="p-5 border items-center justify-center ">
-                      <button className="bg-[#154472] text-white px-3 py-2 rounded-md ">
-                        Tampilkan
-                      </button>
-                    </td>
-                    <td className="p-5 border">
-                      <button className="bg-[#154472] text-white px-3 py-2 rounded-md ">
-                        Tampilkan
-                      </button>
-                    </td>
-                    <td className="p-5 border">
-                      <div className="flex justify-center gap-2">
-                        <button className="bg-green-500 text-white px-3 py-2 rounded-md">
-                          Lulus
-                        </button>
-                        <button className="bg-red-500 text-white px-3 py-2 rounded-md">
-                          Gagal
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                </tbody>
-                <tbody>
-                  <tr className="border text-gray-800 text-center">
-                    <td className="p-5 border">dikimks288@gmail.com</td>
-                    <td className="p-5 border items-center justify-center ">
-                      <button className="bg-[#154472] text-white px-3 py-2 rounded-md ">
-                        Tampilkan
-                      </button>
-                    </td>
-                    <td className="p-5 border">
-                      <button className="bg-[#154472] text-white px-3 py-2 rounded-md ">
-                        Tampilkan
-                      </button>
-                    </td>
-                    <td className="p-5 border">
-                      <div className="flex justify-center gap-2">
-                        <button className="bg-green-500 text-white px-3 py-2 rounded-md">
-                          Lulus
-                        </button>
-                        <button className="bg-red-500 text-white px-3 py-2 rounded-md">
-                          Gagal
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                </tbody>
-                <tbody>
-                  <tr className="border text-gray-800 text-center">
-                    <td className="p-5 border">adatonog@gmail.com</td>
-                    <td className="p-5 border items-center justify-center ">
-                      <button className="bg-[#154472] text-white px-3 py-2 rounded-md ">
-                        Tampilkan
-                      </button>
-                    </td>
-                    <td className="p-5 border">
-                      <button className="bg-[#154472] text-white px-3 py-2 rounded-md ">
-                        Tampilkan
-                      </button>
-                    </td>
-                    <td className="p-5 border">
-                      <div className="flex justify-center gap-2">
-                        <button className="bg-green-500 text-white px-3 py-2 rounded-md">
-                          Lulus
-                        </button>
-                        <button className="bg-red-500 text-white px-3 py-2 rounded-md">
-                          Gagal
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
+                  {isLoading ? (
+                    <tr>
+                      <td colSpan={5} className="text-center p-4">Memuat data...</td>
+                    </tr>
+                  ) : pendaftar.length === 0 ? (
+                    <tr>
+                      <td colSpan={5} className="text-center p-4">Belum ada pendaftar.</td>
+                    </tr>
+                  ) : (
+                    pendaftar.map((p) => (
+                      <tr key={p.id} className="border text-gray-800 text-center">
+                        <td className="p-5 border">{p.datasiswa?.nama || "-"}</td>
+                        <td className="p-5 border">
+                          <button
+                            className="bg-[#154472] text-white px-3 py-2 rounded-md"
+                            onClick={() => router.push(`/AdminDetailSiswa/${p.id}`)}
+                          >
+                            Tampilkan
+                          </button>
+                        </td>
+                        <td className="p-5 border">
+                          <button
+                            className="bg-[#154472] text-white px-3 py-2 rounded-md"
+                            onClick={() => router.push(`/AdminDetailOrtu/${p.id}`)}
+                          >
+                            Tampilkan
+                          </button>
+                        </td>
+                        <td className="p-5 border">
+                          <button
+                            className="bg-[#154472] text-white px-3 py-2 rounded-md"
+                            onClick={() => router.push(`/AdminDetailBerkas/${p.id}`)}
+                          >
+                            Tampilkan
+                          </button>
+                        </td>
+                        <td className="p-5 border">
+                          <div className="flex justify-center gap-2">
+                            <button
+                              className={`bg-green-500 text-white px-3 py-2 rounded-md ${p.status === "lulus" ? "opacity-70" : ""}`}
+                              disabled={p.status === "lulus"}
+                              onClick={() => handleStatus(p.id, "lulus")}
+                            >
+                              Lulus
+                            </button>
+                            <button
+                              className={`bg-red-500 text-white px-3 py-2 rounded-md ${p.status === "gagal" ? "opacity-70" : ""}`}
+                              disabled={p.status === "gagal"}
+                              onClick={() => handleStatus(p.id, "gagal")}
+                            >
+                              Gagal
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    ))
+                  )}
                 </tbody>
               </table>
             </div>

@@ -87,4 +87,49 @@ class BerkasController extends Controller
             ], 500);
         }
     }
+
+    public function destroy($id)
+    {
+        try {
+            $berkas = Berkas::findOrFail($id);
+
+            // Hapus file dari storage
+            $files = ['surat_lulus', 'surat_baik', 'kartu_keluarga', 'akta_lahir', 'foto'];
+            foreach ($files as $file) {
+                if ($berkas->$file && Storage::disk('public')->exists($berkas->$file)) {
+                    Storage::disk('public')->delete($berkas->$file);
+                }
+            }
+
+            $berkas->delete();
+
+            return response()->json([
+                'message' => 'Berkas berhasil dihapus'
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Berkas delete error: ' . $e->getMessage());
+            return response()->json([
+                'message' => 'Gagal menghapus berkas',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    public function me()
+    {
+        try {
+            $berkas = Berkas::where('user_id', auth()->id())->first();
+            return response()->json([
+                'message' => 'Berkas user ditemukan',
+                'data' => $berkas
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Gagal mengambil data berkas user',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    
 }

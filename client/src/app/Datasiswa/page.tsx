@@ -7,7 +7,7 @@ import Image from "next/image";
 import logo from '@/assets/logo.png';
 import axios from "axios";
 
-export default function Pendaftaran() {
+export default function DataSiswaPage() {
   const router = useRouter();
   const [formData, setFormData] = useState({
     nisn: "",
@@ -17,17 +17,18 @@ export default function Pendaftaran() {
     tempat_lahir: "",
     tanggal_lahir: "",
     asal_sekolah: "",
-         // Field ini required di backend
     desa: "",
     rt: "",
     rw: "",
     kecamatan: "",
     kabupaten: "",
     provinsi: "",
-    alamatlengkap: "",   // Ini mungkin duplikat dengan alamat?
+    alamatlengkap: "",
     jarakrumah: "",
   });
-  const [isLoading, setIsLoading] = useState(false); // State untuk loading
+  const [isLoading, setIsLoading] = useState(false);
+  const [dataId, setDataId] = useState<number | null>(null);
+  const [successMsg, setSuccessMsg] = useState("");
 
   // Proteksi role user
   useEffect(() => {
@@ -49,29 +50,106 @@ export default function Pendaftaran() {
     }
   }, [router]);
 
+  // Ambil data siswa user jika sudah pernah mengisi
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        const res = await axios.get("http://localhost:8000/api/datasiswa/me", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        if (res.data.data) {
+          setFormData({
+            nisn: res.data.data.nisn || "",
+            nik: res.data.data.nik || "",
+            nama: res.data.data.nama || "",
+            jenis_kelamin: res.data.data.jenis_kelamin || "",
+            tempat_lahir: res.data.data.tempat_lahir || "",
+            tanggal_lahir: res.data.data.tanggal_lahir || "",
+            asal_sekolah: res.data.data.asal_sekolah || "",
+            desa: res.data.data.desa || "",
+            rt: res.data.data.rt || "",
+            rw: res.data.data.rw || "",
+            kecamatan: res.data.data.kecamatan || "",
+            kabupaten: res.data.data.kabupaten || "",
+            provinsi: res.data.data.provinsi || "",
+            alamatlengkap: res.data.data.alamatlengkap || "",
+            jarakrumah: res.data.data.jarakrumah || "",
+          });
+          setDataId(res.data.data.id);
+        }
+      } catch {
+        setDataId(null);
+      }
+    };
+    fetchData();
+  }, []);
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    
-  
-
     setIsLoading(true);
-
+    setSuccessMsg("");
     try {
-      const response = await axios.post("http://localhost:8000/api/datasiswa", formData);
-      alert("Data berhasil disimpan!");
-      router.push("/Berandappdb");
+      const token = localStorage.getItem("token");
+      if (dataId) {
+        // Update
+        await axios.put(`http://localhost:8000/api/datasiswa/${dataId}`, formData, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        setSuccessMsg("Data berhasil diupdate!");
+      } else {
+        // Simpan baru
+        await axios.post("http://localhost:8000/api/datasiswa", formData, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        setSuccessMsg("Data berhasil disimpan!");
+      }
     } catch (error) {
       if (axios.isAxiosError(error) && error.response) {
-        // Tampilkan error detail dari backend
         const errorMessage = error.response.data.message || "Terjadi kesalahan";
         alert(errorMessage);
       } else {
         alert("Gagal mengirim data. Silakan coba lagi.");
       }
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleDelete = async () => {
+    if (!dataId) return;
+    if (!window.confirm("Yakin ingin menghapus data siswa ini?")) return;
+    setIsLoading(true);
+    try {
+      const token = localStorage.getItem("token");
+      await axios.delete(`http://localhost:8000/api/datasiswa/${dataId}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setSuccessMsg("Data berhasil dihapus!");
+      setFormData({
+        nisn: "",
+        nik: "",
+        nama: "",
+        jenis_kelamin: "",
+        tempat_lahir: "",
+        tanggal_lahir: "",
+        asal_sekolah: "",
+        desa: "",
+        rt: "",
+        rw: "",
+        kecamatan: "",
+        kabupaten: "",
+        provinsi: "",
+        alamatlengkap: "",
+        jarakrumah: "",
+      });
+      setDataId(null);
+    } catch (error) {
+      alert("Gagal menghapus data.");
     } finally {
       setIsLoading(false);
     }
@@ -133,6 +211,12 @@ export default function Pendaftaran() {
           <FaArrowLeft className="mr-2" /> Kembali
         </button>
         <h1 className="text-2xl font-bold text-[#154472]">Isi Data Peserta Didik</h1>
+
+        {successMsg && (
+          <div className="my-4 p-4 bg-green-100 text-green-800 rounded text-center font-semibold">
+            {successMsg}
+          </div>
+        )}
 
         <form onSubmit={handleSubmit} className="mt-6 bg-white p-6 rounded-lg shadow-lg text-gray-800">
           <div className="grid grid-cols-2 gap-4">
@@ -313,8 +397,18 @@ export default function Pendaftaran() {
             disabled={isLoading}
             className="mt-6 w-full bg-[#154472] text-white p-3 rounded-md hover:bg-[#123A60]"
           >
-            {isLoading ? "Mengirim..." : "Simpan"}
+            {isLoading ? "Menyimpan..." : dataId ? "Update" : "Simpan"}
           </button>
+          {dataId && (
+            <button
+              type="button"
+              onClick={handleDelete}
+              disabled={isLoading}
+              className="mt-4 w-full bg-red-600 text-white p-3 rounded-md hover:bg-red-700"
+            >
+              Hapus Data
+            </button>
+          )}
         </form>
       </main>
     </div>

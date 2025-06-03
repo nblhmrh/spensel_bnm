@@ -21,6 +21,7 @@ use App\Http\Controllers\PrestasiController;
 use App\Http\Controllers\DokumentasiBKController;
 use App\Http\Controllers\LayananBKController;
 use App\Http\Controllers\BerkasController;
+use App\Http\Controllers\AdminPendaftarController;
 
 
 
@@ -58,7 +59,7 @@ Route::put('/users/{id}', [authController::class, 'updateUser']);
 // Endpoint untuk hapus user
 Route::delete('/users/{id}', [authController::class, 'deleteUser']);
 
-Route::post('/daftar2', [Daftar2Controller::class, 'store']);
+// Daftar routes
 Route::post('/datasiswa', [DatasiswaController::class, 'store']);
 Route::post('/dataortu', [DataortuController::class, 'store']);
 Route::get('/sambutan', [SambutanController::class, 'getSambutan']);
@@ -145,15 +146,31 @@ Route::delete('/pengaduan/{id}', [PengaduanController::class, 'destroy']);
 Route::middleware(['auth:sanctum', 'role:user'])->group(function () {
     Route::post('/berkas', [BerkasController::class, 'store']);
     Route::get('/berkas', [BerkasController::class, 'index']);
-    Route::post('/data-siswa', [DataSiswaController::class, 'store']);
-    Route::get('/data-siswa', [DataSiswaController::class, 'show']);
-    Route::post('/data-ortu', [DataOrtuController::class, 'store']);
-    Route::get('/data-ortu', [DataOrtuController::class, 'show']);
+    Route::delete('/berkas/{id}', [BerkasController::class, 'destroy']);
+    Route::get('/berkas/me', [BerkasController::class, 'me']);
+
+    Route::post('/datasiswa', [DatasiswaController::class, 'store']);
+    Route::get('/datasiswa', [DatasiswaController::class, 'show']);
+    Route::delete('/datasiswa/{id}', [DatasiswaController::class, 'destroy']);
+    Route::put('/datasiswa/{id}', [DatasiswaController::class, 'update']);
+    Route::get('/datasiswa/me', [DatasiswaController::class, 'me']);
+
+    Route::post('/dataortu', [DataortuController::class, 'store']);
+    Route::get('/dataortu', [DataortuController::class, 'show']);
+    Route::delete('/dataortu/{id}', [DataortuController::class, 'destroy']);
+    Route::put('/dataortu/{id}', [DataortuController::class, 'update']);
+    Route::get('/dataortu/me', [DataortuController::class, 'me']);
+
 });
 
 Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
     Route::get('/admin/berkas', [BerkasController::class, 'index']);
     Route::get('/admin/data-siswa', [DataSiswaController::class, 'index']);
     Route::get('/admin/data-ortu', [DataOrtuController::class, 'index']);
+    Route::get('/admin/pendaftar', [AdminPendaftarController::class, 'index']);
+    Route::post('/admin/pendaftar/{userId}/status', [AdminPendaftarController::class, 'updateStatus']);
+    Route::get('/admin/datasiswa/{id}', [AdminPendaftarController::class, 'detailSiswa']);
+    Route::get('/admin/dataortu/{id}', [AdminPendaftarController::class, 'detailOrtu']);
+    Route::get('/admin/berkas/{id}', [AdminPendaftarController::class, 'detailBerkas']);
 });
 
