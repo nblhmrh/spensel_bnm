@@ -188,8 +188,8 @@ export default function Home() {
         </section>
       </div>
       <div>
-        <section className="text-center pt-52 mb-8 px-8 bg-white ">
-          <h1 className="text-3xl md:text-4xl font-bold text-[#154472] mb-4 mt-20 transform transition-all duration-500 hover:scale-105">
+        <section className="text-center pt-48 mb-8 px-6 bg-white ">
+          <h1 className="text-3xl md:text-4xl font-bold text-[#154472] mb-4 transform transition-all duration-500 hover:scale-105">
             Temukan Keunggulan!
           </h1>
           <p className="text-gray-700 text-2xl font-inter leading-relaxed animate-slideUp relative group">
@@ -256,17 +256,17 @@ export default function Home() {
         </div>
 
         {/* Foto Kepala Sekolah */}
-        <div className="relative w-full md:w-1/3 flex justify-start h-[400px] sm:h-[500px] md:h-[600px] transform transition-all duration-500 pl-8">
+        <div className="relative w-full md:w-1/3 flex justify-center md:justify-start h-[400px] sm:h-[500px] md:h-[600px] transform transition-all duration-500 px-4 md:pl-8">
           {loading ? (
             <p className="z-20">Memuat foto...</p>
           ) : error ? (
             <p className="text-red-500 z-20">{error}</p>
           ) : sambutanData ? (
-            <div className="w-full h-full absolute bottom-0">
+            <div className="w-full h-full relative">
               <img 
                 src={`http://localhost:8000/storage/${sambutanData.foto}`}
                 alt="Foto Kepala Sekolah"
-                className="object-cover h-full w-full"
+                className="object-contain md:object-cover h-full w-full"
                 onError={(e) => {
                   const target = e.target;
                   target.onerror = null; // Hindari infinite loop
@@ -277,13 +277,13 @@ export default function Home() {
               />
             </div>
           ) : (
-            <div className="w-full h-full absolute bottom-0">
+            <div className="w-full h-full relative">
               <Image
                 src={ayah}
                 alt="Kepala Sekolah"
                 width={600}
                 height={800}
-                className="object-cover h-full w-full"
+                className="object-contain md:object-cover h-full w-full"
               />
             </div>
           )}
@@ -340,9 +340,9 @@ export default function Home() {
             d="M0,32L48,37.3C96,43,192,53,288,58.7C384,64,480,64,576,58.7C672,53,768,43,864,37.3C960,32,1056,32,1152,37.3C1248,43,1344,53,1392,58.7L1440,64L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"
           />
         </svg>
-         <div className="-mt-1 sm:mt-0">
-        <News />
-      </div>
+        <div className="-mt-1 sm:mt-0">
+          <News />
+        </div>
       </div>
      
     </>
