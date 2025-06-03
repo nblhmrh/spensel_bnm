@@ -188,8 +188,8 @@ export default function Home() {
         </section>
       </div>
       <div>
-        <section className="text-center pt-52 mb-8 px-8 bg-white ">
-          <h1 className="text-3xl md:text-4xl font-bold text-[#154472] mb-4 mt-20 transform transition-all duration-500 hover:scale-105">
+        <section className="text-center pt-48 mb-8 px-6 bg-white ">
+          <h1 className="text-3xl md:text-4xl font-bold text-[#154472] mb-4 transform transition-all duration-500 hover:scale-105">
             Temukan Keunggulan!
           </h1>
           <p className="text-gray-700 text-2xl font-inter leading-relaxed animate-slideUp relative group">
@@ -256,35 +256,34 @@ export default function Home() {
         </div>
 
         {/* Foto Kepala Sekolah */}
-        <div className="relative w-full md:w-1/3 flex justify-start h-[400px] sm:h-[500px] md:h-[600px] transform transition-all duration-500 pl-8">
+        <div className="relative w-full md:w-1/3 flex justify-center md:justify-start h-[400px] sm:h-[500px] md:h-[600px] transform transition-all duration-500 px-4 md:pl-8">
           {loading ? (
             <p className="z-20">Memuat foto...</p>
           ) : error ? (
             <p className="text-red-500 z-20">{error}</p>
           ) : sambutanData ? (
-            <div className="w-full h-full absolute bottom-0">
+            <div className="w-full h-full relative">
               <img 
                 src={`http://localhost:8000/storage/${sambutanData.foto}`}
                 alt="Foto Kepala Sekolah"
-                className="object-cover h-full w-full"
+                className="object-contain md:object-cover h-full w-full"
                 onError={(e) => {
                   const target = e.target;
                   target.onerror = null; // Mencegah infinite loop
                   target.src = ayah.src;
                   console.error("Error loading image from:", `http://localhost:8000/storage/${sambutanData.foto}`);
                 }}
-                // Tambahkan key yang unik untuk memaksa re-render
                 key={`sambutan-${sambutanData.foto}`}
               />
             </div>
           ) : (
-            <div className="w-full h-full absolute bottom-0">
+            <div className="w-full h-full relative">
               <Image
                 src={ayah}
                 alt="Kepala Sekolah"
                 width={600}
                 height={800}
-                className="object-cover h-full w-full"
+                className="object-contain md:object-cover h-full w-full"
               />
             </div>
           )}
@@ -317,7 +316,7 @@ export default function Home() {
       {/* Double Wave Effect */}
       <div className="relative -mt-16 sm:-mt-24 md:-mt-32">
         {/* Top wave - Solid color matching background */}
-        <div className="absolute w-full" style={{ top: '-40px', '@media (min-width: 640px)': { top: '-80px' }, '@media (min-width: 768px)': { top: '-140px' } }}>
+        <div className="absolute w-full" style={{ top: '-40px', '@media (minWidth: 640px)': { top: '-80px' }, '@media (minWidth: 768px)': { top: '-140px' } }}>
           <svg
             className="w-full h-auto"
             viewBox="0 0 1300 180"

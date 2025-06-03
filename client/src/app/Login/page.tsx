@@ -9,6 +9,7 @@ import { RiLockPasswordLine } from "react-icons/ri";
 import logo from "@/assets/logo.png";
 import skl from '@/assets/skl.jpg'
 import smbt from '@/assets/smbt.png'
+
 export default function Login() {
   const router = useRouter();
 
@@ -59,44 +60,57 @@ export default function Login() {
   };
 
   return (
-    <>
-    <div className="relative min-h-screen flex justify-center items-center">
-      {/* Background Image */}
+    <div className="relative min-h-screen flex justify-center items-center overflow-hidden bg-gray-50">
+      {/* Background Image with animation */}
       <div className="absolute inset-0 z-0">
         <Image 
           src={smbt}
           layout="fill"
           objectFit="cover"
           alt="Background"
+          className="transform scale-105 hover:scale-110 transition-transform duration-1000 ease-in-out"
         />
+        <div className="absolute inset-0 bg-black/40 backdrop-blur-sm"></div>
       </div>
-    <div className="relative min-h-screen flex justify-center items-center">
+
       {/* Form Container */}
-      <div className="bg-white px-14 py-4 rounded-lg shadow-lg w-[1200px] flex">
-        {/* Form Kiri */}
-        <div className="w-1/2 p-4">
-          {/* Logo Sekolah */}
-          <div className="flex justify-center mb-4">
-            <Image src={logo} width={100} height={100} alt="Logo Sekolah" />
+      <div className="relative z-10 bg-white/90 backdrop-blur-md px-6 sm:px-8 md:px-12 lg:px-14 py-6 rounded-2xl shadow-2xl w-[95%] sm:w-[85%] md:w-[75%] lg:w-[800px] xl:w-[1000px] mx-4 flex flex-col md:flex-row gap-8 transform hover:shadow-3xl transition-all duration-300">
+        {/* Form Section */}
+        <div className="w-full md:w-1/2 p-4">
+          {/* Logo Sekolah with animation */}
+          <div className="flex justify-center mb-6 transform hover:scale-105 transition-transform duration-300">
+            <Image 
+              src={logo} 
+              width={100} 
+              height={100} 
+              alt="Logo Sekolah"
+              className="drop-shadow-lg"
+            />
           </div>
 
-          <h2 className="text-2xl font-semibold text-center mb-2 text-[#154472]">Selamat Datang!</h2>
-          <p className="text-sm text-gray-600 text-center mb-4">
+          <h2 className="text-2xl sm:text-3xl font-bold text-center mb-3 text-[#154472] animate-fadeIn">
+            Selamat Datang!
+          </h2>
+          <p className="text-sm sm:text-base text-gray-600 text-center mb-6 animate-fadeIn delay-200">
             Senang melihatmu lagi! Semoga harimu penuh dengan kebahagiaan dan pengalaman menyenangkan! 🌟
           </p>
 
-          {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
+          {error && (
+            <div className="bg-red-50 text-red-500 text-sm p-3 rounded-lg mb-4 animate-shake">
+              {error}
+            </div>
+          )}
 
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={handleSubmit} className="space-y-5">
             {/* Email */}
-            <div className="mb-4 relative">
-              <label className="block text-gray-700 text-sm font-medium mb-1">Email</label>
-              <div className="flex items-center border rounded-lg px-3 py-2 focus-within:ring-2 focus-within:ring-blue-500">
+            <div className="relative">
+              <label className="block text-gray-700 text-sm font-medium mb-2">Email</label>
+              <div className="flex items-center border-2 rounded-lg px-3 py-2 focus-within:ring-2 focus-within:ring-blue-500 focus-within:border-blue-500 transition-all duration-300 hover:border-blue-400">
                 <AiOutlineMail className="text-gray-500 text-xl mr-2" />
                 <input
                   type="email"
                   name="email"
-                  className="w-full focus:outline-none text-black"
+                  className="w-full focus:outline-none text-gray-700 bg-transparent"
                   value={formData.email}
                   onChange={handleChange}
                   required
@@ -106,65 +120,86 @@ export default function Login() {
             </div>
 
             {/* Password */}
-            <div className="mb-4 relative">
-              <label className="block text-gray-700 text-sm font-medium mb-1">Kata Sandi</label>
-              <div className="flex items-center border rounded-lg px-3 py-2 focus-within:ring-2 focus-within:ring-blue-500">
+            <div className="relative">
+              <label className="block text-gray-700 text-sm font-medium mb-2">Kata Sandi</label>
+              <div className="flex items-center border-2 rounded-lg px-3 py-2 focus-within:ring-2 focus-within:ring-blue-500 focus-within:border-blue-500 transition-all duration-300 hover:border-blue-400">
                 <RiLockPasswordLine className="text-gray-500 text-xl mr-2" />
                 <input
                   type={showPassword ? "text" : "password"}
                   name="password"
-                  className="w-full focus:outline-none text-black"
+                  className="w-full focus:outline-none text-gray-700 bg-transparent"
                   value={formData.password}
                   onChange={handleChange}
                   required
                   placeholder="Masukkan kata sandi"
                 />
-                <button type="button" onClick={togglePassword} className="focus:outline-none">
-                  {showPassword ? <AiOutlineEyeInvisible className="text-gray-500 text-xl" /> : <AiOutlineEye className="text-gray-500 text-xl" />}
+                <button 
+                  type="button" 
+                  onClick={togglePassword} 
+                  className="focus:outline-none hover:text-blue-500 transition-colors duration-300"
+                >
+                  {showPassword ? 
+                    <AiOutlineEyeInvisible className="text-gray-500 text-xl hover:scale-110 transition-transform duration-300" /> : 
+                    <AiOutlineEye className="text-gray-500 text-xl hover:scale-110 transition-transform duration-300" />
+                  }
                 </button>
               </div>
             </div>
 
             {/* Lupa Sandi */}
-            <div className="text-right mb-4">
-              <a href="/Lupasandi" className="text-blue-600 text-sm hover:underline">
-                lupa sandi?
+            <div className="text-right">
+              <a 
+                href="/Lupasandi" 
+                className="text-blue-600 text-sm hover:text-blue-800 hover:underline transition-colors duration-300"
+              >
+                Lupa sandi?
               </a>
             </div>
 
             {/* Tombol Login */}
             <button
               type="submit"
-              className="w-full bg-[#154472] text-white py-2 rounded-lg hover:bg-blue-700 transition duration-300"
+              className="w-full bg-[#154472] text-white py-3 rounded-lg hover:bg-blue-700 transform hover:scale-[1.02] transition-all duration-300 font-semibold text-base sm:text-lg shadow-lg hover:shadow-xl disabled:opacity-70 disabled:cursor-not-allowed"
               disabled={loading}
             >
-              {loading ? "Memproses..." : "Masuk"}
+              {loading ? (
+                <span className="flex items-center justify-center">
+                  <svg className="animate-spin h-5 w-5 mr-3" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                  </svg>
+                  Memproses...
+                </span>
+              ) : "Masuk"}
             </button>
           </form>
 
           {/* Link ke Registrasi */}
-          <p className="text-sm text-center mt-4 text-gray-600">
-            belum memiliki akun?{" "}
-            <a href="/Daftar" className="text-blue-600 hover:underline">
+          <p className="text-sm sm:text-base text-center mt-6 text-gray-600">
+            Belum memiliki akun?{" "}
+            <a 
+              href="/Daftar" 
+              className="text-blue-600 hover:text-blue-800 hover:underline transition-colors duration-300 font-medium"
+            >
               Daftar disini
             </a>
           </p>
         </div>
 
-        {/* Placeholder Gambar */}
-         {/* Gambar Samping */}
-         <div className="w-1/2 flex justify-center items-center">
-          <Image 
-            src={skl}
-            width={380}
-            height={380}
-            alt="Siswa Belajar"
-            className="rounded-lg"
-          />
+        {/* Image Section */}
+        <div className="hidden md:flex w-1/2 justify-center items-center p-4">
+          <div className="relative group">
+            <Image 
+              src={skl}
+              width={380}
+              height={380}
+              alt="Siswa Belajar"
+              className="rounded-2xl shadow-xl transform group-hover:scale-105 transition-transform duration-500 ease-in-out"
+            />
+            <div className="absolute inset-0 rounded-2xl bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+          </div>
         </div>
       </div>
     </div>
-    </div>
-    </>
   );
 }
