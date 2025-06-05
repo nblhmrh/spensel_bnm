@@ -11,6 +11,7 @@ const UserForm = ({ onSuccess, onCancel }) => {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
+    whatsapp: "",
     password: "",
     role: "admin",
   });
@@ -48,6 +49,10 @@ const UserForm = ({ onSuccess, onCancel }) => {
           <div>
             <label className="block mb-1 font-semibold text-gray-700">Email</label>
             <input type="email" name="email" value={formData.email} onChange={handleChange} required className="w-full border rounded-lg px-3 py-2 bg-gray-50 outline-none text-black" placeholder="Email Address" />
+          </div>
+          <div>
+            <label className="block mb-1 font-semibold text-gray-700">Whatsapp</label>
+            <input type="whatsapp" name="whatsapp" value={formData.whatsapp} onChange={handleChange} required className="w-full border rounded-lg px-3 py-2 bg-gray-50 outline-none text-black" placeholder="Email Address" />
           </div>
           <div>
             <label className="block mb-1 font-semibold text-gray-700">Password</label>
@@ -202,6 +207,17 @@ export default function UserManagementPage() {
                 />
               </div>
               <div>
+                <label className="block mb-1 font-semibold text-gray-700">Whatsapp</label>
+                <input
+                  type="whatsapp"
+                  name="whatsapp"
+                  value={editUser.whatsapp}
+                  onChange={e => setEditUser({ ...editUser, whatsapp: e.target.value })}
+                  required
+                  className="w-full border rounded-lg px-3 py-2 bg-gray-50 outline-none text-black"
+                />
+              </div>
+              <div>
                 <label className="block mb-1 font-semibold text-gray-700">Role</label>
                 <select
                   name="role"
@@ -272,6 +288,7 @@ export default function UserManagementPage() {
               <th scope="col" className="px-6 py-3 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">Name</th>
               <th scope="col" className="px-6 py-3 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">Role</th>
               <th scope="col" className="px-6 py-3 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">Email</th>
+              <th scope="col" className="px-6 py-3 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">whatsapp</th>
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
@@ -300,6 +317,9 @@ export default function UserManagementPage() {
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="text-sm text-gray-800">{user.email}</div>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div className="text-sm text-gray-800">{user.whatsapp}</div>
                   </td>
                 </tr>
               ))

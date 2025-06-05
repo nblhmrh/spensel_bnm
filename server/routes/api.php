@@ -22,6 +22,7 @@ use App\Http\Controllers\DokumentasiBKController;
 use App\Http\Controllers\LayananBKController;
 use App\Http\Controllers\BerkasController;
 use App\Http\Controllers\AdminPendaftarController;
+use App\Http\Controllers\PengumumanController;
 
 
 
@@ -155,6 +156,7 @@ Route::middleware(['auth:sanctum', 'role:user'])->group(function () {
     Route::put('/datasiswa/{id}', [DatasiswaController::class, 'update']);
     Route::get('/datasiswa/me', [DatasiswaController::class, 'me']);
 
+
     Route::post('/dataortu', [DataortuController::class, 'store']);
     Route::get('/dataortu', [DataortuController::class, 'show']);
     Route::delete('/dataortu/{id}', [DataortuController::class, 'destroy']);
@@ -162,6 +164,9 @@ Route::middleware(['auth:sanctum', 'role:user'])->group(function () {
     Route::get('/dataortu/me', [DataortuController::class, 'me']);
 
 });
+
+    Route::post('/Pengumuman', [PengumumanController::class, 'cekPengumuman']);
+
 
 Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
     Route::get('/admin/berkas', [BerkasController::class, 'index']);
@@ -173,4 +178,5 @@ Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
     Route::get('/admin/dataortu/{id}', [AdminPendaftarController::class, 'detailOrtu']);
     Route::get('/admin/berkas/{id}', [AdminPendaftarController::class, 'detailBerkas']);
 });
+
 

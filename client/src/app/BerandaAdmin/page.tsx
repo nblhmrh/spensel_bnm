@@ -337,58 +337,64 @@ export default function Dashboard({ children }: { children?: React.ReactNode }) 
                     <tr>
                       <td colSpan={5} className="text-center p-4">Memuat data...</td>
                     </tr>
-                  ) : pendaftar.length === 0 ? (
+                  ) : pendaftar.filter((p) => !p.status).length === 0 ? (
                     <tr>
                       <td colSpan={5} className="text-center p-4">Belum ada pendaftar.</td>
                     </tr>
                   ) : (
-                    pendaftar.map((p) => (
-                      <tr key={p.id} className="border text-gray-800 text-center">
-                        <td className="p-5 border">{p.datasiswa?.nama || "-"}</td>
-                        <td className="p-5 border">
-                          <button
-                            className="bg-[#154472] text-white px-3 py-2 rounded-md"
-                            onClick={() => router.push(`/AdminDetailSiswa/${p.id}`)}
-                          >
-                            Tampilkan
-                          </button>
-                        </td>
-                        <td className="p-5 border">
-                          <button
-                            className="bg-[#154472] text-white px-3 py-2 rounded-md"
-                            onClick={() => router.push(`/AdminDetailOrtu/${p.id}`)}
-                          >
-                            Tampilkan
-                          </button>
-                        </td>
-                        <td className="p-5 border">
-                          <button
-                            className="bg-[#154472] text-white px-3 py-2 rounded-md"
-                            onClick={() => router.push(`/AdminDetailBerkas/${p.id}`)}
-                          >
-                            Tampilkan
-                          </button>
-                        </td>
-                        <td className="p-5 border">
-                          <div className="flex justify-center gap-2">
+                    pendaftar
+                      .filter((p) => !p.status) // Hanya tampilkan yang belum punya status
+                      .map((p) => (
+                        <tr key={p.id} className="border text-gray-800 text-center">
+                          <td className="p-5 border">{p.datasiswa?.nama || "-"}</td>
+                          <td className="p-5 border">
                             <button
-                              className={`bg-green-500 text-white px-3 py-2 rounded-md ${p.status === "lulus" ? "opacity-70" : ""}`}
-                              disabled={p.status === "lulus"}
-                              onClick={() => handleStatus(p.id, "lulus")}
+                              className="bg-[#154472] text-white px-3 py-2 rounded-md"
+                              onClick={() => router.push(`/AdminDetailSiswa/${p.id}`)}
                             >
-                              Lulus
+                              Tampilkan
                             </button>
+                          </td>
+                          <td className="p-5 border">
                             <button
-                              className={`bg-red-500 text-white px-3 py-2 rounded-md ${p.status === "gagal" ? "opacity-70" : ""}`}
-                              disabled={p.status === "gagal"}
-                              onClick={() => handleStatus(p.id, "gagal")}
+                              className="bg-[#154472] text-white px-3 py-2 rounded-md"
+                              onClick={() => router.push(`/AdminDetailOrtu/${p.id}`)}
                             >
-                              Gagal
+                              Tampilkan
                             </button>
-                          </div>
-                        </td>
-                      </tr>
-                    ))
+                          </td>
+                          <td className="p-5 border">
+                            <button
+                              className="bg-[#154472] text-white px-3 py-2 rounded-md"
+                              onClick={() => router.push(`/AdminDetailBerkas/${p.id}`)}
+                            >
+                              Tampilkan
+                            </button>
+                          </td>
+                          <td className="p-5 border">
+                            <div className="flex justify-center gap-2">
+                              <button
+                                className="bg-green-500 text-white px-3 py-2 rounded-md"
+                                onClick={() => {
+                                  handleStatus(p.id, "lulus");
+                                  alert("Status sudah tidak bisa diubah!");
+                                }}
+                              >
+                                Lulus
+                              </button>
+                              <button
+                                className="bg-red-500 text-white px-3 py-2 rounded-md"
+                                onClick={() => {
+                                  handleStatus(p.id, "gagal");
+                                  alert("Status sudah tidak bisa diubah!");
+                                }}
+                              >
+                                Gagal
+                              </button>
+                            </div>
+                          </td>
+                        </tr>
+                      ))
                   )}
                 </tbody>
               </table>

@@ -21,18 +21,26 @@ class AdminPendaftarController extends Controller
 
     public function updateStatus(Request $request, $userId)
     {
-        $request->validate([
-            'status' => 'required|in:lulus,gagal'
-        ]);
+        try {
+            $request->validate([
+                'status' => 'required|in:lulus,gagal',
+            ]);
 
-        $user = User::findOrFail($userId);
-        $user->status = $request->status;
-        $user->save();
+            $user = User::findOrFail($userId);
+            $user->status = $request->status;
+            $user->save();
 
-        return response()->json([
-            'success' => true,
-            'message' => 'Status berhasil diupdate'
-        ]);
+            return response()->json([
+                'success' => true,
+                'message' => 'Status berhasil diupdate'
+            ]);
+        } catch (\Exception $e) {
+            \Log::error('Update status error: ' . $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'message' => 'Terjadi kesalahan saat memperbarui status'
+            ], 500);
+        }
     }
 
     public function detailSiswa($id)

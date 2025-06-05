@@ -19,9 +19,7 @@ import axios from "axios";
 export default function Pengumuman() {
   const router = useRouter();
   const [sidebarTerbuka, setSidebarTerbuka] = useState(true);
-  const [nisn, setNisn] = useState("");
-  const [nama, setNama] = useState("");
-  const [noPendaftaran, setNoPendaftaran] = useState("");
+  const [keyword, setKeyword] = useState("");
   const [hasil, setHasil] = useState<null | {
     status: string;
     nama: string;
@@ -29,15 +27,12 @@ export default function Pengumuman() {
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async () => {
+    if (!keyword.trim()) return;
     try {
       setLoading(true);
       const response = await axios.post(
-        "http://localhost:8000/api/cek-pengumuman",
-        {
-          nisn,
-          nama,
-          no_pendaftaran: noPendaftaran,
-        }
+        "http://localhost:8000/api/Pengumuman",
+        { keyword }
       );
       if (response.data && response.data.status) {
         setHasil(response.data);
@@ -45,10 +40,9 @@ export default function Pengumuman() {
         throw new Error('Invalid response data');
       }
     } catch (error) {
-      console.error('Error checking announcement:', error);
       setHasil({
         status: "belum_ada",
-        nama: nama,
+        nama: keyword,
       });
     } finally {
       setLoading(false);
@@ -56,7 +50,6 @@ export default function Pengumuman() {
   };
 
   const handleLogout = () => {
-    // Implement your logout logic here
     router.push("/Welcome");
   };
 
@@ -138,9 +131,9 @@ export default function Pengumuman() {
 
       <main className="flex-1 p-10 bg-[#f4f7fc] min-h-screen">
         <h1 className="text-3xl font-bold text-[#154472] mb-2">Pengumuman</h1>
-        <p className="text-gray-400 mb-6">semoga kamu lulus yaaa!</p>
+        <p className="text-gray-400 mb-6">Cek status kelulusanmu di sini!</p>
 
-        <div className="bg-[#154472]  px-64 py-2 rounded-md shadow-md mb-6 w-fit">
+        <div className="bg-[#154472] px-8 py-2 rounded-md shadow-md mb-6 w-fit">
           <h1 className="text-left items-left text-white text-1xl font-medium">
             Cek Pengumuman UPT SMPN 9 BINAMU JENEPONTO{" "}
           </h1>
@@ -148,39 +141,18 @@ export default function Pengumuman() {
         </div>
 
         {!hasil && (
-          <div className=" text-[#154472]">
+          <div className="text-[#154472] max-w-xl">
             <p className="font-bold mb-4">
-              Masukkan NISN & nama lengkap kamu agar kami mudah mengecek status
-              kelulusanmu !
+              Masukkan <b>Nama Lengkap</b>, <b>Email</b>, atau <b>No WhatsApp</b> kamu untuk cek status kelulusan!
             </p>
-
-            <label className="block mb-1 font-medium">NISN Siswa :</label>
             <input
               type="text"
-              placeholder="Masukkan NISN siswa"
-              className="w-full p-3 border border-gray-300 rounded-md mb-4 text-sm"
-              value={nisn}
-              onChange={(e) => setNisn(e.target.value)}
-            />
-
-            <label className="block mb-1 font-medium">Nama Lengkap :</label>
-            <input
-              type="text"
-              placeholder="Masukkan Nama Lengkap"
-              className="w-full p-3 border border-gray-300 rounded-md mb-4 text-sm"
-              value={nama}
-              onChange={(e) => setNama(e.target.value)}
-            />
-
-            <label className="block mb-1 font-medium">No. Pendaftaran :</label>
-            <input
-              type="text"
-              placeholder="Masukkan Nomor Pendaftaran Kamu"
+              placeholder="Cari berdasarkan nama, email, atau no WhatsApp"
               className="w-full p-3 border border-gray-300 rounded-md mb-6 text-sm"
-              value={noPendaftaran}
-              onChange={(e) => setNoPendaftaran(e.target.value)}
+              value={keyword}
+              onChange={(e) => setKeyword(e.target.value)}
+              onKeyDown={e => e.key === "Enter" && handleSubmit()}
             />
-
             <button
               onClick={handleSubmit}
               className="bg-[#154472] text-white px-6 py-3 rounded-md hover:bg-blue-800 w-full font-semibold"
@@ -211,7 +183,7 @@ export default function Pengumuman() {
             <div className="flex justify-center my-4">
               <div className="bg-white w-24 h-24 rounded-md" />
             </div>
-            <p className="text-center font-semibold text-lg">{hasil.nama}</p>
+            <p className="text-center font-semibold text-lg">{hasil.name}</p>
             {hasil.status !== "belum_ada" && (
               <p className="text-center mt-2">
                 Anda dinyatakan{" "}
